@@ -2,17 +2,20 @@
 set all&
 set nocompatible
 
+source ~/configs/.vim/plugins/42header.vim
+
 set langmenu=en_US.UTF-8
 language message C
 
 colorscheme slate
 syntax on
+syntax sync fromstart
 
 " Misc
 set belloff=all
 set fileencodings=ucs-bom,utf-8,default,latin1
 set ttyfast
-set nohidden
+set hidden
 set lazyredraw
 set autoread
 
@@ -28,8 +31,10 @@ set tabstop=4
 set noexpandtab
 set list
 set lcs=tab:>-,space:.
-hi SpecialKey ctermfg=236
 call matchadd('SpecialKey', '\s') " To prevent CursorLine override
+aug SpecialKey
+	au! BufEnter,BufCreate,BufNewFile * call matchadd('SpecialKey', '\s')
+aug END
 
 " Format
 set textwidth=300
@@ -40,7 +45,6 @@ set scrolloff=10
 set formatoptions=tcrqv1j
 
 " Regex
-set gdefault
 set magic
 set hlsearch
 set incsearch
@@ -54,14 +58,32 @@ set ttimeoutlen=100
 set history=200
 set undolevels=500
 
+" Norme
+set efm+=%+PNorme:\ %f,%WWarning:\ %m,%EError:\ %m,%EError\ (line\ %l):\ %m,%EError\ (line\ %l\\,\ col\ %v):\ %m
+
+" Cscope
+if has('cscope')
+	set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
+	set cst
+	set nocsverb
+	if filereadable('cscope.out')
+		cscope add cscope.out
+	endif
+	set csverb
+endif
+
 "
 " Commands
 "
 
+" Diff
+set diffopt=vertical,hiddenoff,filler
+command! Gitdiff execute 'silent !git diff -R % > /tmp/%:t.patch' | execute 'redraw!' | execute 'diffp /tmp/%:t.patch'
+
 " Completion
 set wildmenu
 set wildchar=<TAB>
-set wildmode=list:full
+set wildmode=longest:full
 
 " Paste
 nnoremap <F2> :set invpaste paste?<CR>
@@ -91,35 +113,31 @@ set report=2
 " Numbers
 set number
 set numberwidth=4
-function! SwitchNu(m)
-	if (&modifiable && a:m == 'i')
-		set relativenumber
-	else
-		set norelativenumber
-	endif
-endfunction
-function! DetectModeSwitch(id)
-	let b:mode = mode()
-	call SwitchNu(b:mode)
-endfunction
-aug mode_switch
-	au BufCreate,BufNewFile * call timer_start(100, function('DetectModeSwitch'), {'repeat' : -1})
-aug END
+if has('timer')
+	function! SwitchNu(m)
+		if (&modifiable && a:m == 'i')
+			set relativenumber
+		else
+			set norelativenumber
+		endif
+	endfunction
+	function! DetectModeSwitch(id)
+		let b:mode = mode()
+		call SwitchNu(b:mode)
+	endfunction
+	aug mode_switch
+		au! BufCreate,BufNewFile * call timer_start(100, function('DetectModeSwitch'), {'repeat' : -1})
+	aug END
+endif
 
 " Visual cues
 set showmatch
 set cursorline
-hi CursorLine cterm=NONE ctermbg=233
-hi Visual cterm=NONE ctermbg=238
 
 " Windows
 set splitbelow
 set splitright
 set title
-
-" Status line
-hi User1 ctermfg=darkred ctermbg=white cterm=bold
-hi User2 ctermfg=white ctermbg=232
 
 set statusline=
 set statusline+=\ %1*%{&readonly?'[Read-Only]':&modifiable?'':'[Unmodifiable]'}%0*
@@ -149,12 +167,16 @@ elseif has('unix')
 endif
 
 nnoremap	<LEADER>t		:silent set list!<CR>
-nnoremap	<LEADER>h		:silent nohls<CR>
+nnoremap	<LEADER>g		:silent nohls<CR>
 
 nnoremap	<LEADER><LEFT>	:tabprevious<CR>
 nnoremap	<LEADER><RIGHT>	:tabnext<CR>
-nnoremap	<LEADER>j		:tabprevious<CR>
-nnoremap	<LEADER>m		:tabnext<CR>
+nnoremap	<LEADER>l		:tabprevious<CR>
+nnoremap	<LEADER>h		:tabnext<CR>
+nnoremap	<LEADER>n		:silent tabnew .<CR>
+nnoremap	<LEADER>[		:cprevious<CR>
+nnoremap	<LEADER>]		:cnext<CR>
+nnoremap	<LEADER>w		:w<CR>
 nnoremap	<UP>			<C-w>k
 nnoremap	<DOWN>			<C-w>j
 nnoremap	<LEFT>			<C-w>h
@@ -174,6 +196,33 @@ map			<C-\>			:source ~/.vimrc<CR>
 "
 "
 "
+"
+
+if filereadable(expand("~/configs/.mod.vim"))
+	source ~/configs/.mod.vim
+endif
+
+
+" Status line
+hi User1 ctermfg=darkred ctermbg=white cterm=bold
+hi User2 ctermfg=white ctermbg=232
+
+hi CursorLine cterm=NONE ctermbg=233 ctermfg=NONE
+hi Visual cterm=NONE ctermbg=238 ctermfg=NONE
+
+hi SpecialKey ctermfg=236
+hi CustomTypes cterm=NONE ctermbg=NONE ctermfg=166
+hi GroupChars cterm=NONE ctermbg=NONE ctermfg=243
+
+hi Search cterm=NONE ctermfg=black ctermbg=grey
+hi IncSearch cterm=NONE ctermfg=black ctermbg=cyan
+
+hi DiffAdd cterm=NONE ctermbg=022
+hi DiffDelete cterm=NONE ctermbg=052
+hi DiffChange cterm=NONE ctermbg=018
+hi DiffText cterm=NONE ctermbg=130
+
+hi ColorColumn ctermfg=202 ctermbg=235
 
 " Reload ftplugins
 set filetype&
