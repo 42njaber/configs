@@ -151,6 +151,9 @@ endif
 nnoremap	<LEADER>t		:silent set list!<CR>
 nnoremap	<LEADER>h		:silent nohls<CR>
 
+nnoremap	<LEADER>(		:cprevious<CR>
+nnoremap	<LEADER>)		:cnext<CR>
+
 nnoremap	<LEADER><LEFT>	:tabprevious<CR>
 nnoremap	<LEADER><RIGHT>	:tabnext<CR>
 nnoremap	<LEADER>j		:tabprevious<CR>
@@ -169,7 +172,7 @@ nnoremap	<C-y>			3<C-y>
 map			ZZ				<Nop>
 
 " Reload configs
-map			<C-\>			:source ~/.vimrc<CR>
+map			<LEADER>R			:source ~/.vimrc<CR>
 
 "
 "

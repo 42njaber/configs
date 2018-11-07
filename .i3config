@@ -77,7 +77,7 @@ bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
+bindsym $mod+z layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
@@ -148,6 +148,7 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
+bindsym $mod+w exec "rofi -show window"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -161,12 +162,12 @@ bar {
 
 exec "xinput set-prop 'SynPS/2 Synaptics TouchPad' 'Synaptics Tap Action' '0'"
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
 
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20
+bindsym XF86MonBrightnessUp exec light -A 5
+bindsym XF86MonBrightnessDown exec light -U 5
 
 bindsym Pause exec bash ~/configs/switchtouch.sh
 
@@ -176,3 +177,5 @@ hide_edge_borders both
 focus_follows_mouse no
 force_focus_wrapping no
 workspace_auto_back_and_forth yes
+
+exec --no-startup-id feh --bg-scale $HOME/wallpaper.png
