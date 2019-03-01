@@ -178,5 +178,5 @@ focus_follows_mouse no
 force_focus_wrapping no
 workspace_auto_back_and_forth yes
 
-exec --no-startup-id feh --bg-scale $HOME/wallpaper.png
-exec --no-stqrtup-id compton --config ~/.config/compton.conf -b
+exec always --no-startup-id compton --config $HOME/configs/compton.conf -b
+exec always --no-startup-id feh --bg-scale $HOME/wallpaper.jpg

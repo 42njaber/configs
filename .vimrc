@@ -217,8 +217,8 @@ hi SpecialKey ctermfg=236
 hi CustomTypes cterm=NONE ctermbg=NONE ctermfg=166
 hi GroupChars cterm=NONE ctermbg=NONE ctermfg=243
 
-hi Search cterm=NONE ctermfg=black ctermbg=grey
-hi IncSearch cterm=NONE ctermfg=black ctermbg=cyan
+hi Search cterm=NONE ctermfg=NONE ctermbg=grey
+hi IncSearch cterm=NONE ctermfg=NONE ctermbg=cyan
 
 hi DiffAdd cterm=NONE ctermbg=022
 hi DiffDelete cterm=NONE ctermbg=052
