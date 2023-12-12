@@ -1,0 +1,2 @@
+ReloadScript-1.21.vmb.gz: call delete('/home/neyl/.vim/plugin/ReloadScript.vim')|call delete('/home/neyl/.vim/doc/ReloadScript.txt')
+ReloadScript-1.21.vmb.gz: call delete('/home/neyl/.vim/plugin/ReloadScript.vim')|call delete('/home/neyl/.vim/doc/ReloadScript.txt')

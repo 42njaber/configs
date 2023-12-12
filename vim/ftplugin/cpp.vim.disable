@@ -1,0 +1,16 @@
+
+function OpenClassHpp(winid)
+	let l:winid = win_getid()
+	let l:bufnr = winbufnr(l:winid)
+	let l:filename = bufname(l:bufnr)
+	let l:emptybufs = win_findbuf(l:win_id)
+endfunc
+
+function CloseClassHpp(winid)
+endfunc
+
+augroup cpp
+	autocmd!
+	autocmd BufWinEnter src/*.class.cpp call OpenClassHpp(win_getid())
+	autocmd BufWinLeave src/*.class.cpp call CloseClassHpp(win_getid())
+augroup END

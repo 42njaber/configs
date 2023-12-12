@@ -1,0 +1,31 @@
+" WARNING: By default /etc/athamerc will get rewritten on updates. You should
+" create a ~/.athamerc that sources this file and make changes there.
+"
+" /etc/athamerc is only read if no ~/.athamerc is found
+"
+" If you don't want /etc/athamerc overidden, supply the --norc flag to the setup
+" script.
+
+source ~/configs/vimrc
+
+nnoremap	X					Isudo 
+map			<LEADER>R			:source ~/.athamerc<CR>
+
+" map			cd					Sc<ESC><CR> " Doesn't work
+
+set backspace-=eol   "For more traditional shell behavior
+set backspace+=start "Without this, you can't delete shell completions
+
+set textwidth=0 "Don't try to wrap text
+
+"Start each line in insert mode. Most shell vi-modes do this:
+" autocmd User Vimbed_StartLine call feedkeys("\<C-\>\<C-N>i","n")
+
+" These make arrows more shell like. Feel free to comment them out:
+if v:version>=800 || has("patch928")
+	" These maps can segfault in earlier vim versions.
+	" inoremap <Up> <Up><ESC>A
+	" inoremap <Down> <Down><ESC>A
+endif
+
+" vim: set ft=vim :

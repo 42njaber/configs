@@ -1,0 +1,238 @@
+
+
+input type:keyboard {
+	events enabled
+	xkb_layout "fr(azerty),us"
+	xkb_options grp:rctrl_toggle
+	repeat_delay 200
+	repeat_rate 35
+}
+
+input type:mouse {
+	pointer_accel 1
+	accel_profile "adaptive"
+}
+
+input * {
+	events enabled
+#	dwt enabled
+#	pointer_accel 0.7
+#	accel_profile "flat"
+#	scroll_method "two_finger"
+#	scroll_button "disable"
+#	tap "disabled"
+#	drag "enabled"
+#	drag_lock "enabled"
+#	click_method "none"
+}
+
+output * {
+	bg $HOME/wallpapers/desktop.* fill
+	adaptive_sync on
+}
+
+set $mod Mod4
+
+set $term alacritty --option window.opacity=0.5 -e /bin/bash
+set $info alacritty --class "Info" -t "Window info" -e /bin/bash -c
+set $menu rofi -show run | xargs swaymsg exec --
+
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+a kill
+bindsym $mod+d exec $menu
+bindsym $mod+n exec i3-dmenu-desktop --dmenu="rofi -dmenu -i" | xargs swaymsg exec --
+
+bindsym $mod+Shift+r reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+bindsym $mod+i exec $info 'view <(swaymsg -t get_tree | jq ".. | objects | select(.focused == true)")'
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# split in horizontal orientation
+bindsym $mod+g split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+z layout tabbed
+bindsym $mod+e layout toggle split
+
+workspace_layout stacking
+
+# toggle tiling / floating
+bindsym $mod+u floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+t focus mode_toggle
+
+# focus the parent container
+bindsym $mod+q focus parent
+
+# focus the child container
+bindsym $mod+Shift+q focus child
+
+# switch to workspace
+bindsym $mod+ampersand workspace 1
+bindsym $mod+eacute workspace 2
+bindsym $mod+quotedbl workspace 3
+bindsym $mod+apostrophe workspace 4
+bindsym $mod+parenleft workspace 5
+bindsym $mod+minus workspace 6
+bindsym $mod+egrave workspace 7
+bindsym $mod+underscore workspace 8
+bindsym $mod+ccedilla workspace 9
+bindsym $mod+agrave workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+ampersand move container to workspace 1
+bindsym $mod+Shift+eacute move container to workspace 2
+bindsym $mod+Shift+quotedbl move container to workspace 3
+bindsym $mod+Shift+apostrophe move container to workspace 4
+bindsym $mod+Shift+parenleft move container to workspace 5
+bindsym $mod+Shift+minus move container to workspace 6
+bindsym $mod+Shift+egrave move container to workspace 7
+bindsym $mod+Shift+underscore move container to workspace 8
+bindsym $mod+Shift+ccedilla move container to workspace 9
+bindsym $mod+Shift+agrave move container to workspace 10
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+# These bindings trigger as soon as you enter the resize mode
+
+# Pressing left will shrink the window’s width.
+# Pressing right will grow the window’s width.
+# Pressing up will shrink the window’s height.
+# Pressing down will grow the window’s height.
+	bindsym h resize shrink width 10 px or 10 ppt
+	bindsym j resize grow height 10 px or 10 ppt
+	bindsym k resize shrink height 10 px or 10 ppt
+	bindsym l resize grow width 10 px or 10 ppt
+
+# same bindings, but for the arrow keys
+	bindsym Left move left
+	bindsym Down move down
+	bindsym Up move up
+	bindsym Right move right
+
+# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+
+	bindsym Space move position mouse
+}
+
+bindsym $mod+r mode "resize"
+bindsym $mod+w exec "rofi -show window"
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+bindsym XF86MonBrightnessUp		exec --no-startup-id sudo /opt/bin/backlight +5
+bindsym XF86MonBrightnessDown	exec --no-startup-id sudo /opt/bin/backlight -5
+
+bindsym Print exec flameshot gui
+#bindsym $mod+Print exec scrot -e 'mv $f /tmp/ && gimp /tmp/$f && i3-msg "[class=\"Gimp\"] focus"'
+
+bindsym Pause exec bash ~/configs/switchtouch.sh
+
+bindsym $mod+control+g exec firefox -new-tab https://translate.google.com; [class="Firefox"] focus
+#bindsym $mod+shift+q exec i3lock -i /home/neyl/.lockscreen.png
+
+bindsym $mod+shift+z	exec "sleep 1; xset dpms force off"
+bindsym $mod+shift+s	exec $HOME/configs/scripts/sway-screenshare.sh
+bindsym $mod+shift+p	exec "killall -s INT wf-recorder || wf-recorder -a -f rec.mp4"
+bindsym $mod+shift+c	exec $HOME/configs/scripts/autoclick.sh
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.  font pango:inconsolata 10
+
+default_border pixel 10
+focus_follows_mouse no
+focus_wrapping no
+workspace_auto_back_and_forth no
+
+# Colors
+
+set $border_focus	#64727DFF
+set $border			#2B303B7F
+
+client.focused          $border_focus	$border_focus	#ffffff		#ffaa00		$border
+client.focused_inactive $border_focus	$border_focus	#ffffff		#ffaa00		$border
+client.unfocused        $border			$border			#FFFFFF7F
+client.urgent           #2f343a			#900000			#ffffff
+client.placeholder      #000000			#0c0c0c			#ffffff
+
+font pango:DejaVu Sans Mono 8
+
+bar {
+	swaybar_command waybar
+}
+
+for_window [class="^.*"] inhibit_idle fullscreen
+
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [app_id="zenity"] floating enable
+for_window [window_role="About"] floating enable
+for_window [class="Unity"] floating enable
+for_window [class="Frame"] floating enable
+for_window [app_id="Info"] floating enable, resize set 900 600
+for_window [app_id="flameshot" title="flameshot"] floating enable
+
+
+
+assign [app_id="vimb"] 2
+for_window [app_id="vimb"] workspace 2
+for_window [app_id="vimb"] layout tabbed
+assign [app_id="firefox"] 3
+for_window [app_id="firefox"] workspace 3
+assign [class="discord"] 4
+for_window [class="discord" title="Discord"] workspace 4
+assign [class="Upwork"] 5
+for_window [class="Upwork"] workspace 5, layout split
+for_window [class="Upwork" title="Control Panel"] move position 0 px 0 px, resize set 100 px 100 pt
+for_window [class="Upwork" title="Time Tracker"] move position 100 px 0 px, resize set 100 px 100 pt
+bindsym $mod+equal resize set 100 px
+assign [class="Gimp.*"] 10
+for_window [class="Gimp.*"] workspace 
+
+set $opacity ~/configs/scripts/inactive-wrapper.sh -o
+exec $opacity 0.80
+
+bindsym $mod+o exec $opacity 0.80
+bindsym $mod+shift+o exec $opacity 1.00
+
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+
+exec_always gsettings set org.gnome.desktop.interface cursor-theme "Yaru"
+
+exec_always "if ! pgrep nm-applet; then nm-applet; fi"
+exec_always "killall blueman-applet; XDG_CURRENT_DESKTOP=Unity blueman-applet"
+exec "flameshot"
+exec "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+#exec "systemctl --user restart xdg-desktop-portal xdg-desktop-portal-wlr"
+

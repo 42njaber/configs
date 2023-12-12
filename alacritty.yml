@@ -1,0 +1,712 @@
+# Configuration for Alacritty, the GPU enhanced terminal emulator
+
+# Any items in the `env` entry below will be added as
+# environment variables. Some entries may override variables
+# set by alacritty it self.
+# env:
+  # TERM env customization.
+  #
+  # If this property is not set, alacritty will set it to xterm-256color.
+  #
+  # Note that some xterm terminfo databases don't declare support for italics.
+  # You can verify this by checking for the presence of `smso` and `sitm` in
+  # `infocmp xterm-256color`.
+  # TERM: xterm-256color-italic
+
+window:
+  opacity: 1.0
+
+  # Window padding (changes require restart)
+  #
+  # Blank space added around the window in pixels. This padding is not scaled by
+  # DPI and the specified value is always added at both opposing sides.
+  padding:
+    x: 0
+    y: 0
+
+  # Spread additional padding evenly around the terminal content.
+  dynamic_padding: true
+
+  # Window decorations
+  #
+  # Available values:
+  # - full: borders and title bar
+  # - none: neither borders nor title bar
+  # - transparent: title bar, transparent background and title bar buttons
+  # - buttonless: title bar, transparent background, but no title bar buttons
+  decorations: none
+
+  # Startup Mode (changes require restart)
+  #
+  # Values for `startup_mode`:
+  #   - Windowed
+  #   - Maximized
+  #   - Fullscreen
+  #
+  # Values for `startup_mode` (macOS only):
+  #   - SimpleFullscreen
+  startup_mode: Windowed
+
+scrolling:
+  # maximum number of lines in the scrollback buffer. Specifying '0' will
+  # disable scrolling.
+  history: 0
+
+  # Number of lines the viewport will move for every line scrolled when
+  # scrollback is enabled (history > 0).
+  multiplier: 3
+
+# Font configuration (changes require restart)
+font:
+  # The normal (roman) font face to use.
+  # Style can be specified to pick a specific face.
+  normal:
+    family: Monospace
+    style: Light
+    # family: "Fira Code"
+    # family: "Source Code Pro"
+
+  # The bold font face
+  bold:
+    family: Monospace
+    style: Medium
+    # family: "Fira Code"
+    # family: "Source Code Pro"
+
+  # The italic font face
+  italic:
+    family: Monospace
+    style: "Light Italic"
+    # style: "Light Oblique"
+    # family: "Fira Code"
+    # family: "Source Code Pro"
+    # style: "Medium Italic"
+
+  # Point size of the font
+  size: 13.0
+
+  # Offset is the extra space around each character. offset.y can be thought of
+  # as modifying the linespacing, and offset.x as modifying the letter spacing.
+  offset:
+    x: 1
+    y: 0
+
+  # Glyph offset determines the locations of the glyphs within their cells with
+  # the default being at the bottom. Increase the x offset to move the glyph to
+  # the right, increase the y offset to move the glyph upward.
+  glyph_offset:
+    x: 0
+    y: 0
+
+# When true, bold text is drawn using the bright variant of colors.
+draw_bold_text_with_bright_colors: true
+
+# Use custom cursor colors. If true, display the cursor in the cursor.foreground
+# and cursor.background colors, otherwise invert the colors of the cursor.
+custom_cursor_colors: true
+
+# Colors
+colors:
+
+  # Tomorrow (https://github.com/aarowill/base16-alacritty/blob/master/colors/base16-tomorrow.yml)
+  # Default colors
+  primary:
+    background: "0x2B3038"
+    foreground: '0xffffff'
+  # Colors the cursor will use if `custom_cursor_colors` is true
+  cursor:
+    text: '0xffffff'
+    cursor: '0x4d4d4c'
+  # Normal colors
+  normal:
+    black:   '0x000000'
+    red:     '0x800000'
+    green:   '0x008000'
+    yellow:  '0x808000'
+    blue:    '0x2020A0'
+    magenta: '0x800080'
+    cyan:    '0x008080'
+    white:   '0xc0c0c0'
+  # Bright colors
+  bright:
+    black:   '0x404040'
+    red:     '0xff0000'
+    green:   '0x00ff00'
+    yellow:  '0xffff00'
+    blue:    '0x0000ff'
+    magenta: '0xff00ff'
+    cyan:    '0x00ffff'
+    white:   '0xffffff'
+
+  # # Tomorrow Night (https://github.com/aarowill/base16-alacritty/blob/master/colors/base16-tomorrow-night.yml)
+  # # Default colors
+  # primary:
+  #   background: '0x1d1f21'
+  #   foreground: '0xc5c8c6'
+  # # Colors the cursor will use if `custom_cursor_colors` is true
+  # cursor:
+  #   text: '0x1d1f21'
+  #   cursor: '0xc5c8c6'
+  # # Normal colors
+  # normal:
+  #   black:   '0x1d1f21'
+  #   red:     '0xcc6666'
+  #   green:   '0xb5bd68'
+  #   yellow:  '0xf0c674'
+  #   blue:    '0x81a2be'
+  #   magenta: '0xb294bb'
+  #   cyan:    '0x8abeb7'
+  #   white:   '0xc5c8c6'
+  # # Bright colors
+  # bright:
+  #   black:   '0x969896'
+  #   red:     '0xde935f'
+  #   green:   '0x282a2e'
+  #   yellow:  '0x373b41'
+  #   blue:    '0xb4b7b4'
+  #   magenta: '0xe0e0e0'
+  #   cyan:    '0xa3685a'
+  #   white:   '0xffffff'
+
+  # Indexed Colors
+  #
+  # The indexed colors include all colors from 16 to 256.
+  # When these are not set, they're filled with sensible defaults.
+  #
+  # Example:
+  #   `- { index: 16, color: '0xff00ff' }`
+  #
+  indexed_colors:
+    - { index: 16, color: '0x000000' }
+    - { index: 17, color: '0x00005f' }
+    - { index: 18, color: '0x000087' }
+    - { index: 19, color: '0x0000af' }
+    - { index: 20, color: '0x0000d7' }
+    - { index: 21, color: '0x0000ff' }
+    - { index: 22, color: '0x005f00' }
+    - { index: 23, color: '0x005f5f' }
+    - { index: 24, color: '0x005f87' }
+    - { index: 25, color: '0x005faf' }
+    - { index: 26, color: '0x005fd7' }
+    - { index: 27, color: '0x005fff' }
+    - { index: 28, color: '0x008700' }
+    - { index: 29, color: '0x00875f' }
+    - { index: 30, color: '0x008787' }
+    - { index: 31, color: '0x0087af' }
+    - { index: 32, color: '0x0087d7' }
+    - { index: 33, color: '0x0087ff' }
+    - { index: 34, color: '0x00af00' }
+    - { index: 35, color: '0x00af5f' }
+    - { index: 36, color: '0x00af87' }
+    - { index: 37, color: '0x00afaf' }
+    - { index: 38, color: '0x00afd7' }
+    - { index: 39, color: '0x00afff' }
+    - { index: 40, color: '0x00d700' }
+    - { index: 41, color: '0x00d75f' }
+    - { index: 42, color: '0x00d787' }
+    - { index: 43, color: '0x00d7af' }
+    - { index: 44, color: '0x00d7d7' }
+    - { index: 45, color: '0x00d7ff' }
+    - { index: 46, color: '0x00ff00' }
+    - { index: 47, color: '0x00ff5f' }
+    - { index: 48, color: '0x00ff87' }
+    - { index: 49, color: '0x00ffaf' }
+    - { index: 50, color: '0x00ffd7' }
+    - { index: 51, color: '0x00ffff' }
+    - { index: 52, color: '0x5f0000' }
+    - { index: 53, color: '0x5f005f' }
+    - { index: 54, color: '0x5f0087' }
+    - { index: 55, color: '0x5f00af' }
+    - { index: 56, color: '0x5f00d7' }
+    - { index: 57, color: '0x5f00ff' }
+    - { index: 58, color: '0x5f5f00' }
+    - { index: 59, color: '0x5f5f5f' }
+    - { index: 60, color: '0x5f5f87' }
+    - { index: 61, color: '0x5f5faf' }
+    - { index: 62, color: '0x5f5fd7' }
+    - { index: 63, color: '0x5f5fff' }
+    - { index: 64, color: '0x5f8700' }
+    - { index: 65, color: '0x5f875f' }
+    - { index: 66, color: '0x5f8787' }
+    - { index: 67, color: '0x5f87af' }
+    - { index: 68, color: '0x5f87d7' }
+    - { index: 69, color: '0x5f87ff' }
+    - { index: 70, color: '0x5faf00' }
+    - { index: 71, color: '0x5faf5f' }
+    - { index: 72, color: '0x5faf87' }
+    - { index: 73, color: '0x5fafaf' }
+    - { index: 74, color: '0x5fafd7' }
+    - { index: 75, color: '0x5fafff' }
+    - { index: 76, color: '0x5fd700' }
+    - { index: 77, color: '0x5fd75f' }
+    - { index: 78, color: '0x5fd787' }
+    - { index: 79, color: '0x5fd7af' }
+    - { index: 80, color: '0x5fd7d7' }
+    - { index: 81, color: '0x5fd7ff' }
+    - { index: 82, color: '0x5fff00' }
+    - { index: 83, color: '0x5fff5f' }
+    - { index: 84, color: '0x5fff87' }
+    - { index: 85, color: '0x5fffaf' }
+    - { index: 86, color: '0x5fffd7' }
+    - { index: 87, color: '0x5fffff' }
+    - { index: 88, color: '0x870000' }
+    - { index: 89, color: '0x87005f' }
+    - { index: 90, color: '0x870087' }
+    - { index: 91, color: '0x8700af' }
+    - { index: 92, color: '0x8700d7' }
+    - { index: 93, color: '0x8700ff' }
+    - { index: 94, color: '0x875f00' }
+    - { index: 95, color: '0x875f5f' }
+    - { index: 96, color: '0x875f87' }
+    - { index: 97, color: '0x875faf' }
+    - { index: 98, color: '0x875fd7' }
+    - { index: 99, color: '0x875fff' }
+    - { index: 100, color: '0x878700' }
+    - { index: 101, color: '0x87875f' }
+    - { index: 102, color: '0x878787' }
+    - { index: 103, color: '0x8787af' }
+    - { index: 104, color: '0x8787d7' }
+    - { index: 105, color: '0x8787ff' }
+    - { index: 106, color: '0x87af00' }
+    - { index: 107, color: '0x87af5f' }
+    - { index: 108, color: '0x87af87' }
+    - { index: 109, color: '0x87afaf' }
+    - { index: 110, color: '0x87afd7' }
+    - { index: 111, color: '0x87afff' }
+    - { index: 112, color: '0x87d700' }
+    - { index: 113, color: '0x87d75f' }
+    - { index: 114, color: '0x87d787' }
+    - { index: 115, color: '0x87d7af' }
+    - { index: 116, color: '0x87d7d7' }
+    - { index: 117, color: '0x87d7ff' }
+    - { index: 118, color: '0x87ff00' }
+    - { index: 119, color: '0x87ff5f' }
+    - { index: 120, color: '0x87ff87' }
+    - { index: 121, color: '0x87ffaf' }
+    - { index: 122, color: '0x87ffd7' }
+    - { index: 123, color: '0x87ffff' }
+    - { index: 124, color: '0xaf0000' }
+    - { index: 125, color: '0xaf005f' }
+    - { index: 126, color: '0xaf0087' }
+    - { index: 127, color: '0xaf00af' }
+    - { index: 128, color: '0xaf00d7' }
+    - { index: 129, color: '0xaf00ff' }
+    - { index: 130, color: '0xaf5f00' }
+    - { index: 131, color: '0xaf5f5f' }
+    - { index: 132, color: '0xaf5f87' }
+    - { index: 133, color: '0xaf5faf' }
+    - { index: 134, color: '0xaf5fd7' }
+    - { index: 135, color: '0xaf5fff' }
+    - { index: 136, color: '0xaf8700' }
+    - { index: 137, color: '0xaf875f' }
+    - { index: 138, color: '0xaf8787' }
+    - { index: 139, color: '0xaf87af' }
+    - { index: 140, color: '0xaf87d7' }
+    - { index: 141, color: '0xaf87ff' }
+    - { index: 142, color: '0xafaf00' }
+    - { index: 143, color: '0xafaf5f' }
+    - { index: 144, color: '0xafaf87' }
+    - { index: 145, color: '0xafafaf' }
+    - { index: 146, color: '0xafafd7' }
+    - { index: 147, color: '0xafafff' }
+    - { index: 148, color: '0xafd700' }
+    - { index: 149, color: '0xafd75f' }
+    - { index: 150, color: '0xafd787' }
+    - { index: 151, color: '0xafd7af' }
+    - { index: 152, color: '0xafd7d7' }
+    - { index: 153, color: '0xafd7ff' }
+    - { index: 154, color: '0xafff00' }
+    - { index: 155, color: '0xafff5f' }
+    - { index: 156, color: '0xafff87' }
+    - { index: 157, color: '0xafffaf' }
+    - { index: 158, color: '0xafffd7' }
+    - { index: 159, color: '0xafffff' }
+    - { index: 160, color: '0xd70000' }
+    - { index: 161, color: '0xd7005f' }
+    - { index: 162, color: '0xd70087' }
+    - { index: 163, color: '0xd700af' }
+    - { index: 164, color: '0xd700d7' }
+    - { index: 165, color: '0xd700ff' }
+    - { index: 166, color: '0xd75f00' }
+    - { index: 167, color: '0xd75f5f' }
+    - { index: 168, color: '0xd75f87' }
+    - { index: 169, color: '0xd75faf' }
+    - { index: 170, color: '0xd75fd7' }
+    - { index: 171, color: '0xd75fff' }
+    - { index: 172, color: '0xd78700' }
+    - { index: 173, color: '0xd7875f' }
+    - { index: 174, color: '0xd78787' }
+    - { index: 175, color: '0xd787af' }
+    - { index: 176, color: '0xd787d7' }
+    - { index: 177, color: '0xd787ff' }
+    - { index: 178, color: '0xd7af00' }
+    - { index: 179, color: '0xd7af5f' }
+    - { index: 180, color: '0xd7af87' }
+    - { index: 181, color: '0xd7afaf' }
+    - { index: 182, color: '0xd7afd7' }
+    - { index: 183, color: '0xd7afff' }
+    - { index: 184, color: '0xd7d700' }
+    - { index: 185, color: '0xd7d75f' }
+    - { index: 186, color: '0xd7d787' }
+    - { index: 187, color: '0xd7d7af' }
+    - { index: 188, color: '0xd7d7d7' }
+    - { index: 189, color: '0xd7d7ff' }
+    - { index: 190, color: '0xd7ff00' }
+    - { index: 191, color: '0xd7ff5f' }
+    - { index: 192, color: '0xd7ff87' }
+    - { index: 193, color: '0xd7ffaf' }
+    - { index: 194, color: '0xd7ffd7' }
+    - { index: 195, color: '0xd7ffff' }
+    - { index: 196, color: '0xff0000' }
+    - { index: 197, color: '0xff005f' }
+    - { index: 198, color: '0xff0087' }
+    - { index: 199, color: '0xff00af' }
+    - { index: 200, color: '0xff00d7' }
+    - { index: 201, color: '0xff00ff' }
+    - { index: 202, color: '0xff5f00' }
+    - { index: 203, color: '0xff5f5f' }
+    - { index: 204, color: '0xff5f87' }
+    - { index: 205, color: '0xff5faf' }
+    - { index: 206, color: '0xff5fd7' }
+    - { index: 207, color: '0xff5fff' }
+    - { index: 208, color: '0xff8700' }
+    - { index: 209, color: '0xff875f' }
+    - { index: 210, color: '0xff8787' }
+    - { index: 211, color: '0xff87af' }
+    - { index: 212, color: '0xff87d7' }
+    - { index: 213, color: '0xff87ff' }
+    - { index: 214, color: '0xffaf00' }
+    - { index: 215, color: '0xffaf5f' }
+    - { index: 216, color: '0xffaf87' }
+    - { index: 217, color: '0xffafaf' }
+    - { index: 218, color: '0xffafd7' }
+    - { index: 219, color: '0xffafff' }
+    - { index: 220, color: '0xffd700' }
+    - { index: 221, color: '0xffd75f' }
+    - { index: 222, color: '0xffd787' }
+    - { index: 223, color: '0xffd7af' }
+    - { index: 224, color: '0xffd7d7' }
+    - { index: 225, color: '0xffd7ff' }
+    - { index: 226, color: '0xffff00' }
+    - { index: 227, color: '0xffff5f' }
+    - { index: 228, color: '0xffff87' }
+    - { index: 229, color: '0xffffaf' }
+    - { index: 230, color: '0xffffd7' }
+    - { index: 231, color: '0xffffff' }
+    - { index: 232, color: '0x080808' }
+    - { index: 233, color: '0x121212' }
+    - { index: 234, color: '0x1c1c1c' }
+    - { index: 235, color: '0x262626' }
+    - { index: 236, color: '0x303030' }
+    - { index: 237, color: '0x3a3a3a' }
+    - { index: 238, color: '0x444444' }
+    - { index: 239, color: '0x4e4e4e' }
+    - { index: 240, color: '0x585858' }
+    - { index: 241, color: '0x626262' }
+    - { index: 242, color: '0x6c6c6c' }
+    - { index: 243, color: '0x767676' }
+    - { index: 244, color: '0x808080' }
+    - { index: 245, color: '0x8a8a8a' }
+    - { index: 246, color: '0x949494' }
+    - { index: 247, color: '0x9e9e9e' }
+    - { index: 248, color: '0xa8a8a8' }
+    - { index: 249, color: '0xb2b2b2' }
+    - { index: 250, color: '0xbcbcbc' }
+    - { index: 251, color: '0xc6c6c6' }
+    - { index: 252, color: '0xd0d0d0' }
+    - { index: 253, color: '0xdadada' }
+    - { index: 254, color: '0xe4e4e4' }
+    - { index: 255, color: '0xeeeeee' }
+
+# Visual Bell
+#
+# Any time the BEL code is received, Alacritty "rings" the visual bell. Once
+# rung, the terminal background will be set to white and transition back to the
+# default background color. You can control the rate of this transition by
+# setting the `duration` property (represented in milliseconds). You can also
+# configure the transition function by setting the `animation` property.
+#
+# Possible values for `animation`
+# `Ease`
+# `EaseOut`
+# `EaseOutSine`
+# `EaseOutQuad`
+# `EaseOutCubic`
+# `EaseOutQuart`
+# `EaseOutQuint`
+# `EaseOutExpo`
+# `EaseOutCirc`
+# `Linear`
+#
+# To completely disable the visual bell, set its duration to 0.
+#
+bell:
+  animation: EaseOutExpo
+  color: '0xffffff'
+  duration: 1
+
+# Key bindings
+#
+# Key bindings are specified as a list of objects. Each binding will specify a
+# key and modifiers required to trigger it, terminal modes where the binding is
+# applicable, and what should be done when the key binding fires. It can either
+# send a byte sequence to the running application (`chars`), execute a
+# predefined action (`action`) or fork and execute a specified command plus
+# arguments (`command`).
+#
+# Bindings are always filled by default, but will be replaced when a new binding
+# with the same triggers is defined. To unset a default binding, it can be
+# mapped to the `None` action.
+#
+# Example:
+#   `- { key: V, mods: Control|Shift, action: Paste }`
+#
+# Available fields:
+#   - key
+#   - mods (optional)
+#   - chars | action | command (exactly one required)
+#   - mode (optional)
+#
+# Values for `key`:
+#   - `A` -> `Z`
+#   - `F1` -> `F12`
+#   - `Key1` -> `Key0`
+#
+#   A full list with available key codes can be found here:
+#   https://docs.rs/glutin/*/glutin/enum.VirtualKeyCode.html#variants
+#
+#   Instead of using the name of the keys, the `key` field also supports using
+#   the scancode of the desired key. Scancodes have to be specified as a
+#   decimal number.
+#   This command will allow you to display the hex scancodes for certain keys:
+#     `showkey --scancodes`
+#
+# Values for `mods`:
+#   - Command
+#   - Control
+#   - Option
+#   - Super
+#   - Shift
+#   - Alt
+#
+#   Multiple `mods` can be combined using `|` like this: `mods: Control|Shift`.
+#   Whitespace and capitalization is relevant and must match the example.
+#
+# Values for `chars`:
+#   The `chars` field writes the specified string to the terminal. This makes
+#   it possible to pass escape sequences.
+#   To find escape codes for bindings like `PageUp` ("\x1b[5~"), you can run
+#   the command `showkey -a` outside of tmux.
+#   Note that applications use terminfo to map escape sequences back to
+#   keys. It is therefore required to update the terminfo when
+#   changing an escape sequence.
+#
+# Values for `action`:
+#   - Paste
+#   - PasteSelection
+#   - Copy
+#   - IncreaseFontSize
+#   - DecreaseFontSize
+#   - ResetFontSize
+#   - ScrollPageUp
+#   - ScrollPageDown
+#   - ScrollLineUp
+#   - ScrollLineDown
+#   - ScrollToTop
+#   - ScrollToBottom
+#   - ClearHistory
+#   - Hide
+#   - Quit
+#   - ClearLogNotice
+#   - SpawnNewInstance
+#   - ToggleFullscreen
+#   - None
+#
+# Values for `action` (macOS only):
+#   - ToggleSimpleFullscreen: Enters fullscreen without occupying another space
+#
+# Values for `command`:
+#   The `command` field must be a map containing a `program` string and
+#   an `args` array of command line parameter strings.
+#
+#   Example:
+#       `command: { program: "alacritty", args: ["-e", "vttest"] }`
+#
+# Values for `mode`:
+#   - ~AppCursor
+#   - AppCursor
+#   - ~AppKeypad
+#   - AppKeypad
+#
+key_bindings:
+  #  - { key: V,        mods: Command,       action: Paste                        }
+  #  - { key: C,        mods: Command,       action: Copy                         }
+  #  - { key: Q,        mods: Command,       action: Quit                         }
+  #  - { key: N,        mods: Command,       action: SpawnNewInstance             }
+  #  - { key: Return,   mods: Command,       action: ToggleFullscreen             }
+  #
+  #  - { key: Home,                          chars: "\x1bOH",   mode: AppCursor   }
+  #  - { key: Home,                          chars: "\x1b[H",   mode: ~AppCursor  }
+  #  - { key: End,                           chars: "\x1bOF",   mode: AppCursor   }
+  #  - { key: End,                           chars: "\x1b[F",   mode: ~AppCursor  }
+  - { key: Equals,   mods: Command,       action: IncreaseFontSize             }
+  - { key: Minus,    mods: Command,       action: DecreaseFontSize             }
+  - { key: Minus,    mods: Command|Shift, action: ResetFontSize                }
+  #  - { key: PageUp,   mods: Shift,         chars: "\x1b[5;2~"                   }
+  #  - { key: PageUp,   mods: Control,       chars: "\x1b[5;5~"                   }
+  #  - { key: PageUp,                        chars: "\x1b[5~"                     }
+  #  - { key: PageDown, mods: Shift,         chars: "\x1b[6;2~"                   }
+  #  - { key: PageDown, mods: Control,       chars: "\x1b[6;5~"                   }
+  #  - { key: PageDown,                      chars: "\x1b[6~"                     }
+  - { key: Left,     mods: Shift,         chars: "\x1b[1;2D"                   }
+  - { key: Left,     mods: Control,       chars: "\x1b[1;5D"                   }
+  - { key: Left,     mods: Alt,           chars: "\x1b[1;3D"                   }
+  - { key: Left,                          chars: "\x1b[D",   mode: ~AppCursor  }
+  - { key: Left,                          chars: "\x1bOD",   mode: AppCursor   }
+  - { key: Right,    mods: Shift,         chars: "\x1b[1;2C"                   }
+  - { key: Right,    mods: Control,       chars: "\x1b[1;5C"                   }
+  - { key: Right,    mods: Alt,           chars: "\x1b[1;3C"                   }
+  - { key: Right,                         chars: "\x1b[C",   mode: ~AppCursor  }
+  - { key: Right,                         chars: "\x1bOC",   mode: AppCursor   }
+  - { key: Up,       mods: Shift,         chars: "\x1b[1;2A"                   }
+  - { key: Up,       mods: Control,       chars: "\x1b[1;5A"                   }
+  - { key: Up,       mods: Alt,           chars: "\x1b[1;3A"                   }
+  - { key: Up,                            chars: "\x1b[A",   mode: ~AppCursor  }
+  - { key: Up,                            chars: "\x1bOA",   mode: AppCursor   }
+  - { key: Down,     mods: Shift,         chars: "\x1b[1;2B"                   }
+  - { key: Down,     mods: Control,       chars: "\x1b[1;5B"                   }
+  - { key: Down,     mods: Alt,           chars: "\x1b[1;3B"                   }
+  - { key: Down,                          chars: "\x1b[B",   mode: ~AppCursor  }
+  - { key: Down,                          chars: "\x1bOB",   mode: AppCursor   }
+  #  - { key: Tab,      mods: Shift,         chars: "\x1b[Z"                      }
+  #  - { key: F1,                            chars: "\x1bOP"                      }
+  #  - { key: F2,                            chars: "\x1bOQ"                      }
+  #  - { key: F3,                            chars: "\x1bOR"                      }
+  #  - { key: F4,                            chars: "\x1bOS"                      }
+  #  - { key: F5,                            chars: "\x1b[15~"                    }
+  #  - { key: F6,                            chars: "\x1b[17~"                    }
+  #  - { key: F7,                            chars: "\x1b[18~"                    }
+  #  - { key: F8,                            chars: "\x1b[19~"                    }
+  #  - { key: F9,                            chars: "\x1b[20~"                    }
+  #  - { key: F10,                           chars: "\x1b[21~"                    }
+  #  - { key: F11,                           chars: "\x1b[23~"                    }
+  #  - { key: F12,                           chars: "\x1b[24~"                    }
+  #  - { key: Back,                          chars: "\x7f"                        }
+  #  - { key: Back,     mods: Alt,           chars: "\x1b\x7f"                    }
+  #  - { key: Insert,                        chars: "\x1b[2~"                     }
+  #  - { key: Delete,                        chars: "\x1b[3~"                     }
+
+  #    # shortcuts for tmux. the leader key is control-b (0x02)
+  #  - { key: W,        mods: Command,       chars: "\x02&"                       }  # close tab (kill)
+  #  - { key: T,        mods: Command,       chars: "\x02c"                       }  # new tab
+  #  - { key: RBracket, mods: Command|Shift, chars: "\x02n"                       }  # select next tab
+  #  - { key: LBracket, mods: Command|Shift, chars: "\x02p"                       }  # select previous tab
+  #  - { key: RBracket, mods: Command,       chars: "\x02o"                       }  # select next pane
+  #  - { key: LBracket, mods: Command,       chars: "\x02;"                       }  # select last (previously used) pane
+  #  - { key: F,        mods: Command,       chars: "\x02/"                       }  # search (upwards) (see tmux.conf)
+
+mouse:
+  # Click settings
+  #
+  # The `double_click` and `triple_click` settings control the time
+  # alacritty should wait for accepting multiple clicks as one double
+  # or triple click.
+  double_click: { threshold: 300 }
+  triple_click: { threshold: 300 }
+
+  # If this is `true`, the cursor is temporarily hidden when typing.
+  hide_when_typing: true
+
+  # URL launcher
+  # url:
+    # This program is executed when clicking on a text which is recognized as a URL.
+    # The URL is always added to the command as the last parameter.
+    #
+    # When set to `None`, URL launching will be disabled completely.
+    #
+    # Default:
+    #   - (macOS) open
+    #   - (Linux) xdg-open
+    #   - (Windows) explorer
+    # launcher:
+    #   program: xdg-open
+    #   args: []
+
+    # These are the modifiers that need to be held down for opening URLs when clicking
+    # on them. The available modifiers are documented in the key binding section.
+    # modifiers: Control|Shift
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+
+  # When set to `true`, selected text will be copied to the primary clipboard.
+  save_to_clipboard: false
+
+# Mouse bindings
+#
+# Available fields:
+# - mouse
+# - action
+# - mods (optional)
+#
+# Values for `mouse`:
+# - Middle
+# - Left
+# - Right
+# - Numeric identifier such as `5`
+#
+# All available `mods` and `action` values are documented in the key binding
+# section.
+mouse_bindings:
+  - { mouse: Middle, action: PasteSelection }
+
+cursor:
+  # Cursor style
+  #
+  # Values for 'style':
+  #   - ▇ Block
+  #   - _ Underline
+  #   - | Beam
+  style: Block
+
+  # If this is `true`, the cursor will be rendered as a hollow box when the
+  # window is not focused.
+  unfocused_hollow: true
+
+# dynamic_title: false
+
+# Live config reload (changes require restart)
+live_config_reload: true
+
+debug:
+  # Should display the render timer
+  render_timer: false
+
+  # Keep the log file after quitting Alacritty.
+  persistent_logging: false
+
+  # Log level
+  #
+  # Values for `log_level`:
+  #   - OFF
+  #   - ERROR
+  #   - WARN
+  #   - INFO
+  #   - DEBUG
+  #   - TRACE
+  log_level: OFF
+
+  # Print all received window events.
+  print_events: false
+
+  # Record all characters and escape sequences as test data.
+  ref_test: false
+
+# Shell
+#
+# You can set shell.program to the path of your favorite shell, e.g. /bin/fish.
+# Entries in shell.args are passed unmodified as arguments to the shell.
+shell:
+  program: /usr/local/bin/bash
+
+# vim: nospell
