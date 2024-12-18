@@ -1,2 +1,9 @@
-.mod.vim
-bin
+
+*.bak
+*.bak.*
+.netrw*
+vim/spell
+commands.vsh
+bashrc
+old/
+computer_dependent/
