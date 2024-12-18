@@ -2,8 +2,11 @@
 *.bak
 *.bak.*
 .netrw*
+vim/.vim
+.Vimball*
 vim/spell
 commands.vsh
 bashrc
 old/
 computer_dependent/
+__pycache__

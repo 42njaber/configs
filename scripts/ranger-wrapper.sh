@@ -58,13 +58,14 @@ Notes:
 elif [ "$directory" = "1" ]; then
     set -- --choosedir="$out" --show-only-dirs --cmd="'echo Select directory (quit in dir to select it)'"
 elif [ "$multiple" = "1" ]; then
+    echo >> "$out"
     set -- --choosefiles="$out" --cmd="'echo Select file(s) (open file to select it; <Space> to select multiple)'"
 else
     set -- --choosefile="$out" --cmd="'echo Select file (open file to select it)'"
 fi
 
 echo $termcmd $cmd $@
-sh -c "$termcmd $cmd $@"
+sh -c "$termcmd $cmd $@" && echo >> "$out"
 if [ "$save" = "1" ] && [ ! -s "$out" ]; then
     rm "$path"
 fi

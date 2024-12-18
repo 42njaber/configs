@@ -1,17 +1,28 @@
+"
+" TODO
+" - Better session management, put temp files in ./.vim
+" - Better vsh
+"
 
-if !has("nvim")
-	set nocompatible
-else
+if has("nvim")
 	set runtimepath^=~/.vim runtimepath+=~/.vim/after
-	let &packpath = &runtimepath
+	let &packpath=&runtimepath
+else
+	set nocompatible
 endif
 
 set langmenu=en_US.UTF-8
 language message C
 
+function! ReloadSyntax()
+	let l:buf=bufnr('%')
+	syntax on \| syntax sync fromstart
+	exec 'b' l:buf
+endfunc
+call ReloadSyntax()
+
 colorscheme custom
-syntax on
-syntax sync fromstart
+set synmaxcol=400
 
 " Plugins
 call pathogen#infect()
@@ -28,6 +39,7 @@ set mouse =
 if !has("nvim")
 	set ttymouse =
 endif
+
 let g:tex_flavor='latex'
 let g:hdr42mail='njaber@student.42.fr'
 let g:hdr42user='njaber'
@@ -39,7 +51,6 @@ set nowritebackup
 set noswapfile
 
 " Sessions
-set sessionoptions=curdir,folds,globals,help,localoptions,options,resize,tabpages,winpos,winsize
 set viewdir=~/.vimstore/view
 set viminfofile=~/.vimstore/info/.viminfo
 set viminfo=\"10,'100,<50,s2,h
@@ -47,25 +58,20 @@ set viminfo=\"10,'100,<50,s2,h
 " Indent/Syntax
 set cindent
 set shiftwidth=4
-set softtabstop=4
 set tabstop=4
 set noexpandtab
 set list
 set lcs=tab:>-,space:_
 set conceallevel=2
-call matchadd('SpecialKey', '\s', 100) " To prevent CursorLine override
-aug SpecialKey
-	au! BufEnter,BufCreate,BufNewFile * call matchadd('SpecialKey', '\s', 100)
-aug END
 
 " Format
-set textwidth=300
+set textwidth&
 set nowrap
 set breakindent
 set showbreak=>---
 set linebreak
 set backspace=indent,eol,start
-set scrolloff=10
+set scrolloff=5
 set formatoptions=tcrqv1j
 
 " Regex
@@ -77,13 +83,13 @@ set regexpengine=0
 
 " Timeouts
 " set timeoutlen=500
-" set ttimeoutlen=100
 set notimeout
-set nottimeout
+set ttimeout
+set ttimeoutlen=500
 
 " History
 set history=200
-set undolevels=100
+set undolevels=1000
 
 " Undo
 set undofile
@@ -98,6 +104,7 @@ if isdirectory('inc/')
 endif
 
 " Norme
+set efm&
 set efm+=%+PNorme:\ %f,%WWarning:\ %m,%EError:\ %m,%EError\ (line\ %l):\ %m,%EError\ (line\ %l\\,\ col\ %v):\ %m
 
 " Error format ignore notes and warnings
@@ -127,20 +134,21 @@ command! Gitdiff execute 'silent !git diff -R % > /tmp/%:t.patch' | execute 'red
 " Completion
 set wildmenu
 set wildchar=<TAB>
-set wildmode=longest:full
+set wildmode=longest:full,list,full
 
 set omnifunc=syntaxcomplete#Complete
 set completeopt=menu,menuone,longest
 
 " Paste
 nnoremap <F2> :set invpaste paste?<CR>
-imap <F2> <C-O>:set invpaste paste?<CR>
+" imap <F2> <C-O>:set invpaste paste?<CR>
 set pastetoggle=<F2>
 
 " Fold
 set foldmethod=manual
 set foldnestmax=3
-set nofoldenable
+set foldcolumn=0
+"set nofoldenable
 
 " Modelines
 set modeline
@@ -186,6 +194,7 @@ set relativenumber
 " endif
 
 " Visual cues
+set more
 set cursorline
 
 " Not working D:
@@ -199,7 +208,7 @@ set cursorline
 " Windows
 set splitbelow
 set splitright
-set title
+"set title
 
 set statusline=
 set statusline+=\ %1*%{&readonly?'[Read-Only]':&modifiable?'':'[Unmodifiable]'}%0*
@@ -209,29 +218,64 @@ set statusline+=%=
 set statusline+=%10.10(ft=%{&ft}%)
 set statusline+=\ \ L%l/%L(%p%%)
 
+" Open up to 10 arg files in tabs
+au VimEnter * set tabpagemax=10|sil tab ball|set tabpagemax&vim
+
+" Go to previous tab on close
+augroup tabing
+	au!
+	let g:tablist = [1, 1]
+	au TabLeave * let g:tablist[0] = g:tablist[1]
+	au TabLeave * let g:tablist[1] = tabpagenr()
+	au TabClosed * exe "normal " . g:tablist[0] . "gt"
+augroup END
+
 "
 " Templates
 "
 
-if has("autocmd")
-	augroup templates
-		au!
-		autocmd BufNewFile *.sh 0r ~/.vim/templates/sh/default.sh | normal G
-		autocmd BufNewFile *.cpp
-					\ if(@% =~ ".*\.class\.cpp") |
-					\	0r ~/.vim/templates/cpp/class.cpp | exe 'normal 9G' |
-					\ else |
-					\	0r ~/.vim/templates/cpp/default.cpp | exe 'normal G' |
-					\ endif
-		autocmd BufNewFile *.hpp
-					\ if(@% =~ ".*\.class\.hpp") |
-					\	0r ~/.vim/templates/cpp/class.hpp | exe 'normal 9G' |
-					\ else |
-					\	0r ~/.vim/templates/cpp/default.hpp | exe 'normal G' |
-					\ endif
-		autocmd! BufNewFile * %s#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge|''
-	augroup END
+augroup templates
+	au!
+	autocmd BufNewFile *.sh 0r ~/.vim/templates/sh/default.sh | normal G
+	autocmd BufNewFile *.cpp
+				\ if(@% =~ ".*\.class\.cpp") |
+				\	0r ~/.vim/templates/cpp/class.cpp | exe 'normal 9G' |
+				\ else |
+				\	0r ~/.vim/templates/cpp/default.cpp | exe 'normal G' |
+				\ endif
+	autocmd BufNewFile *.hpp
+				\ if(@% =~ ".*\.class\.hpp") |
+				\	0r ~/.vim/templates/cpp/class.hpp | exe 'normal 9G' |
+				\ else |
+				\	0r ~/.vim/templates/cpp/default.hpp | exe 'normal G' |
+				\ endif
+	autocmd! BufNewFile * %s#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge|''
+augroup END
+
+set term&
+if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
+	set term=tmux-256color
+	set <xUp>=[1;*A
+	set <xDown>=[1;*B
+	set <xRight>=[1;*C
+	set <xLeft>=[1;*D
+	set <PasteStart>=[200~
+	set <PasteEnd>=[201~
 endif
+
+augroup smartpaste
+	au!
+	function! IndentPastedText()
+		if !v:option_old && v:option_new
+			mark [
+		elseif v:option_old && !v:option_new
+			let pos = getpos('.')
+			normal ='[
+			call setpos('.', pos)
+		endif
+	endfunction
+	au OptionSet paste call IndentPastedText()
+augroup END
 
 "
 " Shortcuts
@@ -244,10 +288,23 @@ nmapclear
 cmapclear
 let mapleader=' '
 
+nnoremap	,					/
+inoremap	<F1>				<NOP>
+nnoremap	<F1>				<NOP>
+nnoremap	/					:30messages<CR>
+nnoremap	Q					<NOP>
+
+nnoremap	+					g+
+nnoremap	-					g-
+nmap		gf					:e <cfile><CR>
+
 nnoremap	<LEADER>			<NOP>
 nnoremap	<LEADER><LEADER>	<NOP>
 
-cnoremap	<C-C>				<ESC>
+nnoremap	<LEADER>			<NOP>
+nnoremap	<LEADER><LEADER>	<NOP>
+
+cnoremap	<C-C>				<C-u><Backspace>
 inoremap	<C-C>				<ESC>
 vnoremap	<C-C>				<ESC>
 
@@ -263,44 +320,18 @@ nnoremap	<LEADER>t			:silent set list!<CR>
 nnoremap	<LEADER>g			:silent nohls<CR>
 nohls
 
-nnoremap	<LEADER>z			:silent set list!<CR>
-nnoremap	<LEADER><LEFT>		:tabprevious<CR>
+nnoremap	<LEADER><LEFT>		:tabprev<CR>
 nnoremap	<LEADER><RIGHT>		:tabnext<CR>
-nnoremap	<LEADER>h			:tabprevious<CR>
+nnoremap	<LEADER>h			:tabprev<CR>
 nnoremap	<LEADER>l			:tabnext<CR>
 nnoremap	<LEADER>H			:tabm -1<CR>
 nnoremap	<LEADER>L			:tabm +1<CR>
 nnoremap	<LEADER>n			:silent tabnew .<CR>
+nnoremap	<LEADER>z			:ls<CR>:b 
+cnoreabbrev <expr> del getcmdtype() == ":" && getcmdline() == 'b del' ? 'bw' : 'del'
 
-nnoremap	<LEADER>&			1gt<CR>
-nnoremap	<LEADER>é			2gt<CR>
-nnoremap	<LEADER>"			3gt<CR>
-nnoremap	<LEADER>'			4gt<CR>
-nnoremap	<LEADER>(			5gt<CR>
-nnoremap	<LEADER>-			6gt<CR>
-nnoremap	<LEADER>è			7gt<CR>
-nnoremap	<LEADER>_			8gt<CR>
-nnoremap	<LEADER>ç			9gt<CR>
-nnoremap	<LEADER>à			10gt<CR>
-
-nnoremap	<LEADER>1			:tabm 1<CR>
-nnoremap	<LEADER>2			:tabm 2<CR>
-nnoremap	<LEADER>3			:tabm 3<CR>
-nnoremap	<LEADER>4			:tabm 4<CR>
-nnoremap	<LEADER>5			:tabm 5<CR>
-nnoremap	<LEADER>6			:tabm 6<CR>
-nnoremap	<LEADER>7			:tabm 7<CR>
-nnoremap	<LEADER>8			:tabm 8<CR>
-nnoremap	<LEADER>9			:tabm 9<CR>
-nnoremap	<LEADER>0			:tabm 10<CR>
-
-" nnoremap	<LEADER>(			:cprevious<CR>
-" nnoremap	<LEADER>)			:cnext<CR>
-
-nnoremap	<UP>				<C-w>k
-nnoremap	<DOWN>				<C-w>j
-nnoremap	<LEFT>				<C-w>h
-nnoremap	<RIGHT>				<C-w>l
+nnoremap	(					<C-[>
+nnoremap	)					<C-]>
 
 noremap		H					0
 noremap		L					$
@@ -331,15 +362,61 @@ nmap <silent>	<F10>			:echo "hi<" . synIDattr(synID(line("."),col("."),1),"name"
 
 nnoremap <LEADER><TAB>			:set et<CR>:.retab<CR>hv0r :set noet<CR>:.retab!<CR>w
 
-cnoreabbrev <expr> t getcmdtype() == ":" && getcmdline() == 't' ? 'tabnew' : 't'
+" cnoreabbrev <expr> t getcmdtype() == ":" && getcmdline() == 't' ? 'tabnew' : 't'
 
 " Configs
-map			<LEADER>r			:tabnew ~/.vimrc<CR>
 if has("nvim")
 	map			<LEADER>R			:source ~/.config/nvim/init.vim<CR>
 else
 	map			<LEADER>R			:source ~/.vimrc<CR>
+	" map			<LEADER>r			:tabnew ~/.vimrc<CR>
+	map			<LEADER>f			:exec "tabnew ~/.vim/ftplugin/"..&ft..".vim"<CR>
+	map			<LEADER>s			:exec "tabnew ~/.vim/after/syntax/"..&ft..".vim"<CR>
+	map			<LEADER>i			:exec "tabnew ~/.vim/indent/"..&ft..".vim"<CR>
 endif
+
+command Suw silent exec "w !sudo tee % >/dev/null" | e!
+command Sudo call SudoMode()
+function! SudoMode()
+	if &modifiable && ! filewritable(expand("%")) && system("sudo echo 1 || echo 0")
+		cnoreabbrev <buffer> <expr> w getcmdtype() == ":" && getcmdline() == 'w' ? 'Suw' : 'w'
+		setlocal noreadonly
+		setlocal autoread
+		augroup sudo
+			au!
+			au BufReadPost <buffer> set noreadonly
+		augroup END
+	endif
+endfunction
+
+set sessionoptions=curdir,folds,options,buffers,tabpages,help,winpos,winsize
+function! LoadSession(session)
+	let g:session_name = a:session
+	if filereadable(expand("~/.vimstore/sessions/" . a:session . ".vim"))
+		exec "source ~/.vimstore/sessions/" . a:session . ".vim"
+	endif
+endfunction
+
+function! SaveSession()
+	exec "mksession! ~/.vimstore/sessions/" . g:session_name . ".vim"
+endfunction
+
+augroup session
+	autocmd!
+	autocmd BufWrite * if exists("g:session_name") | call SaveSession() | endif
+augroup END
+
+function! SetupServer()
+	if exists("v:servername") && v:servername != ""
+		cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == "q" ? "close" : "q"
+		cnoreabbrev <expr> x getcmdtype() == ":" && getcmdline() == "x" ? "w \| close" : "x"
+		nnoremap <silent> ZZ :b#\|bw#<CR>
+
+		if !exists("g:session_name") | call LoadSession(v:servername) | endif
+	endif
+endfunction
+
+autocmd SourcePost,VimEnter * call SetupServer()
 
 " "
 "
@@ -354,7 +431,4 @@ filetype plugin indent off
 filetype detect
 filetype plugin indent on
 
-if (&ft == "tpt2")
-	set noautoindent
-	set nocindent
-endif
+do BufRead

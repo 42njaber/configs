@@ -1,4 +1,4 @@
-# vim: set ft=tmux
+# vim: ft=tmux
 
 ## This file is a slightly modified dump of all default tmux bindings (excluding mouse bindings), used to reset keybindings to their default state
 

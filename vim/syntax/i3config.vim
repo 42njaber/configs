@@ -44,7 +44,7 @@ syn match Font /^\s*font\s\+.*$/ contains=FontContent,FontSeparator,FontSize,Fon
 "syn match Font /^\s*font\s\+\(\(.*\\\_.*\)\|\(.*[^\\]\+$\)\)/ contains=FontContent,FontSeparator,FontSize,FontNamespace
 
 " variables
-syn match String /\(['"]\)\(.\{-}\)\1/ contained
+syn match String /\(['"]\)\(.\{-}\)\1/ contained contains=Variable
 syn match Color /#\w\{6}/ contained
 syn match VariableModifier /+/ contained
 syn match VariableAndModifier /+\w\+/ contained contains=VariableModifier
@@ -82,7 +82,7 @@ syn match BorderStyle /^\s*\(new_window\|new_float\|default_border\|default_floa
 
 " Hide borders and edges
 syn keyword EdgeKeyword none vertical horizontal both contained
-syn match Edge /^\s*hide_edge_borders\s\+\(none\|vertical\|horizontal\|both\)\s\?$/ contains=EdgeKeyword
+syn match Edge /^\s*hide_edge_borders\s\+\(--i3\)\?\s\+\(\|none\|vertical\|horizontal\|both\)\s\?$/ contains=EdgeKeyword
 
 " Arbitrary commands for specific windows (for_window)
 syn keyword CommandKeyword for_window contained
@@ -106,7 +106,7 @@ syn match Resource /^\s*set_from_resource\s\+.*$/ contains=ResourceKeyword,Windo
 " Auto start applications
 syn keyword ExecKeyword exec exec_always contained
 syn match NoStartupId /--no-startup-id/ contained " We are not using BindArgument as only no-startup-id is supported here
-syn match Exec /^\s*exec\(_always\)\?\s\+.*$/ contains=ExecKeyword,NoStartupId,String
+syn match Exec /^\s*exec\(_always\)\?\s\+.*$/ contains=Variable,ExecKeyword,NoStartupId,String
 
 " Automatically putting workspaces on specific screens
 syn keyword WorkspaceKeyword workspace contained
@@ -135,6 +135,11 @@ syn match PopupOnFullscreen /^\s*popup_during_fullscreen\s\+\w\+\s\?$/ contains=
 syn keyword FocusWrappingKeyword force_focus_wrapping focus_wrapping contained
 syn keyword FocusWrappingType yes no contained
 syn match FocusWrapping /^\s*\(force_\)\?focus_wrapping\s\+\(yes\|no\)\s\?$/ contains=FocusWrappingType,FocusWrappingKeyword
+
+" Focus follow mouse
+syn keyword FocusFollowKeyword focus_follows_mouse contained
+syn keyword FocusFollowType yes no contained
+syn match FocusWrapping /^\s*focus_follows_mouse\s\+\(yes\|no\)\s\?$/ contains=FocusFollowType,FocusFollowKeyword
 
 " Forcing Xinerama
 syn keyword ForceXineramaKeyword force_xinerama contained
@@ -182,6 +187,7 @@ hi! def link Command Type
 hi! def link Output Type
 hi! def link WindowCommandSpecial Type
 hi! def link FocusWrappingType Type
+hi! def link FocusFollowType Type
 hi! def link FontSize Constant
 hi! def link Color Constant
 hi! def link Number Constant
@@ -217,6 +223,7 @@ hi! def link InterprocessKeyword Identifier
 hi! def link MouseWarpingKeyword Identifier
 hi! def link PopupOnFullscreenKeyword Identifier
 hi! def link FocusWrappingKeyword Identifier
+hi! def link FocusFollowKeyword Identifier
 hi! def link ForceXineramaKeyword Identifier
 hi! def link AutomaticSwitchKeyword Identifier
 hi! def link DelayUrgencyKeyword Identifier

@@ -65,6 +65,7 @@ window#waybar.solo {
 #clock,
 #custom-clock,
 #battery,
+#disk,
 #cpu,
 #memory,
 #temperature,
@@ -83,10 +84,6 @@ window#waybar.solo {
     color: #ffffff;
     background-color: rgba(43, 48, 59, 0.9);
     border-bottom: 3px solid rgba(100, 114, 125, 1);
-}
-
-#custom-clock {
-	margin: 0 0 0 4px;
 }
 
 #battery.charging:not(.good) {

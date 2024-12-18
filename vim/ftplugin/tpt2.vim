@@ -1,0 +1,3 @@
+
+setlocal noautoindent
+setlocal nocindent

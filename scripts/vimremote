@@ -1,0 +1,66 @@
+#!/bin/env bash
+# vim: ft=sh
+
+# -use return value from ${PIPESTATUS[0]}, because ! hosed $?
+! getopt --test > /dev/null 
+if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
+    echo 'I’m sorry, `getopt --test` failed in this environment.'
+    exit 1
+fi
+
+# option --output/-o requires 1 argument
+OPTIONS=se:
+
+# -pass arguments only via   -- "$@"   to separate them correctly
+! PARSED=$(getopt --options=$OPTIONS --name "$0" -- "$@")
+if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
+    exit 2
+fi
+# read getopt’s output this way to handle the quoting right:
+eval set -- "$PARSED"
+
+s=true
+e=false
+# now enjoy the options in order and nicely split until we see --
+while true; do
+    case "$1" in
+        -s)
+            s=false
+            shift
+            ;;
+        -e)
+            e=true
+            exp="`echo "$2" | sed "s/'/\\\"/g"`"
+            shift 2
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Programming error"
+            exit 3
+            ;;
+    esac
+done
+
+# handle non-option arguments
+
+SESSION_NAME="`tmux display -p "#{session_name}"`"
+VIMPANE="`tmux display -p "#{@vimpane}"`"
+
+if $e; then
+    vim --servername "$SESSION_NAME" --remote-expr "execute(\"${exp//\"/\\\"}\")"
+fi
+
+if [[ $# -gt 0 ]]; then
+    vim --servername "$SESSION_NAME" --remote "$@"
+    if $s; then
+        tmux switch-client -t "$VIMPANE"
+    fi
+elif $e; then
+    true
+else
+    echo "$0: One or more input files are required."
+    exit 4
+fi

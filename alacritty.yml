@@ -16,6 +16,10 @@
 window:
   opacity: 1.0
 
+  dimensions:
+    columns: 130
+    lines: 40
+
   # Window padding (changes require restart)
   #
   # Blank space added around the window in pixels. This padding is not scaled by
@@ -111,7 +115,7 @@ colors:
   # Tomorrow (https://github.com/aarowill/base16-alacritty/blob/master/colors/base16-tomorrow.yml)
   # Default colors
   primary:
-    background: "0x2B3038"
+    background: '0x2B3038'
     foreground: '0xffffff'
   # Colors the cursor will use if `custom_cursor_colors` is true
   cursor:
@@ -125,7 +129,7 @@ colors:
     yellow:  '0x808000'
     blue:    '0x2020A0'
     magenta: '0x800080'
-    cyan:    '0x008080'
+    cyan:    '0x006060'
     white:   '0xc0c0c0'
   # Bright colors
   bright:
@@ -137,36 +141,6 @@ colors:
     magenta: '0xff00ff'
     cyan:    '0x00ffff'
     white:   '0xffffff'
-
-  # # Tomorrow Night (https://github.com/aarowill/base16-alacritty/blob/master/colors/base16-tomorrow-night.yml)
-  # # Default colors
-  # primary:
-  #   background: '0x1d1f21'
-  #   foreground: '0xc5c8c6'
-  # # Colors the cursor will use if `custom_cursor_colors` is true
-  # cursor:
-  #   text: '0x1d1f21'
-  #   cursor: '0xc5c8c6'
-  # # Normal colors
-  # normal:
-  #   black:   '0x1d1f21'
-  #   red:     '0xcc6666'
-  #   green:   '0xb5bd68'
-  #   yellow:  '0xf0c674'
-  #   blue:    '0x81a2be'
-  #   magenta: '0xb294bb'
-  #   cyan:    '0x8abeb7'
-  #   white:   '0xc5c8c6'
-  # # Bright colors
-  # bright:
-  #   black:   '0x969896'
-  #   red:     '0xde935f'
-  #   green:   '0x282a2e'
-  #   yellow:  '0x373b41'
-  #   blue:    '0xb4b7b4'
-  #   magenta: '0xe0e0e0'
-  #   cyan:    '0xa3685a'
-  #   white:   '0xffffff'
 
   # Indexed Colors
   #
@@ -558,26 +532,26 @@ key_bindings:
   #  - { key: PageDown, mods: Shift,         chars: "\x1b[6;2~"                   }
   #  - { key: PageDown, mods: Control,       chars: "\x1b[6;5~"                   }
   #  - { key: PageDown,                      chars: "\x1b[6~"                     }
-  - { key: Left,     mods: Shift,         chars: "\x1b[1;2D"                   }
-  - { key: Left,     mods: Control,       chars: "\x1b[1;5D"                   }
-  - { key: Left,     mods: Alt,           chars: "\x1b[1;3D"                   }
-  - { key: Left,                          chars: "\x1b[D",   mode: ~AppCursor  }
-  - { key: Left,                          chars: "\x1bOD",   mode: AppCursor   }
-  - { key: Right,    mods: Shift,         chars: "\x1b[1;2C"                   }
-  - { key: Right,    mods: Control,       chars: "\x1b[1;5C"                   }
-  - { key: Right,    mods: Alt,           chars: "\x1b[1;3C"                   }
-  - { key: Right,                         chars: "\x1b[C",   mode: ~AppCursor  }
-  - { key: Right,                         chars: "\x1bOC",   mode: AppCursor   }
-  - { key: Up,       mods: Shift,         chars: "\x1b[1;2A"                   }
-  - { key: Up,       mods: Control,       chars: "\x1b[1;5A"                   }
-  - { key: Up,       mods: Alt,           chars: "\x1b[1;3A"                   }
-  - { key: Up,                            chars: "\x1b[A",   mode: ~AppCursor  }
-  - { key: Up,                            chars: "\x1bOA",   mode: AppCursor   }
-  - { key: Down,     mods: Shift,         chars: "\x1b[1;2B"                   }
-  - { key: Down,     mods: Control,       chars: "\x1b[1;5B"                   }
-  - { key: Down,     mods: Alt,           chars: "\x1b[1;3B"                   }
-  - { key: Down,                          chars: "\x1b[B",   mode: ~AppCursor  }
-  - { key: Down,                          chars: "\x1bOB",   mode: AppCursor   }
+  #- { key: Left,     mods: Shift,         chars: "\x1b[1;2D"                   }
+  #- { key: Left,     mods: Control,       chars: "\x1b[1;5D"                   }
+  #- { key: Left,     mods: Alt,           chars: "\x1b[1;3D"                   }
+  #- { key: Left,                          chars: "\x1b[D",   mode: ~AppCursor  }
+  #- { key: Left,                          chars: "\x1bOD",   mode: AppCursor   }
+  #- { key: Right,    mods: Shift,         chars: "\x1b[1;2C"                   }
+  #- { key: Right,    mods: Control,       chars: "\x1b[1;5C"                   }
+  #- { key: Right,    mods: Alt,           chars: "\x1b[1;3C"                   }
+  #- { key: Right,                         chars: "\x1b[C",   mode: ~AppCursor  }
+  #- { key: Right,                         chars: "\x1bOC",   mode: AppCursor   }
+  #- { key: Up,       mods: Shift,         chars: "\x1b[1;2A"                   }
+  #- { key: Up,       mods: Control,       chars: "\x1b[1;5A"                   }
+  #- { key: Up,       mods: Alt,           chars: "\x1b[1;3A"                   }
+  #- { key: Up,                            chars: "\x1b[A",   mode: ~AppCursor  }
+  #- { key: Up,                            chars: "\x1bOA",   mode: AppCursor   }
+  #- { key: Down,     mods: Shift,         chars: "\x1b[1;2B"                   }
+  #- { key: Down,     mods: Control,       chars: "\x1b[1;5B"                   }
+  #- { key: Down,     mods: Alt,           chars: "\x1b[1;3B"                   }
+  #- { key: Down,                          chars: "\x1b[B",   mode: ~AppCursor  }
+  #- { key: Down,                          chars: "\x1bOB",   mode: AppCursor   }
   #  - { key: Tab,      mods: Shift,         chars: "\x1b[Z"                      }
   #  - { key: F1,                            chars: "\x1bOP"                      }
   #  - { key: F2,                            chars: "\x1bOQ"                      }
@@ -707,6 +681,6 @@ debug:
 # You can set shell.program to the path of your favorite shell, e.g. /bin/fish.
 # Entries in shell.args are passed unmodified as arguments to the shell.
 shell:
-  program: /usr/local/bin/bash
+  program: /bin/bash
 
 # vim: nospell

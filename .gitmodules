@@ -1,0 +1,21 @@
+[submodule "vim/bundle/html5.vim"]
+	path = vim/bundle/html5.vim
+	url = https://github.com/othree/html5.vim.git
+[submodule "vim/bundle/vim-glsl"]
+	path = vim/bundle/vim-glsl
+	url = https://github.com/tikhomirov/vim-glsl
+[submodule "vim/bundle/vim-javascript"]
+	path = vim/bundle/vim-javascript
+	url = https://github.com/pangloss/vim-javascript.git
+[submodule "vim/bundle/vim-jq"]
+	path = vim/bundle/vim-jq
+	url = https://github.com/bfrg/vim-jq
+[submodule "vim/bundle/vim-misc"]
+	path = vim/bundle/vim-misc
+	url = https://github.com/xolox/vim-misc
+[submodule "vim/bundle/vim-reload"]
+	path = vim/bundle/vim-reload
+	url = https://github.com/xolox/vim-reload
+[submodule "vim/bundle/vim-svelte"]
+	path = vim/bundle/vim-svelte
+	url = https://github.com/evanleck/vim-svelte.git
