@@ -33,9 +33,11 @@ input type:touchpad {
 }
 
 output * {
-	bg $HOME/wallpapers/desktop.* fill
+	bg #AA0033 solid_color
 	adaptive_sync on
 }
+
+exec "test -e '~/wallpapers/desktop.*' && sway-msg input '*' bg ~/wallpapers/desktop.* fill #337700"
 
 set $term alacritty --option window.opacity=0.5 -e /bin/bash
 set $info alacritty --class "Info" -t "Window info" -e /bin/bash -c
@@ -235,7 +237,7 @@ exec_always gsettings set org.gnome.desktop.interface cursor-theme "Yaru"
 exec_always "if ! pgrep nm-applet; then nm-applet; fi"
 #exec_always "killall blueman-applet; XDG_CURRENT_DESKTOP=Unity blueman-applet"
 #exec "ydotoold"
-exec "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK"
+exec "XDG_CURRENT_DESKTOP=wayland systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK"
 exec_always "XDG_CURRENT_DESKTOP=Sway flameshot"
 #exec "gnome-power-manager --verbose"
 #exec "systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr"
