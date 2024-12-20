@@ -431,4 +431,6 @@ filetype plugin indent off
 filetype detect
 filetype plugin indent on
 
+syntax on
+
 do BufRead
