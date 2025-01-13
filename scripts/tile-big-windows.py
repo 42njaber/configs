@@ -18,8 +18,6 @@ def on_new_window(width, height, ipc, event):
         #win.command
 
 if __name__ == "__main__":
-    transparency_val = "0.80"
-
     parser = argparse.ArgumentParser(
         description="This script automatically tiles windows above a certain size in sway.",
         add_help=False

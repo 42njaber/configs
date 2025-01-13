@@ -10,3 +10,4 @@ bashrc
 old/
 computer_dependent/
 __pycache__
+ranger/__init__.py
