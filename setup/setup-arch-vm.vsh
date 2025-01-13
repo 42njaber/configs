@@ -74,3 +74,7 @@ stty susp undef
 
 PS1="\n   \w $> "
 SH
+
+git config --global user.email "njaber@student.42.fr"
+git config --global user.name "njaber(VM)"
+git config --global core.sshCommand "ssh -i ~/.ssh/id_rsa"
