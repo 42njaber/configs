@@ -362,6 +362,15 @@ nmap <silent>	<F10>			:echo "hi<" . synIDattr(synID(line("."),col("."),1),"name"
 
 nnoremap <LEADER><TAB>			:set et<CR>:.retab<CR>hv0r :set noet<CR>:.retab!<CR>w
 
+imap <C-t>t ⊤
+imap <C-t>f ⊥
+imap <C-t>! ¬
+imap <C-t>& ∧
+imap <C-t>\| ∨
+imap <C-t>x ⊕
+imap <C-t>> ⇒
+imap <C-t>= ⇔
+
 " cnoreabbrev <expr> t getcmdtype() == ":" && getcmdline() == 't' ? 'tabnew' : 't'
 
 " Configs
@@ -369,7 +378,7 @@ if has("nvim")
 	map			<LEADER>R			:source ~/.config/nvim/init.vim<CR>
 else
 	map			<LEADER>R			:source ~/.vimrc<CR>
-	" map			<LEADER>r			:tabnew ~/.vimrc<CR>
+	map			<LEADER>r			:tabnew ~/.vimrc<CR>
 	map			<LEADER>f			:exec "tabnew ~/.vim/ftplugin/"..&ft..".vim"<CR>
 	map			<LEADER>s			:exec "tabnew ~/.vim/after/syntax/"..&ft..".vim"<CR>
 	map			<LEADER>i			:exec "tabnew ~/.vim/indent/"..&ft..".vim"<CR>

@@ -151,6 +151,14 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
+
+# Disables all other bindings while a VM is focused
+mode "VM" {
+	bindsym $mod+Escape mode "default"
+}
+
+bindsym $mod+Shift+v mode "VM"
+
 bindsym $mod+w exec "rofi -no-lazy-grab -show window"
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
@@ -173,7 +181,7 @@ bindsym $mod+shift+p	exec "killall -s INT wf-recorder || wf-recorder -a -f rec.m
 bindsym $mod+shift+c	exec $HOME/configs/scripts/autoclick.sh
 
 # Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
+# floating_modifier $mod
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.  font pango:inconsolata 10
@@ -203,7 +211,7 @@ bar {
 	swaybar_command waybar
 }
 
-for_window [title=".*"] floating enable
+#for_window [title=".*"] floating enable
 for_window [app_id="Info"] floating enable, resize set 900 600
 for_window [class="QtWeb"] floating disabled
 #for_window [class="feh" title=""] floating disabled

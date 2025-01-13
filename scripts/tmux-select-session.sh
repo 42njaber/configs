@@ -1,6 +1,5 @@
 #/bin/env bash
 
-COMMAND="display-message 'new-session -s %%'"
 COMMAND="new-session -s %%"
 
 ENTRIES=()
