@@ -1,4 +1,4 @@
-live_config_reload = true
+general.live_config_reload = true
 
 [bell]
 animation = "EaseOutExpo"
@@ -1010,7 +1010,7 @@ render_timer = false
 size = 13.0
 
 [font.bold]
-family = "Monospace"
+family = "DejaVuSansMono"
 style = "Medium"
 
 [font.glyph_offset]
@@ -1018,11 +1018,11 @@ x = 0
 y = 0
 
 [font.italic]
-family = "Monospace"
+family = "DejaVuSansMono"
 style = "Light Italic"
 
 [font.normal]
-family = "Monospace"
+family = "DejaVuSansMono"
 style = "Light"
 
 [font.offset]
@@ -1059,7 +1059,7 @@ multiplier = 3
 save_to_clipboard = false
 semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
-[shell]
+[terminal.shell]
 program = "/bin/bash"
 
 [window]

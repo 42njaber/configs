@@ -37,10 +37,16 @@ output * {
 	adaptive_sync on
 }
 
+output Virtual-1 {
+	mode 1440x900
+}
+
 exec "test -e '~/wallpapers/desktop.*' && sway-msg input '*' bg ~/wallpapers/desktop.* fill #337700"
 
+#set $term foot
 set $term alacritty --option window.opacity=0.5 -e /bin/bash
 set $info alacritty --class "Info" -t "Window info" -e /bin/bash -c
+#set $menu wofi --show run
 set $menu rofi -no-lazy-grab -show run | xargs swaymsg exec --
 
 bindsym $mod+Return exec $term
@@ -51,7 +57,7 @@ bindsym $mod+n exec i3-dmenu-desktop --dmenu="rofi -no-lazy-grab -dmenu -i" | xa
 bindsym $mod+Shift+r reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
-bindsym $mod+i exec $info 'view <(swaymsg -t get_tree | jq ".. | objects | select(.focused == true)")'
+bindsym $mod+i exec $info 'vim <(swaymsg -t get_tree | jq ".. | objects | select(.focused == true)")'
 
 # change focus
 bindsym $mod+h focus left
@@ -234,13 +240,13 @@ exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CU
 
 exec_always gsettings set org.gnome.desktop.interface cursor-theme "Yaru"
 
+exec "XDG_CURRENT_DESKTOP=wayland systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK"
+exec "systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr"
 exec_always "if ! pgrep nm-applet; then nm-applet; fi"
 #exec_always "killall blueman-applet; XDG_CURRENT_DESKTOP=Unity blueman-applet"
 #exec "ydotoold"
-exec "XDG_CURRENT_DESKTOP=wayland systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK"
 exec_always "XDG_CURRENT_DESKTOP=Sway flameshot"
 #exec "gnome-power-manager --verbose"
-#exec "systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr"
 
 exec "hash dbus-update-activation-environment 2>/dev/null && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK"
 
