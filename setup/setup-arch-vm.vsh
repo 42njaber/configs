@@ -2,9 +2,9 @@
 reflector --sort rate --latest 20 --save /etc/pacman.d/mirrorlist.ref
 
 pacman -Sy --noconfirm tmux alacritty sway waybar ranger gvim rofi
+pacman -Sy --noconfirm extra/ttf-dejavu
 pacman -Sy --noconfirm man-db man-pages
 
-pacman -Sy --noconfirm extra/ttf-dejavu
 pacman -Sy --noconfirm base-devel
 
 if ! pacman -Qk yay; then
@@ -17,13 +17,9 @@ makepkg -si --noconfirm
 CONFIG
 fi
 
-if ! pacman -Qk start-stop-daemon; then
-	su config -c "yay -Sy --answerclean All --answerdiff None start-stop-daemon --sudoflags '-S'"
-fi
-
-if ! pacman -Qk vieb-bin; then
-	su config -c "yay -Sy --answerclean All --answerdiff None vieb-bin --sudoflags '-S'"
-fi
+pacman -Qk start-stop-daemon || su config -c "yay -Sy --answerclean All --answerdiff --noconfirm None start-stop-daemon --sudoflags '-S'"
+pacman -Qk vieb-bin || su config -c "yay -Sy --answerclean All --answerdiff None --noconfirm vieb-bin --sudoflags '-S'"
+pacman -Qk ttf-material-design-icons-extended || su config -c "yay -Sy --answerclean All --answerdiff --noconfirm None ttf-material-design-icons-extended --sudoflags '-S'"
 
 if ! grep -q EDITOR /etc/profile; then
 cat >> "/etc/profile" << SH

@@ -33,15 +33,14 @@ input type:touchpad {
 }
 
 output * {
-	bg #AA0033 solid_color
+	bg #444488 solid_color
 	adaptive_sync on
 }
+exec_always "sway-msg output bg '*' ~/wallpapers/desktop.* fill"
 
 output Virtual-1 {
 	mode 1440x900
 }
-
-exec "test -e '~/wallpapers/desktop.*' && sway-msg input '*' bg ~/wallpapers/desktop.* fill #337700"
 
 #set $term foot
 set $term alacritty --option window.opacity=0.5 -e /bin/bash

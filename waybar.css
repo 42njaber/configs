@@ -2,8 +2,8 @@
     border: none;
     border-radius: 0;
     /* `otf-font-awesome` is required to be installed for icons */
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-	font-family: Material Design Icons;
+    font-family: Roboto, DejaVu, Arial, sans-serif;
+    font-family: Material Design Icons;
     font-size: 13px;
     min-height: 0;
 }
@@ -28,6 +28,10 @@ window#waybar.solo {
     background-color: #FFFFFF;
 }
 */
+
+#workspaces {
+    margin: 0 2px 0 0;
+}
 
 #workspaces button {
     padding: 0 5px;
@@ -119,10 +123,6 @@ window#waybar.solo {
 
 #temperature.critical {
     background-color: #bd2c40;
-}
-
-#tray {
-	margin: 0 4px 0 0;
 }
 
 #idle_inhibitor {
