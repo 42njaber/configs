@@ -5,7 +5,7 @@ pacman -Sy --noconfirm tmux alacritty sway waybar ranger gvim rofi
 pacman -Sy --noconfirm extra/ttf-dejavu
 pacman -Sy --noconfirm man-db man-pages
 
-pacman -Sy --noconfirm base-devel
+pacman -Sy --noconfirm base-devel git
 
 if ! pacman -Qk yay; then
 su config <<CONFIG

@@ -36,7 +36,7 @@ output * {
 	bg #444488 solid_color
 	adaptive_sync on
 }
-exec_always "sway-msg output bg '*' ~/wallpapers/desktop.* fill"
+exec_always "swaymsg output '*' bg ~/wallpapers/desktop.* fill"
 
 output Virtual-1 {
 	mode 1440x900
