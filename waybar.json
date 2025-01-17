@@ -31,7 +31,7 @@
     "sway/language": {
         "format": "{long}",
 		"tooltip": false,
-        "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
     },
     "tray": {
         // "icon-size": 21,
@@ -89,11 +89,12 @@
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-wifi": "{ifname}: {essid}[{signalStrength}%]",// ",
+        "format-ethernet": "{ifname}: Connected",
+        "format-linked": "{ifname}: (No IP)",// ",
+        "format-disconnected": "⚠ None",
+        //"on-click": "swaymsg '$info' networkctl",
+        // "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
