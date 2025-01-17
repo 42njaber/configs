@@ -4,8 +4,9 @@ mapclear
 set timeoutlen=100000
 set windowtitle="%app - %title"
 set suspendtimeout=3600000
-set searchwords+={"css":"https://developer.mozilla.org/en-US/search?q=%s"}
-set searchwords+={"pl":"https://us.swi-prolog.org/search?for=%s"}
+set searchwords+={"css_":"https://developer.mozilla.org/en-US/search?q=%s"}
+set searchwords+={"pl_":"https://us.swi-prolog.org/search?for=%s"}
+set searchwords+={"cpp_":"https://duckduckgo.com/?sites=cppreference.com&q=%s"}
 set containerstartuppage=s:usematching
 
 set passthroughkeys={}

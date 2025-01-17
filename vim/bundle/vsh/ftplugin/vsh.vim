@@ -21,7 +21,15 @@ function! Run() range
 		eval system("mkdir -p /tmp/vsh")
 		let l:tempfile=systemlist("mktemp /tmp/vsh/run.XXXXXXXXXX")[0]
 		silent exec l:firstline..','..l:lastline..'w! '..l:tempfile
-		exec '!clear;bash -e '..l:tempfile
+		exec '!clear;cd '..shellescape(getenv('PWD'))..';source '..l:tempfile..';env -u SHLVL -u OLDPWD -u _ >'..l:tempfile
+		redraw
+		let l:vars=readfile(l:tempfile)
+		let l:vars=map(l:vars,'[strpart(v:val,0,stridx(v:val,"=")),strpart(v:val,stridx(v:val,"=") + 1)]')
+		let l:vars=filter(l:vars,'getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
+		for v in vars 
+			call setenv(v[0],v[1])
+			echoh Label | echom "import "..v[0].."="..v[1] | echoh None
+		endfor
 		eval system("rm "..l:tempfile)
 	endif
 endfunction
