@@ -56,6 +56,8 @@ PASSWD
 passwd -e root
 passwd -e njaber
 
+sed -i "/^#CacheDir/ s+^#CacheDir\(.*\)= .*+CacheDir\1 = /tmp/pacman/cache+" /etc/pacman.conf
+
 pacman --needed -S --noconfirm grub efibootmgr < /dev/null
 
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB

@@ -26,14 +26,16 @@ ROOT
 
 sudo -S su config <<CONFIG
 
-
 if ! pacman -Qk yay; then
 	cd /tmp
-	git clone https://aur.archlinux.org/yay.git
+	git clone https://aur.archlinux.org/yay.git yay-build
 	set -e
-	cd /tmp/yay
+	cd /tmp/yay-build
 	GOCACHE=/tmp/.gocache makepkg -si --noconfirm
 fi
+
+mkdir -p /tmp/yay/cache
+ln -sfT /tmp/yay/cache $HOME/.cache/yay
 
 set -e
 

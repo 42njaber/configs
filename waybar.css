@@ -1,3 +1,4 @@
+
 * {
     border: none;
     border-radius: 0;
@@ -30,7 +31,6 @@ window#waybar.solo {
 */
 
 #workspaces {
-    margin: 0 2px 0 0;
 }
 
 #workspaces button {
@@ -84,7 +84,6 @@ window#waybar.solo {
 #idle_inhibitor,
 #mpd {
     padding: 0 10px;
-    margin: 0 2px;
     color: #ffffff;
     background-color: rgba(43, 48, 59, 0.9);
     border-bottom: 3px solid rgba(100, 114, 125, 1);

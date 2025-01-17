@@ -9,14 +9,19 @@ set searchwords+={"pl_":"https://us.swi-prolog.org/search?for=%s"}
 set searchwords+={"cpp_":"https://duckduckgo.com/?sites=cppreference.com&q=%s"}
 set containerstartuppage=s:usematching
 
+!mkdir -p ~/Downloads/Vieb/html
+set downloadpath="~/Downloads/Vieb/html"
+set downloadmethod="ask"
+
 set passthroughkeys={}
 set followchars=alpha
 " Doesn't work?
 set passthroughkeys+={".*":"<F3>"}
-set container
 
 nunmap D
 unmap <F3>
+map :w <NOP>
+
 map <C-c> <Esc>
 map <C-q> <Nop>
 

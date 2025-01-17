@@ -21,6 +21,10 @@ function! ReloadSyntax()
 endfunc
 call ReloadSyntax()
 
+augroup vimrc
+	au!
+augroup END
+
 colorscheme custom
 set synmaxcol=400
 
@@ -219,10 +223,12 @@ set statusline+=%10.10(ft=%{&ft}%)
 set statusline+=\ \ L%l/%L(%p%%)
 
 " Open up to 10 arg files in tabs
-au VimEnter * set tabpagemax=10|sil tab ball|set tabpagemax&vim
+augroup vimrc
+	au VimEnter * set tabpagemax=10|sil tab ball|set tabpagemax&vim
+augroup END
 
 " Go to previous tab on close
-augroup tabing
+augroup vimrc
 	au!
 	let g:tablist = [1, 1]
 	au TabLeave * let g:tablist[0] = g:tablist[1]
@@ -234,8 +240,7 @@ augroup END
 " Templates
 "
 
-augroup templates
-	au!
+augroup vimrc
 	autocmd BufNewFile *.sh 0r ~/.vim/templates/sh/default.sh | normal G
 	autocmd BufNewFile *.cpp
 				\ if(@% =~ ".*\.class\.cpp") |
@@ -263,8 +268,7 @@ if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
 	set <PasteEnd>=[201~
 endif
 
-augroup smartpaste
-	au!
+augroup vimrc
 	function! IndentPastedText()
 		if !v:option_old && v:option_new
 			mark [
@@ -392,8 +396,7 @@ function! SudoMode()
 		cnoreabbrev <buffer> <expr> w getcmdtype() == ":" && getcmdline() == 'w' ? 'Suw' : 'w'
 		setlocal noreadonly
 		setlocal autoread
-		augroup sudo
-			au!
+		augroup vimrc
 			au BufReadPost <buffer> set noreadonly
 		augroup END
 	endif
@@ -411,8 +414,7 @@ function! SaveSession()
 	exec "mksession! ~/.vimstore/sessions/" . g:session_name . ".vim"
 endfunction
 
-augroup session
-	autocmd!
+augroup vimrc
 	autocmd BufWrite * if exists("g:session_name") | call SaveSession() | endif
 augroup END
 
@@ -426,7 +428,9 @@ function! SetupServer()
 	endif
 endfunction
 
-autocmd SourcePost,VimEnter * call SetupServer()
+augroup vimrc
+	autocmd User Config call SetupServer()
+augroup END
 
 " "
 "
@@ -443,4 +447,4 @@ filetype plugin indent on
 
 syntax on
 
-do BufRead
+do User Config

@@ -16,20 +16,28 @@ endfunction
 function! vsh#run#Run() range
 	let [l:firstline,l:lastline]=[s:foldLine(a:firstline),s:foldLine(a:lastline,1)]
 	if getline(l:firstline)[0] == ":"
-		exec l:firstline.",".l:lastline "call RunVim()"
+		exec l:firstline.",".l:lastline "call vsh#run#RunVim()"
 	else
 		eval system("mkdir -p /tmp/vsh")
 		let l:tempfile=systemlist("mktemp /tmp/vsh/run.XXXXXXXXXX")[0]
 		silent exec l:firstline..','..l:lastline..'w! '..l:tempfile
 		exec '!clear;cd '..shellescape(getenv('PWD'))..';source '..l:tempfile..';env -u SHLVL -u OLDPWD -u _ >'..l:tempfile
 		redraw
-		let l:vars=readfile(l:tempfile)
-		let l:vars=map(l:vars,'[strpart(v:val,0,stridx(v:val,"=")),strpart(v:val,stridx(v:val,"=") + 1)]')
-		let l:vars=filter(l:vars,'getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
-		for v in vars 
-			call setenv(v[0],v[1])
-			echoh Label | echom "import "..v[0].."="..v[1] | echoh None
-		endfor
+		if exists('b:vsh_dynamic') && b:vsh_dynamic
+			let l:vars=readfile(l:tempfile)
+			let l:vars=map(l:vars,'[strpart(v:val,0,stridx(v:val,"=")),strpart(v:val,stridx(v:val,"=") + 1)]')
+			let l:vars=filter(l:vars,'getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
+			echoh Label
+			for v in vars 
+				call setenv(v[0],v[1])
+				echom "let "..v[0].."="..v[1]
+				if v[0] == "PWD" && exists('b:vsh_cwd') && b:vsh_cwd
+					exec "cd "..v[1]
+					echom "cd "..v[1]
+				endif
+			endfor
+			echoh None
+		endif
 		eval system("rm "..l:tempfile)
 	endif
 endfunction
@@ -53,3 +61,8 @@ function! vsh#run#TmuxRun() range
 				\	'env - BASH_ENV='..l:envfile..' bash -e '..l:tempfile
 				\ ])
 endfunction
+
+augroup vsh_autoload
+	au! vsh_autoload
+	autocmd User Config source <sfile>:p
+augroup END
