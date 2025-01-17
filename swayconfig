@@ -249,7 +249,6 @@ exec_always gsettings set org.gnome.desktop.interface cursor-theme "Yaru"
 
 exec "XDG_CURRENT_DESKTOP=wayland systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK"
 exec "systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr"
-exec_always "if ! pgrep nm-applet; then nm-applet; fi"
 #exec_always "killall blueman-applet; XDG_CURRENT_DESKTOP=Unity blueman-applet"
 #exec "ydotoold"
 exec_always "XDG_CURRENT_DESKTOP=Sway flameshot"

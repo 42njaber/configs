@@ -289,6 +289,7 @@ cmapclear
 let mapleader=' '
 
 nnoremap	,					/
+vnoremap	,					/
 inoremap	<F1>				<NOP>
 nnoremap	<F1>				<NOP>
 nnoremap	/					:30messages<CR>

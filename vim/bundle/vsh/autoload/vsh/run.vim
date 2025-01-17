@@ -1,21 +1,55 @@
 
-function! vsh#run#SimpleRun(command, capture_stdout, capture_stderr)
-endfunc
-
-function! s:ReplaceOutput(lines, prefix, start, length)
-	for l:i in range(0, a:length - 1)
-		call setline(a:start + l:i, a:prefix..(l:i < len(a:lines) ? a:lines[i] : ""))
-	endfor
-endfunc
-
-function! vsh#run#RunOutputInBuffer(command, line_buffers)
-	let l:outputs = vsh#run#SimpleRun(a:command, len(keys(a:line_buffers["stdout"])) > 0, len(keys(a:line_buffers["stderr"])) > 0)
-	if has_key(a:line_buffers["stdout"], "head")
-		let l:buffer = a:line_buffers["stdout"]["head"]
-		call s:ReplaceOutput(l:outputs["stdout"][0:l:buffer["length"]], l:buffer["prefix"], l:buffer["start"], l:buffer["length"])
+function! s:foldLine(line,end=0)
+	if foldlevel(a:line) == 0
+		let l:ret = a:line
+	else
+		let l:closed = foldclosed(a:line)
+		exec a:line."g/^/normal zC"
+		let l:ret = a:end ? foldclosedend(a:line) : foldclosed(a:line)
+		if l:closed != foldclosed(a:line)
+			exec a:line."g/^/normal zo"
+		endif
 	endif
-	if has_key(a:line_buffers["stdout"], "tail")
-		let l:buffer = a:line_buffers["stdout"]["tail"]
-		call s:ReplaceOutput(l:outputs["stdout"][-l:buffer["length"]:], l:buffer["prefix"], l:buffer["start"], l:buffer["length"])
+	return l:ret
+endfunction
+
+function! vsh#run#Run() range
+	let [l:firstline,l:lastline]=[s:foldLine(a:firstline),s:foldLine(a:lastline,1)]
+	if getline(l:firstline)[0] == ":"
+		exec l:firstline.",".l:lastline "call RunVim()"
+	else
+		eval system("mkdir -p /tmp/vsh")
+		let l:tempfile=systemlist("mktemp /tmp/vsh/run.XXXXXXXXXX")[0]
+		silent exec l:firstline..','..l:lastline..'w! '..l:tempfile
+		exec '!clear;cd '..shellescape(getenv('PWD'))..';source '..l:tempfile..';env -u SHLVL -u OLDPWD -u _ >'..l:tempfile
+		redraw
+		let l:vars=readfile(l:tempfile)
+		let l:vars=map(l:vars,'[strpart(v:val,0,stridx(v:val,"=")),strpart(v:val,stridx(v:val,"=") + 1)]')
+		let l:vars=filter(l:vars,'getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
+		for v in vars 
+			call setenv(v[0],v[1])
+			echoh Label | echom "import "..v[0].."="..v[1] | echoh None
+		endfor
+		eval system("rm "..l:tempfile)
 	endif
-endfunc
+endfunction
+
+function! vsh#run#RunVim() range
+	let [l:firstline,l:lastline]=[a:firstline,a:lastline]
+	exec l:firstline.",".l:lastline "g/^/ exec getline(\".\")"
+endfunction
+
+function! vsh#run#TmuxRun() range
+	let [l:firstline,l:lastline]=[s:foldLine(a:firstline),s:foldLine(a:lastline,1)]
+	let l:name=getline(l:firstline)
+	eval system("mkdir -p /tmp/vsh")
+	let l:tempfile=systemlist("mktemp /tmp/vsh/tmuxrun.XXXXXXXXXX")[0]
+	let l:envfile=l:tempfile..".env"
+	let l:env = map(items(environ()),'"export "..v:val[0].."="..shellescape(v:val[1])')
+	call writefile(["tmux set-option -p remain-on-exit on"] + l:env,l:envfile)
+	silent exec l:firstline..','..l:lastline..'w! '..l:tempfile..''
+	eval job_start([ 'tmux', 'new-window',
+				\	'-n', l:name,
+				\	'env - BASH_ENV='..l:envfile..' bash -e '..l:tempfile
+				\ ])
+endfunction
