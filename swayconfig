@@ -1,5 +1,5 @@
 
-set $keyboard "1:1:AT_Translated_Set_2_keyboard"
+#set $keyboard "1:1:AT_Translated_Set_2_keyboard"
 set $mod Mod4
 
 input type:keyboard {
@@ -35,11 +35,6 @@ input type:touchpad {
 output * {
 	bg #444488 solid_color
 	adaptive_sync on
-}
-exec_always "swaymsg output '*' bg ~/wallpapers/desktop.* fill"
-
-output Virtual-1 {
-	mode 1440x900
 }
 
 #set $term foot
@@ -247,16 +242,18 @@ exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CU
 
 exec_always gsettings set org.gnome.desktop.interface cursor-theme "Yaru"
 
-exec "XDG_CURRENT_DESKTOP=wayland systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK"
-exec "systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr"
-exec_always "if ! pgrep nm-applet; then nm-applet; fi"
+exec "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK"
+exec "systemctl --user restart xdg-desktop-portal"
+#exec "systemctl --user restart xdg-desktop-portal-gtk"
+#exec_always "if [ -e nm-applet ] && ! pgrep nm-applet; then nm-applet; fi"
 #exec_always "killall blueman-applet; XDG_CURRENT_DESKTOP=Unity blueman-applet"
 #exec "ydotoold"
-exec_always "XDG_CURRENT_DESKTOP=Sway flameshot"
+#exec_always "flameshot"
 #exec "gnome-power-manager --verbose"
 
-exec "hash dbus-update-activation-environment 2>/dev/null && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK"
+exec "hash dbus-update-activation-environment 2>/dev/null && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK I3SOCK"
 
 exec '$term & swaymsg "assign [pid="$!"] 1"'
 exec 'vieb & swaymsg "assign [pid="$!"] 2"'
 
+include ~/.sway.local

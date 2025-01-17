@@ -1,7 +1,7 @@
 " Options
 mapclear
 
-set notimeout
+set timeoutlen=100000
 set windowtitle="%app - %title"
 set suspendtimeout=3600000
 set searchwords+={"css":"https://developer.mozilla.org/en-US/search?q=%s"}
@@ -11,8 +11,8 @@ set containerstartuppage=s:usematching
 set passthroughkeys={}
 set followchars=alpha
 " Doesn't work?
-" set passthroughkeys+={".*":"<F3>"}
-" set container
+set passthroughkeys+={".*":"<F3>"}
+set container
 
 nunmap D
 unmap <F3>
