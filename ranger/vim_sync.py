@@ -30,12 +30,12 @@ if VIM_SESSION:
 
         def update_vim():
             macros = {k:v for k,v in fm.get_macros().items() if len(k) == 1}
-            subprocess.run(["vim","--servername",VIM_SESSION,"--remote-expr",
-                            ["setenv('FM_"+str(k)+"','0')" for k,v in macros.items()].join(" | ")
-                            ],
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL
-                           )
+            #subprocess.run(["vim","--servername",VIM_SESSION,"--remote-expr",
+            #                ["setenv('FM_"+str(k)+"','0')" for k,v in macros.items()].join(" | ")
+            #                ],
+            #               stdout=subprocess.DEVNULL,
+            #               stderr=subprocess.DEVNULL
+            #               )
             LOG.info("--- MACROS --")
             for k,v in macros.items():
                 LOG.info(str(k)+":"+str(v))
