@@ -1,4 +1,26 @@
 
+function! s:reload_env()
+	if exists('v:servername')
+		let l:fmfile="/tmp/vsh/fm/"..v:servername..".vim"
+		if filereadable(l:fmfile)
+			exec "source "..l:fmfile
+		endif
+	endif
+endfunc
+
+function! Fm(macro,escape=1)
+	if exists('g:fm_macros')
+		let l:ret = copy(g:fm_macros[a:macro])
+		if a:escape
+			return (type(l:ret) == type([])) ? join(map(l:ret,'shellescape(v:val)')," ") : shellescape(l:ret)
+		else
+			return (type(l:ret) == type([])) ? join(l:ret," ") : l:ret
+		endif
+	else
+		return ""
+	endif
+endfunc
+
 function! s:foldLine(line,end=0)
 	if foldlevel(a:line) == 0
 		let l:ret = a:line
@@ -13,8 +35,26 @@ function! s:foldLine(line,end=0)
 	return l:ret
 endfunction
 
+function! vsh#run#Load()
+	if !exists('g:fm_macros')
+		g:fm_macros = {}
+	endif
+endfunc
+
+function! vsh#run#VshMacro(match)
+	return a:match == "%" ? "%" : Fm(a:match)
+endfunction
+
+function! vsh#run#Expand() range
+	let [l:firstline,l:lastline]=[s:foldLine(a:firstline),s:foldLine(a:lastline,1)]
+	let l:expand_pat = "%\\([fpsctd%]\\)"
+	exec l:firstline.",".l:lastline "s/"..l:expand_pat.."/\\=vsh#run#VshMacro(submatch(1))/eg"
+endfunction
+
 function! vsh#run#Run() range
 	let [l:firstline,l:lastline]=[s:foldLine(a:firstline),s:foldLine(a:lastline,1)]
+	let l:lastchange=changenr()
+	exec l:firstline.",".l:lastline "call vsh#run#Expand()"
 	if getline(l:firstline)[0] == ":"
 		exec l:firstline.",".l:lastline "call vsh#run#RunVim()"
 	else
@@ -40,6 +80,7 @@ function! vsh#run#Run() range
 		endif
 		eval system("rm "..l:tempfile)
 	endif
+	silent exec "undo "..l:lastchange
 endfunction
 
 function! vsh#run#RunVim() range
@@ -64,5 +105,9 @@ endfunction
 
 augroup vsh_autoload
 	au! vsh_autoload
-	autocmd User Config source <sfile>:p
+	autocmd User ConfigPost source <sfile>:p
+
+	autocmd FocusGained * call <SID>reload_env()
 augroup END
+
+call s:reload_env()

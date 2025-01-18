@@ -4,12 +4,12 @@
 # -use return value from ${PIPESTATUS[0]}, because ! hosed $?
 ! getopt --test > /dev/null 
 if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
-    echo 'I’m sorry, `getopt --test` failed in this environment.'
+    echo 'I’m sorry, `getopt --test` failed in this environment.' >&2
     exit 1
 fi
 
 # option --output/-o requires 1 argument
-OPTIONS=se:
+OPTIONS=se:w
 
 # -pass arguments only via   -- "$@"   to separate them correctly
 ! PARSED=$(getopt --options=$OPTIONS --name "$0" -- "$@")
@@ -21,16 +21,22 @@ eval set -- "$PARSED"
 
 s=true
 e=false
+w=
+
 # now enjoy the options in order and nicely split until we see --
 while true; do
     case "$1" in
         -s)
             s=false
-            shift
+            shift 1
+            ;;
+        -w)
+            w=-wait
+            shift 1
             ;;
         -e)
             e=true
-            exp="`echo "$2" | sed "s/'/\\\"/g"`"
+            ex_cmd="`sed "s/'/\\\"/g" <<< "$2"`"
             shift 2
             ;;
         --)
@@ -38,7 +44,7 @@ while true; do
             break
             ;;
         *)
-            echo "Programming error"
+            echo "Programming error" >&2
             exit 3
             ;;
     esac
@@ -48,19 +54,30 @@ done
 
 SESSION_NAME="`tmux display -p "#{session_name}"`"
 VIMPANE="`tmux display -p "#{@vimpane}"`"
+REMOTE=$(vim --servername $SESSION_NAME --remote-expr "v:servername" 2>/dev/null)
 
-if $e; then
-    vim --servername "$SESSION_NAME" --remote-expr "execute(\"${exp//\"/\\\"}\")"
-fi
-
-if [[ $# -gt 0 ]]; then
-    vim --servername "$SESSION_NAME" --remote "$@"
-    if $s; then
-        tmux switch-client -t "$VIMPANE"
+if test "$REMOTE"; then
+    if $e; then
+        vim --servername "$REMOTE" --remote-expr "execute(\"${ex_cmd//\"/\\\"}\")"
     fi
-elif $e; then
-    true
+
+    if [[ $# -gt 0 ]]; then
+        vim --servername "$REMOTE" --remote$w "$@"
+        if $s; then
+            tmux switch-client -t "$VIMPANE"
+        fi
+    elif $e; then
+        true
+    else
+        echo "$0: One or more input files are required." >&2
+        exit 4
+    fi
 else
-    echo "$0: One or more input files are required."
-    exit 4
+    echo "Server not found, opening local session" >&2
+    if $e; then
+        echo "Cannot run Ex command without a server" >&2
+        exit 5
+    fi
+
+    vim $@
 fi

@@ -9,7 +9,15 @@ if has("nvim")
 	let &packpath=&runtimepath
 else
 	set nocompatible
+
+augroup vimrc
+	au!
+
+	autocmd User ConfigReloadPre eval 0
+augroup END
 endif
+
+do User ConfigReloadPre
 
 set langmenu=en_US.UTF-8
 language message C
@@ -20,10 +28,6 @@ function! ReloadSyntax()
 	exec 'b' l:buf
 endfunc
 call ReloadSyntax()
-
-augroup vimrc
-	au!
-augroup END
 
 colorscheme custom
 set synmaxcol=400
@@ -257,17 +261,6 @@ augroup vimrc
 	autocmd! BufNewFile * %s#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge|''
 augroup END
 
-set term&
-if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
-	set term=tmux-256color
-	set <xUp>=[1;*A
-	set <xDown>=[1;*B
-	set <xRight>=[1;*C
-	set <xLeft>=[1;*D
-	set <PasteStart>=[200~
-	set <PasteEnd>=[201~
-endif
-
 augroup vimrc
 	function! IndentPastedText()
 		if !v:option_old && v:option_new
@@ -376,21 +369,27 @@ imap <C-t>x ⊕
 imap <C-t>> ⇒
 imap <C-t>= ⇔
 
-" cnoreabbrev <expr> t getcmdtype() == ":" && getcmdline() == 't' ? 'tabnew' : 't'
+map			<LEADER>R			:source ~/.vimrc<CR>
+map			<LEADER>r			:tabnew ~/.vimrc<CR>
+map			<LEADER>f			:exec "tabnew ~/.vim/ftplugin/"..&ft..".vim"<CR>
+map			<LEADER>s			:exec "tabnew ~/.vim/after/syntax/"..&ft..".vim"<CR>
+map			<LEADER>i			:exec "tabnew ~/.vim/indent/"..&ft..".vim"<CR>
 
-" Configs
-if has("nvim")
-	map			<LEADER>R			:source ~/.config/nvim/init.vim<CR>
-else
-	map			<LEADER>R			:source ~/.vimrc<CR>
-	map			<LEADER>r			:tabnew ~/.vimrc<CR>
-	map			<LEADER>f			:exec "tabnew ~/.vim/ftplugin/"..&ft..".vim"<CR>
-	map			<LEADER>s			:exec "tabnew ~/.vim/after/syntax/"..&ft..".vim"<CR>
-	map			<LEADER>i			:exec "tabnew ~/.vim/indent/"..&ft..".vim"<CR>
+" set term&
+if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
+	set t_ti&
+	set t_te&
+	set term=tmux-256color
+	set <xUp>=[1;*A
+	set <xDown>=[1;*B
+	set <xRight>=[1;*C
+	set <xLeft>=[1;*D
+	set <PasteStart>=[200~
+	set <PasteEnd>=[201~
 endif
 
-command Suw silent exec "w !sudo tee % >/dev/null" | e!
-command Sudo call SudoMode()
+command! Suw silent exec "w !sudo tee % >/dev/null" | e!
+command! Sudo call SudoMode()
 function! SudoMode()
 	if &modifiable && ! filewritable(expand("%")) && system("sudo echo 1 || echo 0")
 		cnoreabbrev <buffer> <expr> w getcmdtype() == ":" && getcmdline() == 'w' ? 'Suw' : 'w'
@@ -429,7 +428,8 @@ function! SetupServer()
 endfunction
 
 augroup vimrc
-	autocmd User Config call SetupServer()
+	autocmd User ConfigPost call SetupServer()
+	autocmd VimEnter * call SetupServer()
 augroup END
 
 " "
@@ -447,4 +447,4 @@ filetype plugin indent on
 
 syntax on
 
-do User Config
+do User ConfigPost

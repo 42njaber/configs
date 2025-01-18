@@ -27,17 +27,25 @@ if VIM_SESSION:
 
     @on_hook(api,'hook_ready')
     def sync(fm):
+        envdir = "/tmp/vsh/fm/"
+        if not os.path.isdir(envdir):
+            os.makedirs(envdir)
+        envfile = envdir + VIM_SESSION + ".vim"
 
         def update_vim():
-            macros = {k:v for k,v in fm.get_macros().items() if len(k) == 1}
-            #subprocess.run(["vim","--servername",VIM_SESSION,"--remote-expr",
-            #                ["setenv('FM_"+str(k)+"','0')" for k,v in macros.items()].join(" | ")
-            #                ],
-            #               stdout=subprocess.DEVNULL,
-            #               stderr=subprocess.DEVNULL
-            #               )
-            LOG.info("--- MACROS --")
-            for k,v in macros.items():
-                LOG.info(str(k)+":"+str(v))
+            macros = {k:v for k,v in fm.get_macros().items() if len(k) == 1 and v != MACRO_FAIL}
+            del macros['p']
+            for m in [k for k in "sft" if k in macros.keys()]:
+                if isinstance(macros[m],list):
+                    macros[m] = [os.path.join(fm.thisdir.path, f) for f in macros[m]]
+                else:
+                    macros[m] = os.path.join(fm.thisdir.path, macros[m])
+            source = "let g:fm_macros=" + str(macros)
+            with open(envfile, 'w') as fileobj:
+                fileobj.write(source)
+
+            #LOG.info("--- MACROS --")
+            #for k,v in macros.items():
+            #    LOG.info(str(k)+":"+str(v))
 
         fm.signal_bind('move', update_vim)
