@@ -1,7 +1,7 @@
 "
 " TODO
-" - Better session management, put temp files in ./.vim
-" - Better vsh
+" - Fold management in vsh
+" - Better ranger interation?
 "
 
 if has("nvim")
@@ -9,15 +9,18 @@ if has("nvim")
 	let &packpath=&runtimepath
 else
 	set nocompatible
-
-augroup vimrc
-	au!
-
-	autocmd User ConfigReloadPre eval 0
-augroup END
 endif
 
-do User ConfigReloadPre
+augroup vimrc
+	au! vimrc
+	au User ConfigReloadPre eval 0
+	au User ConfigPost eval 0
+augroup END
+
+if exists("g:configload")
+	do User ConfigReloadPre
+endif
+let g:configload=1
 
 set langmenu=en_US.UTF-8
 language message C
@@ -44,9 +47,7 @@ set hidden
 set lazyredraw
 set autoread
 set mouse =
-if !has("nvim")
-	set ttymouse =
-endif
+set ttymouse =
 
 let g:tex_flavor='latex'
 let g:hdr42mail='njaber@student.42.fr'
@@ -57,11 +58,6 @@ set bdir=.,/home/neyl/.vimstore/backup
 set nobackup
 set nowritebackup
 set noswapfile
-
-" Sessions
-set viewdir=~/.vimstore/view
-set viminfofile=~/.vimstore/info/.viminfo
-set viminfo=\"10,'100,<50,s2,h
 
 " Indent/Syntax
 set cindent
@@ -134,9 +130,7 @@ endif
 "
 
 " Diff
-if !has("nvim")
-	set diffopt=vertical,hiddenoff,filler
-endif
+set diffopt=vertical,hiddenoff,filler
 command! Gitdiff execute 'silent !git diff -R % > /tmp/%:t.patch' | execute 'redraw!' | execute 'diffp /tmp/%:t.patch'
 
 " Completion
@@ -184,34 +178,9 @@ set number
 set numberwidth=4
 set relativenumber
 
-" if has('timer')
-" 	function! SwitchNu(m)
-" 		if (&modifiable && a:m == 'i')
-" 			set relativenumber
-" 		else
-" 			set norelativenumber
-" 		endif
-" 	endfunction
-" 	function! DetectModeSwitch(id)
-" 		let b:mode = mode()
-" 		call SwitchNu(b:mode)
-" 	endfunction
-" 	aug mode_switch
-" 		au! BufCreate,BufNewFile * call timer_start(100, function('DetectModeSwitch'), {'repeat' : -1})
-" 	aug END
-" endif
-
 " Visual cues
 set more
 set cursorline
-
-" Not working D:
-" function! UpdateCursorLine()
-" 	if exists(b:prev_line)
-" 		call matchdelete(b:prev_line)
-" 	endif
-" 	let b:prev_line = matchaddpos("CustomCursorLine", [getpos(".")[1]], 1)
-" endfunction
 
 " Windows
 set splitbelow
@@ -233,7 +202,6 @@ augroup END
 
 " Go to previous tab on close
 augroup vimrc
-	au!
 	let g:tablist = [1, 1]
 	au TabLeave * let g:tablist[0] = g:tablist[1]
 	au TabLeave * let g:tablist[1] = tabpagenr()
@@ -375,76 +343,10 @@ map			<LEADER>f			:exec "tabnew ~/.vim/ftplugin/"..&ft..".vim"<CR>
 map			<LEADER>s			:exec "tabnew ~/.vim/after/syntax/"..&ft..".vim"<CR>
 map			<LEADER>i			:exec "tabnew ~/.vim/indent/"..&ft..".vim"<CR>
 
-" set term&
-if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
-	set t_ti&
-	set t_te&
-	set term=tmux-256color
-	set <xUp>=[1;*A
-	set <xDown>=[1;*B
-	set <xRight>=[1;*C
-	set <xLeft>=[1;*D
-	set <PasteStart>=[200~
-	set <PasteEnd>=[201~
-endif
-
-command! Suw silent exec "w !sudo tee % >/dev/null" | e!
-command! Sudo call SudoMode()
-function! SudoMode()
-	if &modifiable && ! filewritable(expand("%")) && system("sudo echo 1 || echo 0")
-		cnoreabbrev <buffer> <expr> w getcmdtype() == ":" && getcmdline() == 'w' ? 'Suw' : 'w'
-		setlocal noreadonly
-		setlocal autoread
-		augroup vimrc
-			au BufReadPost <buffer> set noreadonly
-		augroup END
-	endif
-endfunction
-
-set sessionoptions=curdir,folds,options,buffers,tabpages,help,winpos,winsize
-function! LoadSession(session)
-	let g:session_name = a:session
-	if filereadable(expand("~/.vimstore/sessions/" . a:session . ".vim"))
-		exec "source ~/.vimstore/sessions/" . a:session . ".vim"
-	endif
-endfunction
-
-function! SaveSession()
-	exec "mksession! ~/.vimstore/sessions/" . g:session_name . ".vim"
-endfunction
-
-augroup vimrc
-	autocmd BufWrite * if exists("g:session_name") | call SaveSession() | endif
-augroup END
-
-function! SetupServer()
-	if exists("v:servername") && v:servername != ""
-		cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == "q" ? "close" : "q"
-		cnoreabbrev <expr> x getcmdtype() == ":" && getcmdline() == "x" ? "w \| close" : "x"
-		nnoremap <silent> ZZ :b#\|bw#<CR>
-
-		if !exists("g:session_name") | call LoadSession(v:servername) | endif
-	endif
-endfunction
-
-augroup vimrc
-	autocmd User ConfigPost call SetupServer()
-	autocmd VimEnter * call SetupServer()
-augroup END
-
-" "
-"
-"
-
-if filereadable(expand("~/configs/.mod.vim"))
-	source ~/configs/.mod.vim
-endif
-
 " Reload ftplugins
 filetype plugin indent off
-filetype detect
 filetype plugin indent on
 
-syntax on
-
 do User ConfigPost
+
+syntax on

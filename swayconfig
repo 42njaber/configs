@@ -10,7 +10,7 @@ input type:keyboard {
 	repeat_rate 35
 }
 
-input type:mouse {
+input type:pointer {
 	pointer_accel 1
 	accel_profile "adaptive"
 }
@@ -41,12 +41,13 @@ output * {
 set $term alacritty --option window.opacity=0.5 -e /bin/bash
 set $info alacritty --class "Info" -t "Window info" -e /bin/bash -c
 #set $menu wofi --show run
-set $menu rofi -no-lazy-grab -show run | xargs swaymsg exec --
+set $menu tofi-run | xargs -I{} -- swaymsg exec {}
+set $dmenu tofi-drun
 
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+a kill
 bindsym $mod+d exec $menu
-bindsym $mod+n exec i3-dmenu-desktop --dmenu="rofi -no-lazy-grab -dmenu -i" | xargs swaymsg exec --
+bindsym $mod+n exec $dmenu
 
 bindsym $mod+Shift+r reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
@@ -153,7 +154,7 @@ mode "VM" {
 
 bindsym $mod+Shift+v mode "VM"
 
-bindsym $mod+w exec "rofi -no-lazy-grab -show window"
+#bindsym $mod+w exec "rofi -no-lazy-grab -show window"
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%

@@ -73,6 +73,7 @@ vim_highlight() {
         endfor
         file ${FILE_PATH}
         filetype detect
+        set foldlevel=2
         syntax on
         colorscheme custom
         let g:html_no_progress=1

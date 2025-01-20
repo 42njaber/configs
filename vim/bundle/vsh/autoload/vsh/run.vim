@@ -103,10 +103,8 @@ function! vsh#run#TmuxRun() range
 				\ ])
 endfunction
 
-augroup vsh_autoload
-	au! vsh_autoload
-	autocmd User ConfigPost source <sfile>:p
-
+augroup vsh
+	au!
 	autocmd FocusGained * call <SID>reload_env()
 augroup END
 

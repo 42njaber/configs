@@ -1,3 +1,0 @@
-
-set noautoindent
-set nocindent
