@@ -19,6 +19,7 @@ pacman -Sy --needed --noconfirm xorg-xwayland
 pacman -Sy --needed --noconfirm xdg-desktop-portal xdg-desktop-portal-wlr
 
 pacman -Sy --needed --noconfirm flameshot jq elinks
+pacman -Sy --needed --noconfirm mako libnotify
 pacman -Sy --needed --noconfirm firefox
 
 #groupadd -rg 102 polkitd

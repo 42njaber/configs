@@ -12,17 +12,31 @@ if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
 	set <PasteEnd>=[201~
 endif
 
-set sessionoptions=curdir,folds,options,buffers,tabpages,help,winpos,winsize
+silent eval system('mkdir -p ~/.vimstore/sessions/')
+set sessionoptions=curdir,globals,folds,options,buffers,tabpages,help,winpos,winsize
 function! LoadSession(session)
 	let g:session_name = a:session
+	let g:SessionFrozen = 0
 	if filereadable(expand("~/.vimstore/sessions/" . a:session . ".vim"))
 		exec "source ~/.vimstore/sessions/" . a:session . ".vim"
 	endif
+	autocmd BufWrite * if !g:SessionFrozen | call SaveSession() | endif
+endfunction
+
+function! FreezeSession()
+	let g:SessionFrozen = 1
+	call SaveSession()
+endfunction
+
+function! UnfreezeSession()
+	unlet g:SessionFrozen = 0
+	call SaveSession()
 endfunction
 
 function! SaveSession()
-	silent eval system('mkdir -p ~/.vimstore/sessions/')
-	exec "mksession! ~/.vimstore/sessions/" . g:session_name . ".vim"
+	if exists("g:session_name")
+		exec "mksession! ~/.vimstore/sessions/" . g:session_name . ".vim"
+	endif
 endfunction
 
 function! SetupSession()
@@ -37,7 +51,6 @@ endfunction
 
 augroup session
 	au!
-	autocmd BufWrite * if exists("g:session_name") | call SaveSession() | endif
 	autocmd VimEnter * call SetupSession()
 	autocmd User ConfigPost call SetupSession()
 augroup END

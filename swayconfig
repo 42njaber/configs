@@ -42,12 +42,14 @@ set $term alacritty --option window.opacity=0.5 -e /bin/bash
 set $info alacritty --class "Info" -t "Window info" -e /bin/bash -c
 #set $menu wofi --show run
 set $menu tofi-run | xargs -I{} -- swaymsg exec {}
-set $dmenu tofi-drun
+set $dmenu tofi-drun | bash -c 'read -r CMD && notify-send --expire-time=1000 "Running: $CMD" ; $CMD'
 
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+a kill
 bindsym $mod+d exec $menu
 bindsym $mod+n exec $dmenu
+bindsym $mod+Shift+n exec makoctl menu tofi
+bindsym $mod+Shift+c exec makoctl dismiss -a
 
 bindsym $mod+Shift+r reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
@@ -173,7 +175,7 @@ bindsym $mod+control+g exec firefox -new-tab https://translate.google.com; [clas
 bindsym $mod+shift+z	exec "sleep 1; xset dpms force off"
 bindsym $mod+shift+s	exec $HOME/configs/scripts/sway-screenshare.sh
 bindsym $mod+shift+p	exec "killall -s INT wf-recorder || wf-recorder -a -f rec.mp4"
-bindsym $mod+shift+c	exec $HOME/configs/scripts/autoclick.sh
+# bindsym $mod+shift+c	exec $HOME/configs/scripts/autoclick.sh
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 # floating_modifier $mod

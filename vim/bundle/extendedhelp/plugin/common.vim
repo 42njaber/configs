@@ -55,7 +55,7 @@ endfunction
 
 function! ExtendedHelp(bufname,command,search = "")
 	if bufloaded(a:bufname) && type(getbufvar(a:bufname,"eh_command")) == type(a:command) && getbufvar(a:bufname,"eh_command") == a:command
-		call OpenExtendedHelp(a:bufname,a:search)
+		call OpenExtendedHelp(bufnr(a:bufname),a:search)
 	else
 		if bufloaded(a:bufname)
 			exec "bdelete" bufnr(a:bufname)

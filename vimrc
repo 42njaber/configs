@@ -5,16 +5,17 @@
 "
 
 if has("nvim")
-	set runtimepath^=~/.vim runtimepath+=~/.vim/after
+	setg runtimepath^=~/.vim runtimepath+=~/.vim/after
 	let &packpath=&runtimepath
 else
-	set nocompatible
+	setg nocompatible
 endif
 
 augroup vimrc
 	au! vimrc
 	au User ConfigReloadPre eval 0
 	au User ConfigPost eval 0
+	au User ReloadFull eval 0
 augroup END
 
 if exists("g:configload")
@@ -22,7 +23,7 @@ if exists("g:configload")
 endif
 let g:configload=1
 
-set langmenu=en_US.UTF-8
+setg langmenu=en_US.UTF-8
 language message C
 
 function! ReloadSyntax()
@@ -33,96 +34,96 @@ endfunc
 call ReloadSyntax()
 
 colorscheme custom
-set synmaxcol=400
+setg synmaxcol=400
 
 " Plugins
 call pathogen#infect()
 call pathogen#helptags()
 
 " Misc
-set belloff=all
-set fileencodings=ucs-bom,utf-8,default,latin1
-set ttyfast
-set hidden
-set lazyredraw
-set autoread
-set mouse =
-set ttymouse =
+setg belloff=all
+setg fileencodings=ucs-bom,utf-8,default,latin1
+setg ttyfast
+setg hidden
+setg lazyredraw
+setg autoread
+setg mouse =
+setg ttymouse =
 
 let g:tex_flavor='latex'
 let g:hdr42mail='njaber@student.42.fr'
 let g:hdr42user='njaber'
 
 " No backup
-set bdir=.,/home/neyl/.vimstore/backup
-set nobackup
-set nowritebackup
-set noswapfile
+setg bdir=.,/home/neyl/.vimstore/backup
+setg nobackup
+setg nowritebackup
+setg noswapfile
 
 " Indent/Syntax
-set cindent
-set shiftwidth=4
-set tabstop=4
-set noexpandtab
-set list
-set lcs=tab:>-,space:_
-set conceallevel=2
+setg cindent
+setg shiftwidth=4
+setg tabstop=4
+setg noexpandtab
+setg list
+setg lcs=tab:>-,space:_
+setg conceallevel=2
 
 " Format
-set textwidth&
-set nowrap
-set breakindent
-set showbreak=>---
-set linebreak
-set backspace=indent,eol,start
-set scrolloff=5
-set formatoptions=tcrqv1j
+setg textwidth&
+setg nowrap
+setg breakindent
+setg showbreak=>---
+setg linebreak
+setg backspace=indent,eol,start
+setg scrolloff=5
+setg formatoptions=tcrqv1j
 
 " Regex
-set magic
-set hlsearch
-set incsearch
-set noignorecase
-set regexpengine=0
+setg magic
+setg hlsearch
+setg incsearch
+setg noignorecase
+setg regexpengine=0
 
 " Timeouts
-" set timeoutlen=500
-set notimeout
-set ttimeout
-set ttimeoutlen=500
+" setg timeoutlen=500
+setg notimeout
+setg ttimeout
+setg ttimeoutlen=500
 
 " History
-set history=200
-set undolevels=1000
+setg history=200
+setg undolevels=1000
 
 " Undo
-set undofile
-set undodir=~/.vimstore/undo
+setg undofile
+setg undodir=~/.vimstore/undo
 
 " 
 
 " Where to find includes
 
 if isdirectory('inc/')
-	set path+=inc/
+	setg path+=inc/
 endif
 
 " Norme
-set efm&
-set efm+=%+PNorme:\ %f,%WWarning:\ %m,%EError:\ %m,%EError\ (line\ %l):\ %m,%EError\ (line\ %l\\,\ col\ %v):\ %m
+setg efm&
+setg efm+=%+PNorme:\ %f,%WWarning:\ %m,%EError:\ %m,%EError\ (line\ %l):\ %m,%EError\ (line\ %l\\,\ col\ %v):\ %m
 
 " Error format ignore notes and warnings
-set efm^=%-G%f:%l:%c\ warning:\ %m,%-G%f:%l:%c\ note:\ %m
+setg efm^=%-G%f:%l:%c\ warning:\ %m,%-G%f:%l:%c\ note:\ %m
 
 " Cscope
 if has('cscope')
-	set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
-	set cst
-	set nocsverb
+	setg cscopequickfix=s-,c-,d-,i-,t-,e-,a-
+	setg cst
+	setg nocsverb
 	if filereadable('cscope.out')
 		cscope add cscope.out
 	endif
-	set csverb
+	setg csverb
 endif
 
 "
@@ -130,31 +131,31 @@ endif
 "
 
 " Diff
-set diffopt=vertical,hiddenoff,filler
+setg diffopt=vertical,hiddenoff,filler
 command! Gitdiff execute 'silent !git diff -R % > /tmp/%:t.patch' | execute 'redraw!' | execute 'diffp /tmp/%:t.patch'
 
 " Completion
-set wildmenu
-set wildchar=<TAB>
-set wildmode=longest:full,list,full
+setg wildmenu
+setg wildchar=<TAB>
+setg wildmode=longest:full,list,full
 
-set omnifunc=syntaxcomplete#Complete
-set completeopt=menu,menuone,longest
+setg omnifunc=syntaxcomplete#Complete
+setg completeopt=menu,menuone,longest
 
 " Paste
-nnoremap <F2> :set invpaste paste?<CR>
-" imap <F2> <C-O>:set invpaste paste?<CR>
-set pastetoggle=<F2>
+nnoremap <F2> :setg invpaste paste?<CR>
+" imap <F2> <C-O>:setg invpaste paste?<CR>
+setg pastetoggle=<F2>
 
 " Fold
-set foldmethod=manual
-set foldnestmax=3
-set foldcolumn=0
-"set nofoldenable
+setg foldmethod=manual
+setg foldnestmax=3
+setg foldcolumn=0
+"setg nofoldenable
 
 " Modelines
-set modeline
-set modelines=5
+setg modeline
+setg modelines=5
 
 " Netrw
 
@@ -167,37 +168,37 @@ let g:netrw_liststyle = 3
 "
 
 " Info
-set laststatus=2
-set showcmd
-set showmode
-set ruler
-set report=2
+setg laststatus=2
+setg showcmd
+setg showmode
+setg ruler
+setg report=2
 
 " Numbers
-set number
-set numberwidth=4
-set relativenumber
+setg number
+setg numberwidth=4
+setg relativenumber
 
 " Visual cues
-set more
-set cursorline
+setg more
+setg cursorline
 
 " Windows
-set splitbelow
-set splitright
-"set title
+setg splitbelow
+setg splitright
+"setg title
 
-set statusline=
-set statusline+=\ %1*%{&readonly?'[Read-Only]':&modifiable?'':'[Unmodifiable]'}%0*
-set statusline+=%f
-set statusline+=%5(%2*%-3.3{&modified?'\ +\ ':''}%0*%)
-set statusline+=%=
-set statusline+=%10.10(ft=%{&ft}%)
-set statusline+=\ \ L%l/%L(%p%%)
+setg statusline=
+setg statusline+=\ %1*%{&readonly?'[Read-Only]':&modifiable?'':'[Unmodifiable]'}%0*
+setg statusline+=%f
+setg statusline+=%5(%2*%-3.3{&modified?'\ +\ ':''}%0*%)
+setg statusline+=%=
+setg statusline+=%20.20(ft=%{&ft}%)
+setg statusline+=\ \ L%l/%L(%p%%)
 
 " Open up to 10 arg files in tabs
 augroup vimrc
-	au VimEnter * set tabpagemax=10|sil tab ball|set tabpagemax&vim
+	au VimEnter * setg tabpagemax=10|sil tab ball|setg tabpagemax&vim
 augroup END
 
 " Go to previous tab on close
@@ -282,7 +283,7 @@ elseif has('unix')
 	vnoremap	<LEADER>y		""y:call system('wl-copy', getreg('"'))<CR>
 endif
 
-nnoremap	<LEADER>t			:silent set list!<CR>
+nnoremap	<LEADER>t			:silent setl list!<CR>
 nnoremap	<LEADER>g			:silent nohls<CR>
 nohls
 
@@ -326,8 +327,6 @@ nmap <silent>	<F10>			:echo "hi<" . synIDattr(synID(line("."),col("."),1),"name"
 								\ . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")
 								\ . ">"<CR>
 
-nnoremap <LEADER><TAB>			:set et<CR>:.retab<CR>hv0r :set noet<CR>:.retab!<CR>w
-
 imap <C-t>t ⊤
 imap <C-t>f ⊥
 imap <C-t>! ¬
@@ -337,8 +336,8 @@ imap <C-t>x ⊕
 imap <C-t>> ⇒
 imap <C-t>= ⇔
 
-map			<LEADER>R			:source ~/.vimrc<CR>
-map			<LEADER>r			:tabnew ~/.vimrc<CR>
+map			<LEADER>R			:source ~/.vimrc \| do User ReloadFull<CR>
+map			<LEADER>r			:source ~/.vimrc \| filetype detect<CR>
 map			<LEADER>f			:exec "tabnew ~/.vim/ftplugin/"..&ft..".vim"<CR>
 map			<LEADER>s			:exec "tabnew ~/.vim/after/syntax/"..&ft..".vim"<CR>
 map			<LEADER>i			:exec "tabnew ~/.vim/indent/"..&ft..".vim"<CR>
