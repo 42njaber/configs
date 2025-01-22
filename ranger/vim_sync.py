@@ -50,6 +50,7 @@ if VIM_SESSION:
                 else:
                     macros[m] = os.path.join(fm.thisdir.path, macros[m])
             source = "let g:fm_macros=" + str(macros)
+            #print(source)
             with open(envfile, 'w') as fileobj:
                 fileobj.write(source)
 
@@ -65,5 +66,6 @@ if VIM_SESSION:
         fm.signal_bind('tab.change', update_vimfile)
         fm.signal_bind('move', update_vimfile)
 
-        include = [name for name in dir(Actions) if name not in COMMANDS_EXCLUDE]
+        include = ['tag_toggle','mark_file','copy','cut''uncut']
         fm.commands.load_commands_from_object(fm,include)
+

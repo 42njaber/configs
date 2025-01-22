@@ -19,10 +19,7 @@ def on_hook(obj,name):
         return func
     return ret
 
-LOG = None
-@on_hook(api,'hook_ready')
-def logger(fm):
-    LOG = getLogger("ranger")
+LOG = getLogger(__name__)
 
 task_loop = asyncio.new_event_loop()
 def task_loop_main():
@@ -49,25 +46,36 @@ SESSION = os.environ.get("RANGER_SESSION", None)
 
 if SESSION:
 
-    @on_hook(api,'hook_ready')
-    def save_session(fm):
-        tabfile = fm.datapath(SESSION + ".conf")
-        if os.path.isfile(tabfile):
-            fm.source(tabfile)
+    tabfile = ""
 
-        @reset_callback
-        async def savetabs():
-            try:
-                await asyncio.sleep(5)
-                source = "\n".join(
-                            ("tab_open " + str(n) + " " + str(t.thisdir))
-                            for (n,t) in fm.tabs.items()
-                        )
-                source += "\ntab_move " + str(fm.current_tab)
-                with open(tabfile, 'w') as fileobj:
-                    fileobj.write(source)
-            except Exception as e:
-                LOG.error(e)
+    class write_session(api.commands.Command):
 
-        fm.signal_bind('move', savetabs)
-        fm.signal_bind('tab.change', savetabs)
+        def execute(self):
+            self.write()
+
+        def write(self):
+            tabfile = self.fm.datapath(SESSION + ".conf")
+            source = "\n".join(
+                        ("tab_open " + str(n) + " " + str(t.thisdir))
+                        for (n,t) in self.fm.tabs.items()
+                    )
+            source += "\ntab_move " + str(self.fm.current_tab)
+            with open(tabfile, 'w') as fileobj:
+                fileobj.write(source)
+
+        @on_hook(api,'hook_ready')
+        def save_session(fm):
+            tabfile = fm.datapath(SESSION + ".conf")
+            if os.path.isfile(tabfile):
+                fm.source(tabfile)
+
+            @reset_callback
+            async def savetabs():
+                try:
+                    await asyncio.sleep(5)
+                    self.write()
+                except Exception as e:
+                    LOG.error(e)
+
+            fm.signal_bind('move', savetabs)
+            fm.signal_bind('tab.change', savetabs)

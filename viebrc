@@ -32,7 +32,7 @@ nmap <space>z <toCommandMode>buffer <NOP>
 nmap zz <toCommandMode>suspend <NOP>
 nmap ZZ <:%suspend>
 
-command! session <:!ls -1 ~/.viebstore/ | rofi -no-lazy-grab -p "Choose session" -dmenu | { read SESSION; [ -z "$SESSION" ] && exit; mkdir -p "~/.viebstore/$SESSION";vieb --config-file=~/configs/viebrc --datafolder="~/.viebstore/$SESSION"; } >
+command! session <:!ls -1 ~/.viebstore/ | tofi --auto-accept-single=false --require-match=false --prompt-text=Session --placeholder-text=\<session\> | { read SESSION; [ -z "$SESSION" ] && exit; mkdir -p "~/.viebstore/$SESSION"; vieb --config-file=~/configs/viebrc --datafolder="~/.viebstore/$SESSION"; } >
 nmap O <:session>
 
 nmap <space>L <moveTabForward>

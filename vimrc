@@ -41,6 +41,7 @@ call pathogen#infect()
 call pathogen#helptags()
 
 " Misc
+setg virtualedit=onemore,block
 setg belloff=all
 setg fileencodings=ucs-bom,utf-8,default,latin1
 setg ttyfast
@@ -70,14 +71,14 @@ setg lcs=tab:>-,space:_
 setg conceallevel=2
 
 " Format
-setg textwidth&
-setg nowrap
+setg textwidth=0
+setg wrap
 setg breakindent
 setg showbreak=>---
 setg linebreak
 setg backspace=indent,eol,start
 setg scrolloff=5
-setg formatoptions=tcrqv1j
+setg formatoptions=clrqv1j
 
 " Regex
 setg magic

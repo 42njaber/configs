@@ -109,12 +109,12 @@ ln -fvsT "$HOME/configs/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 rofi -dump-config > config.rasi
 
 tee "$HOME/.bashrc" <<BASHRC
+stty susp undef
 if command -v tmux &> /dev/null && [ -n "\$XDG_CURRENT_DESKTOP" ] && [ -n "\$PS1" ] && [[ ! "\$TERM" =~ screen ]] && [[ ! "\$TERM" =~ tmux ]] && [ -z "\$TMUX" ]; then
     (tmux attach -t 0 || tmux attach || tmux new) && exit
 fi
 
 set -o vi
-stty susp undef
 
 PS1="\n   \w $> "
 BASHRC
