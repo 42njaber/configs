@@ -10,8 +10,8 @@ set searchwords+={"cpp_":"https://duckduckgo.com/?sites=cppreference.com&q=%s"}
 set containerstartuppage=s:usematching
 
 !mkdir -p ~/Downloads/Vieb/html
-set downloadpath="~/Downloads/Vieb/html"
-set downloadmethod="ask"
+set downloadpath=~/Downloads/Vieb/html
+set downloadmethod=ask
 
 set passthroughkeys={}
 set followchars=alpha
