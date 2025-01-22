@@ -71,6 +71,7 @@ call <SID>restore_focus_events()
 " When '&term' changes values for '<F24>', '<F25>', '&t_ti' and '&t_te' are
 " reset. Below autocmd restores values for those options.
 au TermChanged * eval <SID>restore_focus_events()
+au User ConfigPost eval <SID>restore_focus_events()
 
 " restore vim 'autoread' functionality
 " au FocusGained * call tmux_focus_events#focus_gained()

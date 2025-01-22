@@ -27,11 +27,7 @@ mount --mkdir /dev/vda1 /mnt/boot
 [ -e /mnt/boot/vmlinuz-linux ] || pacstrap -K /mnt base linux linux-firmware
 
 genfstab -U /mnt > /mnt/etc/fstab
-echo "ssh /host/ssh 9p trans=virtio,version=9p2000.L,rw,uid=njaber,gid=njaber 0 0" >> /mnt/etc/fstab
-echo "configs /host/configs 9p trans=virtio,version=9p2000.L,rw,uid=root,gid=njaber 0 0" >> /mnt/etc/fstab
-echo "/host/ssh /root/.ssh none bind,defaults 0 0" >> /mnt/etc/fstab
-echo "/host/ssh /home/njaber/.ssh none bind,defaults 0 0" >> /mnt/etc/fstab
-echo "/host/configs /home/njaber/configs none bind,defaults 0 0" >> /mnt/etc/fstab
+echo "home /host/njaber 9p trans=virtio,version=9p2000.L,_netdev,msize=262144,cache=fscache,rw 0 0" >> /mnt/etc/fstab
 
 arch-chroot /mnt <<GUEST
 ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
@@ -46,8 +42,9 @@ echo "Arch-VM-njaber" > /etc/hostname
 systemctl enable systemd-networkd systemd-resolved
 
 useradd -r config
-useradd -m njaber -u $(stat -c '%u' /host/configs)
-groupmod -g njaber -u $(stat -c '%g' /host/configs)
+useradd -m njaber -u $(stat -c '%u' /host/njaber)
+groupmod -g njaber -u $(stat -c '%g' /host/njaber)
+ln -vsfT /host/njaber/configs /home/njaber/configs
 chpasswd <<PASSWD
 root:vmjaber
 config:vmjaber

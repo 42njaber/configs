@@ -3,7 +3,10 @@ function! s:reload_env()
 	if exists('v:servername')
 		let l:fmfile="/tmp/vsh/fm/"..v:servername..".vim"
 		if filereadable(l:fmfile)
-			exec "source "..l:fmfile
+			exec "source "..fmfile
+			echoh Label
+			echo 'Updated ranger macros'
+			echoh None
 		endif
 	endif
 endfunc
@@ -26,10 +29,10 @@ function! s:foldLine(line,end=0)
 		let l:ret = a:line
 	else
 		let l:closed = foldclosed(a:line)
-		exec a:line."g/^/normal zC"
+		exec a:line."normal zC"
 		let l:ret = a:end ? foldclosedend(a:line) : foldclosed(a:line)
 		if l:closed != foldclosed(a:line)
-			exec a:line."g/^/normal zo"
+			exec a:line."normal zo"
 		endif
 	endif
 	return l:ret
@@ -37,33 +40,39 @@ endfunction
 
 function! vsh#run#Load()
 	if !exists('g:fm_macros')
-		g:fm_macros = {}
+		let g:fm_macros = {}
 	endif
+	let b:vsh_lvl = 0
+	call FirstModeLine()
 endfunc
 
 function! vsh#run#VshMacro(match)
-	return a:match == "%" ? "%" : Fm(a:match)
+	return a:match[1] == "%" ? "%" : Fm(a:match[1])
 endfunction
 
-function! vsh#run#Expand() range
-	let [l:firstline,l:lastline]=[s:foldLine(a:firstline),s:foldLine(a:lastline,1)]
+function! vsh#run#Expand(lines)
 	let l:expand_pat = "%\\([fpsctd%]\\)"
-	exec l:firstline.",".l:lastline "s/"..l:expand_pat.."/\\=vsh#run#VshMacro(submatch(1))/eg"
+	return substitute(a:lines,l:expand_pat,function('vsh#run#VshMacro'),'g')"
+endfunction
+
+function! vsh#run#RunVim(lines)
+	for l in a:lines
+		exec l
+	endfor
 endfunction
 
 function! vsh#run#Run() range
 	let [l:firstline,l:lastline]=[s:foldLine(a:firstline),s:foldLine(a:lastline,1)]
-	let l:lastchange=changenr()
-	exec l:firstline.",".l:lastline "call vsh#run#Expand()"
+	let l:lines=map(getline(l:firstline,l:lastline),'vsh#run#Expand(v:val)')
 	if getline(l:firstline)[0] == ":"
-		exec l:firstline.",".l:lastline "call vsh#run#RunVim()"
+		call vsh#run#RunVim(lines)
 	else
 		eval system("mkdir -p /tmp/vsh")
 		let l:tempfile=systemlist("mktemp /tmp/vsh/run.XXXXXXXXXX")[0]
-		silent exec l:firstline..','..l:lastline..'w! '..l:tempfile
+		call writefile(lines, l:tempfile, 'DS')
 		exec '!clear;cd '..shellescape(getenv('PWD'))..';source '..l:tempfile..';env -u SHLVL -u OLDPWD -u _ >'..l:tempfile
 		redraw
-		if exists('b:vsh_dynamic') && b:vsh_dynamic
+		if b:vsh_lvl >= 1
 			let l:vars=readfile(l:tempfile)
 			let l:vars=map(l:vars,'[strpart(v:val,0,stridx(v:val,"=")),strpart(v:val,stridx(v:val,"=") + 1)]')
 			let l:vars=filter(l:vars,'getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
@@ -71,21 +80,14 @@ function! vsh#run#Run() range
 			for v in vars 
 				call setenv(v[0],v[1])
 				echom "let "..v[0].."="..v[1]
-				if v[0] == "PWD" && exists('b:vsh_cwd') && b:vsh_cwd
+				if v[0] == "PWD" && b:vsh_lvl >= 2
 					exec "cd "..v[1]
 					echom "cd "..v[1]
 				endif
 			endfor
 			echoh None
 		endif
-		eval system("rm "..l:tempfile)
 	endif
-	silent exec "undo "..l:lastchange
-endfunction
-
-function! vsh#run#RunVim() range
-	let [l:firstline,l:lastline]=[a:firstline,a:lastline]
-	exec l:firstline.",".l:lastline "g/^/ exec getline(\".\")"
 endfunction
 
 function! vsh#run#TmuxRun() range
@@ -103,10 +105,8 @@ function! vsh#run#TmuxRun() range
 				\ ])
 endfunction
 
-augroup vsh_autoload
-	au! vsh_autoload
-	autocmd User ConfigPost source <sfile>:p
-
+augroup vsh
+	au!
 	autocmd FocusGained * call <SID>reload_env()
 augroup END
 

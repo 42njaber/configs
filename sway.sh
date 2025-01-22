@@ -8,7 +8,8 @@ export XDG_SESSION_TYPE=wayland
 export TERMCMD="alacritty -e /bin/bash -c "
 
 if [ "$1" = "virtual" ]; then
-	#export WLR_RENDERER=gles2
+	shift 1
+	export WLR_RENDERER=gles2
 	export WLR_RENDERER=pixman
 	export WLR_RENDERER_ALLOW_SOFTWARE=1
 	#export WLR_RENDERER_FORCE_SOFTWARE=1
@@ -23,7 +24,7 @@ eval $(ssh-agent -s)
 
 set -e
 
-sway -V 1>"$HOME/sway.log" 2> >( grep --line-buffered -xvf <( cat <<GLINES
+( sway $@ ) 1>"$HOME/sway.log" 2> >( grep --line-buffered -xvf <( cat <<GLINES
 The XKEYBOARD keymap compiler (xkbcomp) reports:
 > Warning:          Unsupported maximum keycode 708, clipping.
 >                   X11 cannot support keycodes above 255.
