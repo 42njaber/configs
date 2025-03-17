@@ -38,6 +38,17 @@ function! s:foldLine(line,end=0)
 	return l:ret
 endfunction
 
+function! vsh#run#FoldLevel(lnum)
+	let l:pos = getpos('.')
+	call setpos('.',[0,a:lnum,0,0])
+	let l:ret = searchpair('^.*{$','','^}.*$','bmr')
+	if getline(a:lnum) =~ '^.*{$'
+		let l:ret += 1
+	endif
+	call setpos('.',l:pos)
+	return l:ret
+endfunc
+
 function! vsh#run#Load()
 	if !exists('g:fm_macros')
 		let g:fm_macros = {}

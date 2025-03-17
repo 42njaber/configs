@@ -15,9 +15,12 @@ nnoremap <buffer>			<leader>D	:let b:vsh_dynamic=1 \| let b:vsh_cwd=1<CR>
 
 call vsh#run#Load()
 
+setlocal foldmethod=expr
+setlocal foldexpr=vsh#run#FoldLevel(v:lnum)
 setlocal nocindent
 setlocal foldcolumn=3
 setlocal buftype=
+setlocal relativenumber
 
 setlocal statusline=%#StatusLineTerm#
 setlocal statusline+=\ %1*%{&readonly?'[Read-Only]':&modifiable?'':'[Unmodifiable]'}%#StatusLineTerm#

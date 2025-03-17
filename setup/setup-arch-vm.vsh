@@ -43,10 +43,11 @@ ROOT
 	set -e
 
 	pacman -Qk start-stop-daemon || yay -Sy --answerclean All --answerdiff None --noconfirm start-stop-daemon
-	pacman -Qk vieb-bin || yay -Sy --answerclean All --answerdiff None vieb-bin --noconfirm
+	pacman -Qk vieb-bin || yay -Sy --answerclean All --answerdiff None --noconfirm vieb-bin
 	pacman -Qk ttf-material-design-icons-extended || yay -Sy --answerclean All --answerdiff None --noconfirm ttf-material-design-icons-extended
 	pacman -Qk i3ipc-python-git || yay -Sy --answerclean All --answerdiff None --noconfirm i3ipc-python-git
 	pacman -Qk tofi || yay -Sy --answerclean All --answerdiff None --noconfirm tofi
+	pacman -Qk xdg-desktop-portal-termfilechooser-git || yay -Sy --answerclean All --answerdiff None --noconfirm xdg-desktop-portal-termfilechooser-git
 }
 
 sudo tee "/etc/profile.d/10-arch.sh" << SH
