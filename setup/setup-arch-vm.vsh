@@ -76,6 +76,7 @@ echo "Path: "
 echo $PATH | tr ':' '\n'
 
 mkdir -vp "$XDG_CONFIG_HOME"/{ranger/plugins,rifle,alacritty,sway,waybar,tmux}
+mkdir -vp "$XDG_CONFIG_HOME"/xdg-desktop-portal{,-wlr,-termfilechooser}
 ln -fsvT "$HOME/.vimstore"                 "$HOST/.vimstore"
 ln -fsvT "$HOME/.viebstore/sessions"       "$HOST/.viebstore/sessions"
 ln -fsvT "$HOME/.tmuxstore/sessions"       "$HOST/.tmuxstore/sessions"
@@ -119,6 +120,17 @@ set -o vi
 
 PS1="\n   \w $> "
 BASHRC
+
+tee "$XDG_CONFIG_HOME/xdg-desktop-portal/portals.conf" <<PORTALS
+[preferred]
+default=wlr
+org.freedesktop.impl.portal.FileChooser=termfilechooser
+PORTALS
+
+tee "$XDG_CONFIG_HOME/xdg-desktop-portal-termfilechooser/config" <<TERMFILECHOOSER
+[filechooser]
+cmd=/usr/share/xdg-desktop-portal-termfilechooser/ranger-wrapper.sh
+TERMFILECHOOSER
 
 git config --global user.email "njaber@student.42.fr"
 git config --global user.name "njaber(VM)"
