@@ -2,6 +2,7 @@
 export MOZ_ENABLE_WAYLAND=1 MOZ_USE_XINPUT2=1
 export MOZ_DISABLE_WAYLAND_PROXY=1
 export GDK_BACKEND=wayland
+export GTK_USE_PORTAL=1
 export XDG_CURRENT_DESKTOP=sway:Sway:wayland
 export XDG_SESSION_DESKTOP=sway
 export XDG_SESSION_TYPE=wayland

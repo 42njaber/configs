@@ -334,10 +334,14 @@ cnoremap <C-j>					<DOWN>
 cnoremap <C-h>					<LEFT>
 cnoremap <C-l>					<RIGHT>
 
-nmap <silent>	<F10>			:echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
-								\ . '> trans<' . synIDattr(synID(line("."),col("."),0),"name")
-								\ . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")
-								\ . ">"<CR>
+function! ShowSynStack()
+	let l:stack = synstack(line('.'),col('.'))
+	for id in l:stack
+		echon "<" . synIDattr(id,"name") . "|" . synIDattr(synIDtrans(id),"name") . "> "
+	endfor
+	echo
+endfunc
+nmap <silent>	<F10>			:call ShowSynStack()<CR>
 
 imap <C-t>t ⊤
 imap <C-t>f ⊥

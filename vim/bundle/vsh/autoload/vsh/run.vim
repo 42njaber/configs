@@ -39,13 +39,13 @@ function! s:foldLine(line,end=0)
 endfunction
 
 function! vsh#run#FoldLevel(lnum)
-	let l:pos = getpos('.')
-	call setpos('.',[0,a:lnum,0,0])
-	let l:ret = searchpair('^.*{$','','^}.*$','bmr')
-	if getline(a:lnum) =~ '^.*{$'
-		let l:ret += 1
-	endif
-	call setpos('.',l:pos)
+	let l:syn0 = synstack(a:lnum,0)
+	let l:syn1 = synstack(a:lnum,getline(a:lnum)->len())
+
+	if getline(a:lnum) =~ '^.*{$' | let l:ret += 1 | endif
+	if synID(a:lnum,0) == hlID('shHereDoc01') | let l:ret += 1 | endif
+	if synID(a:lnum+1,0) == hlID('shHereDoc') | let l:ret += 1 | endif
+
 	return l:ret
 endfunc
 

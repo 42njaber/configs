@@ -16,7 +16,7 @@ pacman -Sy --needed --noconfirm man-db man-pages
 pacman -Sy --needed --noconfirm base-devel git wl-clipboard
 
 pacman -Sy --needed --noconfirm xorg-xwayland
-pacman -Sy --needed --noconfirm xdg-desktop-portal xdg-desktop-portal-wlr
+pacman -Sy --needed --noconfirm xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
 
 pacman -Sy --needed --noconfirm flameshot jq elinks
 pacman -Sy --needed --noconfirm mako libnotify
@@ -47,7 +47,7 @@ ROOT
 	pacman -Qk ttf-material-design-icons-extended || yay -Sy --answerclean All --answerdiff None --noconfirm ttf-material-design-icons-extended
 	pacman -Qk i3ipc-python-git || yay -Sy --answerclean All --answerdiff None --noconfirm i3ipc-python-git
 	pacman -Qk tofi || yay -Sy --answerclean All --answerdiff None --noconfirm tofi
-	pacman -Qk xdg-desktop-portal-termfilechooser-git || yay -Sy --answerclean All --answerdiff None --noconfirm xdg-desktop-portal-termfilechooser-git
+	pacman -Qk xdg-desktop-portal-termfilechooser-hunkyburrito-git || yay -Sy --answerclean All --answerdiff None --noconfirm xdg-desktop-portal-termfilechooser-hunkyburrito-git
 }
 
 sudo tee "/etc/profile.d/10-arch.sh" << SH
@@ -76,7 +76,7 @@ echo "Path: "
 echo $PATH | tr ':' '\n'
 
 mkdir -vp "$XDG_CONFIG_HOME"/{ranger/plugins,rifle,alacritty,sway,waybar,tmux}
-mkdir -vp "$XDG_CONFIG_HOME"/xdg-desktop-portal{,-wlr,-termfilechooser}
+mkdir -vp "$XDG_CONFIG_HOME"/xdg-desktop-portal{,-termfilechooser}
 ln -fsvT "$HOME/.vimstore"                 "$HOST/.vimstore"
 ln -fsvT "$HOME/.viebstore/sessions"       "$HOST/.viebstore/sessions"
 ln -fsvT "$HOME/.tmuxstore/sessions"       "$HOST/.tmuxstore/sessions"
@@ -89,7 +89,7 @@ ln -fvsT "$HOME/configs/vibrc" "$HOME/.viebrc"
 
 ln -fvsT "$HOME/configs/rangerrc.conf" "$HOME/.config/ranger/rc.conf"
 ln -fvsT "$HOME/configs/ranger/scope.sh" "$HOME/.config/ranger/scope.sh"
-ln -fvs  $HOME/configs/ranger/*.py "$HOME/.config/ranger/plugins/"
+ln -fvs  "$HOME/configs/ranger"/*.py "$HOME/.config/ranger/plugins/"
 ln -fvsT "$HOME/configs/rifle.conf" "$HOME/.config/ranger/rifle.conf"
 ln -fvsT "$HOME/configs/tmux.conf" "$HOME/.config/tmux/tmux.conf"
 
@@ -129,7 +129,8 @@ PORTALS
 
 tee "$XDG_CONFIG_HOME/xdg-desktop-portal-termfilechooser/config" <<TERMFILECHOOSER
 [filechooser]
-cmd=/usr/share/xdg-desktop-portal-termfilechooser/ranger-wrapper.sh
+cmd=ranger-wrapper.sh
+env=TERMCMD=alacritty -T "File chooser"
 TERMFILECHOOSER
 
 git config --global user.email "njaber@student.42.fr"
