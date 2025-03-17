@@ -4,10 +4,6 @@
 " Maintainer: Evan Lecklide <evan@lecklider.com>
 " URL:        https://github.com/evanleck/vim-svelte
 
-if exists("b:did_indent")
-  finish
-endif
-
 if !exists('g:svelte_indent_script')
   let g:svelte_indent_script = 1
 endif
@@ -30,13 +26,13 @@ else
 endif
 
 runtime! indent/html.vim
-let s:html_indent = &l:indentexpr
+let s:html_indent = "HtmlIndent()"
 unlet! b:did_indent
 
 let b:did_indent = 1
 
 setlocal indentexpr=GetSvelteIndent()
-setlocal indentkeys=o,O,*<Return>,<>>,{,},0),0],!^F,;,=:else,=:then,=:catch,=/if,=/each,=/await
+setlocal indentkeys=o,O,<Return>,<>>,{,},0),0],!^F,;,=:else,=:then,=:catch,=/if,=/each,=/await,=/snippet
 
 function! GetSvelteIndent()
   let current_line_number = v:lnum
@@ -77,10 +73,14 @@ function! GetSvelteIndent()
 
   " For some reason, the HTML CSS indentation keeps indenting the next line over
   " and over after each style declaration.
-  if searchpair('<style>', '', '</style>', 'bW') && previous_line =~ ';$' && current_line !~ '}'
-    return previous_line_indent
+  call setpos('.',[0,current_line_number,0])
+  if searchpair('<style>', '', '</style>', 'bW')
+    if previous_line =~ ';$' && current_line !~ '}'
+      return previous_line_indent
+    endif
   endif
 
+  call setpos('.',[0,current_line_number,0])
   " "/await" or ":catch" or ":then"
   if current_line =~ '^\s*{\s*\/await' || current_line =~ '^\s*{\s*:\(catch\|then\)'
     let await_start = searchpair('{\s*#await\>', '', '{\s*\/await\>', 'bW')
@@ -94,7 +94,7 @@ function! GetSvelteIndent()
   if current_line =~ '^\s*{\s*\/each'
     let each_start = searchpair('{\s*#each\>', '', '{\s*\/each\>', 'bW')
 
-    if each_start
+    if each_start > 0
       return indent(each_start)
     endif
   endif
@@ -105,6 +105,24 @@ function! GetSvelteIndent()
 
     if if_start
       return indent(if_start)
+    endif
+  endif
+
+  " "/snippet"
+  if current_line =~ '^\s*{\s*\/snippet'
+    let snippet_start = searchpair('{\s*#snippet\>', '', '{\s*\/snippet\>', 'bW')
+
+    if snippet_start
+      return indent(snippet_start)
+    endif
+  endif
+
+  " "/key"
+  if current_line =~ '^\s*{\s*\/key'
+    let key_start = searchpair('{\s*#key\>', '', '{\s*\/key\>', 'bW')
+
+    if key_start
+      return indent(key_start)
     endif
   endif
 
@@ -123,8 +141,8 @@ function! GetSvelteIndent()
     endif
   endif
 
-  " "#if" or "#each"
-  if previous_line =~ '^\s*{\s*#\(if\|each\|await\)'
+  " "#if" or "#each" or other
+  if previous_line =~ '^\s*{\s*#\(if\|each\|await\|snippet\|key\)'
     return previous_line_indent + shiftwidth()
   endif
 
@@ -140,7 +158,10 @@ function! GetSvelteIndent()
   let prevIsTag = (index(synstack(previous_line_number, match(previous_line, '$')), hlID('htmlTag')) >= 0)
   let isEndTag = (index(synstack(current_line_number, match(current_line, '\S') + 1), hlID('htmlEndTag')) >= 0)
 
-  if isEndTag
+  call setpos('.',[0,current_line_number,0])
+  if current_line =~ "<style>"
+    continue
+  elseif isEndTag
     let tag = matchlist(current_line, '</\([a-zA-Z:]\+\)\>')[1]
     let tag_start = searchpair('<'.tag.'\>', '', '</'.tag.'\>', 'bcW', 'TagClosed()')
     if tag_start > 0 && tag_start < current_line_number
@@ -153,14 +174,17 @@ function! GetSvelteIndent()
     let current_tag_end = current_line =~ '>$'
 
     if !prev_tag_end && current_tag_end
-      let tag_start = searchpair('<[a-zA-Z:]\+', '', '>', 'bW')
-      return indent(tag_start)
+      let tag_tab = searchpos('<[a-zA-Z0-9:]\+\s', 'bW')
+      return tag_tab[1] - 1
     elseif prev_tag_end && !previous_closes
       return previous_line_indent + shiftwidth()
     elseif indents_match && !previous_closes && previous_line =~ '<\(\u\|\l\+:\l\+\)'
       return previous_line_indent + shiftwidth()
     elseif !indents_match && previous_closes
       return previous_line_indent
+    else
+      let tag_tab = searchpos('<[a-zA-Z0-9:]\+\s*', 'beW')
+      return tag_tab[1]
     endif
   endif
 

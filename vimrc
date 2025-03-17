@@ -56,10 +56,10 @@ let g:hdr42mail='njaber@student.42.fr'
 let g:hdr42user='njaber'
 
 " No backup
-setg bdir=.,/home/neyl/.vimstore/backup
-setg nobackup
-setg nowritebackup
-setg noswapfile
+set bdir=.,/home/neyl/.vimstore/backup
+set nobackup
+set nowritebackup
+set noswapfile
 
 " Indent/Syntax
 setg cindent
@@ -257,9 +257,10 @@ let mapleader=' '
 
 nnoremap	,					/
 vnoremap	,					/
+vnoremap	<LEADER>			<Esc>
 inoremap	<F1>				<NOP>
 nnoremap	<F1>				<NOP>
-nnoremap	/					:30messages<CR>
+nnoremap	/					:messages<CR>
 nnoremap	Q					<NOP>
 
 nnoremap	+					g+
@@ -306,6 +307,16 @@ noremap		L					$
 noremap		j					gj
 noremap		k					gk
 
+nnoremap	<A-h>				<C-w>h
+nnoremap	<A-j>				<C-w>j
+nnoremap	<A-k>				<C-w>k
+nnoremap	<A-l>				<C-w>l
+
+nnoremap	<Esc>h				<C-w>h
+nnoremap	<Esc>j				<C-w>j
+nnoremap	<Esc>k				<C-w>k
+nnoremap	<Esc>l				<C-w>l
+
 nnoremap	<C-e>				3<C-e>
 nnoremap	<C-y>				3<C-y>
 
@@ -338,15 +349,16 @@ imap <C-t>> ⇒
 imap <C-t>= ⇔
 
 map			<LEADER>R			:source ~/.vimrc \| do User ReloadFull<CR>
-map			<LEADER>r			:source ~/.vimrc \| filetype detect<CR>
-map			<LEADER>f			:exec "tabnew ~/.vim/ftplugin/"..&ft..".vim"<CR>
+map			<LEADER>r			:source ~/.vimrc \| e<CR>
+map			<LEADER>f			:exec "tabnew ~/.vim/after/ftplugin/"..&ft..".vim"<CR>
 map			<LEADER>s			:exec "tabnew ~/.vim/after/syntax/"..&ft..".vim"<CR>
-map			<LEADER>i			:exec "tabnew ~/.vim/indent/"..&ft..".vim"<CR>
+map			<LEADER>i			:exec "tabnew ~/.vim/after/indent/"..&ft..".vim"<CR>
 
 " Reload ftplugins
 filetype plugin indent off
 filetype plugin indent on
 
+set t_te& t_ti&
 do User ConfigPost
 
 syntax on

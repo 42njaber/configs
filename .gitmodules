@@ -19,3 +19,6 @@
 [submodule "vim/bundle/vim-svelte"]
 	path = vim/bundle/vim-svelte
 	url = https://github.com/evanleck/vim-svelte.git
+[submodule "vim/bundle/swayconfig.vim"]
+	path = vim/bundle/swayconfig.vim
+	url = https://github.com/jamespeapen/swayconfig.vim

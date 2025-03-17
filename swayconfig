@@ -41,13 +41,15 @@ output * {
 set $term alacritty --option window.opacity=0.5 -e /bin/bash
 set $info alacritty --class "Info" -t "Window info" -e /bin/bash -c
 #set $menu wofi --show run
-set $menu tofi-run | xargs -I{} -- swaymsg exec {}
-set $dmenu tofi-drun | bash -c 'read -r CMD && notify-send --expire-time=1000 "Running: $CMD" ; $CMD'
+set $menu tofi-run
+set $dmenu tofi-drun
+set $cmdmenu tofi-run --require-match=false --prompt-text="$ bash" --placeholder-text="<command>"
 
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+a kill
-bindsym $mod+d exec $menu
-bindsym $mod+n exec $dmenu
+bindsym $mod+d exec $menu | xargs -I{} -- swaymsg exec {}
+bindsym $mod+n exec $dmenu | bash -c 'read -r CMD && notify-send --expire-time=1000 "Running: $CMD" ; $CMD'
+bindsym $mod+c exec $cmdmenu | xargs -I{} -- alacritty -e bash -c "{} | less -f"
 bindsym $mod+Shift+n exec makoctl menu tofi
 bindsym $mod+Shift+c exec makoctl dismiss -a
 
