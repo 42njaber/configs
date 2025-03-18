@@ -38,15 +38,24 @@ function! s:foldLine(line,end=0)
 	return l:ret
 endfunction
 
+function! s:synstackDepth(lnum)
+	let stack = synstack(a:lnum,getline(a:lnum)->len())
+	let groups = [hlID('shExpr'),hlID('shHereDoc'),hlID('shParen'),hlID('shDo')]
+
+	let counter = 0
+	for synID in stack
+		if index(groups,synID) >= 0
+			let counter += 1
+		endif
+	endfor
+	return counter
+endfunction
+
 function! vsh#run#FoldLevel(lnum)
-	let l:syn0 = synstack(a:lnum,0)
-	let l:syn1 = synstack(a:lnum,getline(a:lnum)->len())
+	let l:prev_lvl = a:lnum == 0 ? 0 : s:synstackDepth(a:lnum - 1)
+	let l:next_lvl = s:synstackDepth(a:lnum)
 
-	if getline(a:lnum) =~ '^.*{$' | let l:ret += 1 | endif
-	if synID(a:lnum,0) == hlID('shHereDoc01') | let l:ret += 1 | endif
-	if synID(a:lnum+1,0) == hlID('shHereDoc') | let l:ret += 1 | endif
-
-	return l:ret
+	return max([prev_lvl,next_lvl])
 endfunc
 
 function! vsh#run#Load()
