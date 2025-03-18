@@ -13,7 +13,7 @@ if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
 endif
 
 silent eval system('mkdir -p ~/.vimstore/sessions/')
-set sessionoptions=curdir,globals,folds,options,buffers,tabpages,help,winpos,winsize
+
 function! LoadSession(session)
 	let g:session_name = a:session
 	let g:SessionFrozen = 0
@@ -47,6 +47,7 @@ function! SetupSession()
 
 		if !exists("g:session_name") | call LoadSession(v:servername) | endif
 	endif
+	set sessionoptions=curdir,localoptions,buffers,tabpages,help,winpos,winsize
 endfunction
 
 augroup session

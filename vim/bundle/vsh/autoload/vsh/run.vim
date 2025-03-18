@@ -62,6 +62,10 @@ function! vsh#run#Load()
 	if !exists('g:fm_macros')
 		let g:fm_macros = {}
 	endif
+	if !exists('g:vsh_default_pwd')
+		let g:vsh_default_pwd = 1
+		let $PWD = getcwd()
+	endif
 	let b:vsh_lvl = 0
 	call FirstModeLine()
 endfunc
