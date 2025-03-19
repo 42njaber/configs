@@ -93,11 +93,13 @@ function! vsh#run#Run() range
 	else
 		eval system("mkdir -p /tmp/vsh")
 		let l:tempfile=systemlist("mktemp /tmp/vsh/run.XXXXXXXXXX")[0]
+		let l:envfile=l:tempfile..".env"
 		call writefile(lines, l:tempfile, 'DS')
-		exec '!clear;cd '..shellescape(getenv('PWD'))..';source '..l:tempfile..';env -u SHLVL -u OLDPWD -u _ >'..l:tempfile
+		call writefile([], l:envfile, 'DS')
+		exec '!clear;cd '..shellescape(getenv('PWD'))..';source '..l:tempfile..';env -u SHLVL -u OLDPWD -u _ >'..l:envfile
 		redraw
 		if b:vsh_lvl >= 1
-			let l:vars=readfile(l:tempfile)
+			let l:vars=readfile(l:envfile)
 			let l:vars=map(l:vars,'[strpart(v:val,0,stridx(v:val,"=")),strpart(v:val,stridx(v:val,"=") + 1)]')
 			let l:vars=filter(l:vars,'getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
 			echoh Label

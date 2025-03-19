@@ -49,7 +49,7 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+a kill
 bindsym $mod+d exec $menu | xargs -I{} -- swaymsg exec {}
 bindsym $mod+n exec $dmenu | bash -c 'read -r CMD && notify-send --expire-time=1000 "Running: $CMD" ; $CMD'
-bindsym $mod+c exec $cmdmenu | xargs -I{} -- alacritty -e bash -c "{} | less -f"
+bindsym $mod+c exec $cmdmenu | xargs -I{} -- alacritty -e bash -c "{} 2>&1 | less -f"
 bindsym $mod+Shift+n exec makoctl menu tofi
 bindsym $mod+Shift+c exec makoctl dismiss -a
 

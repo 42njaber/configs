@@ -47,7 +47,7 @@ function! SetupSession()
 
 		if !exists("g:session_name") | call LoadSession(v:servername) | endif
 	endif
-	set sessionoptions=curdir,localoptions,buffers,tabpages,help,winpos,winsize
+	set sessionoptions=curdir,globals,localoptions,buffers,tabpages,help,winpos,winsize
 endfunction
 
 augroup session
