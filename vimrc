@@ -255,12 +255,19 @@ nmapclear
 cmapclear
 let mapleader=' '
 
+cnoremap	<C-C>				<C-u><Backspace>
+inoremap	<C-C>				<ESC>
+vnoremap	<C-C>				<ESC>
+
+nnoremap	;					:<C-F>
+vnoremap	;					:<C-F>
+
 nnoremap	,					/
 vnoremap	,					/
 vnoremap	<LEADER>			<Esc>
 inoremap	<F1>				<NOP>
 nnoremap	<F1>				<NOP>
-nnoremap	/					:messages<CR>
+nnoremap	/					:30messages<CR>
 nnoremap	Q					<NOP>
 
 nnoremap	+					g+
@@ -272,10 +279,6 @@ nnoremap	<LEADER><LEADER>	<NOP>
 
 nnoremap	<LEADER>			<NOP>
 nnoremap	<LEADER><LEADER>	<NOP>
-
-cnoremap	<C-C>				<C-u><Backspace>
-inoremap	<C-C>				<ESC>
-vnoremap	<C-C>				<ESC>
 
 if has('mac')
 	vnoremap	<LEADER>y		:w !pbcopy<CR>

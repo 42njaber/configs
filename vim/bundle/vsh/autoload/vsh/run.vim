@@ -39,8 +39,9 @@ function! s:foldLine(line,end=0)
 endfunction
 
 function! s:synstackDepth(lnum)
-	let stack = synstack(a:lnum,getline(a:lnum)->len())
-	let groups = [hlID('shExpr'),hlID('shHereDoc'),hlID('shParen'),hlID('shDo')]
+	let end = getline(a:lnum)->len()
+	let stack = synstack(a:lnum,l:end + 1)
+	let groups = ["shExpr","shHereDoc","shParen","shDo","shIf","shSingleQuote","shDoubleQuote"]->map('hlID(v:val)')
 
 	let counter = 0
 	for synID in stack
@@ -95,13 +96,13 @@ function! vsh#run#Run() range
 		let l:tempfile=systemlist("mktemp /tmp/vsh/run.XXXXXXXXXX")[0]
 		let l:envfile=l:tempfile..".env"
 		call writefile(lines, l:tempfile, 'DS')
-		call writefile([], l:envfile, 'DS')
-		exec '!clear;cd '..shellescape(getenv('PWD'))..';source '..l:tempfile..';env -u SHLVL -u OLDPWD -u _ >'..l:envfile
+		exec '!clear;cd '..shellescape(getcwd())..';source '..l:tempfile..';env -0 -u SHLVL -u OLDPWD -u _ >'..l:tempfile
 		redraw
 		if b:vsh_lvl >= 1
-			let l:vars=readfile(l:envfile)
-			let l:vars=map(l:vars,'[strpart(v:val,0,stridx(v:val,"=")),strpart(v:val,stridx(v:val,"=") + 1)]')
-			let l:vars=filter(l:vars,'getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
+			let l:vars=readfile(l:tempfile)->join("\uABCD")->split("\n")
+			let l:vars=l:vars->map('v:val->substitute("\uABCD","\n","g")')
+			let l:vars=l:vars->map('[strpart(v:val,0,stridx(v:val,"=")),strpart(v:val,stridx(v:val,"=") + 1)]')
+			let l:vars=l:vars->filter('getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
 			echoh Label
 			for v in vars 
 				call setenv(v[0],v[1])
@@ -123,7 +124,7 @@ function! vsh#run#TmuxRun() range
 	let l:tempfile=systemlist("mktemp /tmp/vsh/tmuxrun.XXXXXXXXXX")[0]
 	let l:envfile=l:tempfile..".env"
 	let l:env = map(items(environ()),'"export "..v:val[0].."="..shellescape(v:val[1])')
-	call writefile(["tmux set-option -p remain-on-exit on"] + l:env,l:envfile)
+	call writefile(["tmux set-option -p remain-on-exit on","echo"] + l:env,l:envfile)
 	silent exec l:firstline..','..l:lastline..'w! '..l:tempfile..''
 	eval job_start([ 'tmux', 'new-window',
 				\	'-n', l:name,
