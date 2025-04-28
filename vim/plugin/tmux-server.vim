@@ -1,4 +1,6 @@
 
+let s:reload_me=1
+
 " set term&
 if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
 	set t_ti&
@@ -11,12 +13,14 @@ if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
 	set <PasteStart>=[200~
 	set <PasteEnd>=[201~
 endif
+set sessionoptions=curdir,globals,buffers,tabpages,help,winpos,winsize
 
 silent eval system('mkdir -p ~/.vimstore/sessions/')
 
 function! LoadSession(session)
 	let g:session_name = a:session
 	let g:SessionFrozen = 0
+	echom "Loading session: "..a:session
 	if filereadable(expand("~/.vimstore/sessions/" . a:session . ".vim"))
 		exec "source ~/.vimstore/sessions/" . a:session . ".vim"
 	endif
@@ -47,11 +51,10 @@ function! SetupSession()
 
 		if !exists("g:session_name") | call LoadSession(v:servername) | endif
 	endif
-	set sessionoptions=curdir,globals,localoptions,buffers,tabpages,help,winpos,winsize
 endfunction
 
-augroup session
+augroup tmux-session
 	au!
-	autocmd VimEnter * call SetupSession()
-	autocmd User ConfigPost call SetupSession()
+	autocmd VimEnter * ++once ++nested call SetupSession()
+	autocmd SessionLoadPost * ++nested doauto BufRead
 augroup END

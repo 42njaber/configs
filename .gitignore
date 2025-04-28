@@ -6,8 +6,7 @@ vim/.vim
 .Vimball*
 vim/spell
 commands.vsh
-bashrc
-old/
-computer_dependent/
-__pycache__
-ranger/__init__.py
+ranger/plugins/__pycache__
+ranger/plugins/__init__.py
+
+vim/pack/minpac

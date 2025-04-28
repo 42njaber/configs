@@ -182,7 +182,7 @@ function! GetSvelteIndent()
       return previous_line_indent + shiftwidth()
     elseif !indents_match && previous_closes
       return previous_line_indent
-    else
+    elseif !prev_tag_end
       let tag_tab = searchpos('<[a-zA-Z0-9:]\+\s*', 'beW')
       return tag_tab[1]
     endif
