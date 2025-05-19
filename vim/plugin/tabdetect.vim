@@ -28,12 +28,9 @@ function! TabDetect()
 			endif
 		endfor
 		exec "setlocal shiftwidth="..tabsize
-		exec "setlocal tabstop="..tabsize
 	elseif eval("space"..dominant.." > 0")
 		setlocal et
 		exec "setlocal shiftwidth="..dominant
-		exec "setlocal tabstop="..dominant
-		exec "setlocal softtabstop="..dominant
 	endif
 	call winrestview(svpos)
 endfunction

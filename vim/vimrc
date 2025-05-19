@@ -8,7 +8,6 @@ let s:reload_me=1
 " unlet! skip_defaults_vim
 " source $VIMRUNTIME/defaults.vim
 
-setg nocompatible
 setg langmenu=en_US.UTF-8
 language message C
 
@@ -17,122 +16,6 @@ augroup vimrc
 augroup END
 
 runtime! vimrc.d/*.vim
-
-" Misc
-setg virtualedit=onemore,block
-setg belloff=all
-setg fileencodings=ucs-bom,utf-8,default,latin1
-setg ttyfast
-setg hidden
-setg lazyredraw
-setg noautoread
-setg mouse=
-setg ttymouse=
-
-" No backup
-setg bdir=.,/home/neyl/.vimstore/backup
-setg writebackup
-setg backupcopy=auto
-setg nobackup
-setg noswapfile
-
-" Format
-setg textwidth=400
-setg wrap
-setg breakindent
-setg showbreak=>---
-setg linebreak
-setg backspace=indent,eol,start
-setg scrolloff=5
-setg formatoptions=clrqv1j
-
-" Regex
-setg magic
-setg hlsearch
-setg incsearch
-setg noignorecase
-setg regexpengine=0
-
-" Timeouts
-" setg timeoutlen=500
-setg notimeout
-setg ttimeout
-setg ttimeoutlen=500
-
-" History
-setg history=200
-setg undolevels=1000
-
-" Undo
-setg undofile
-setg undodir=~/.vimstore/undo
-
-" Where to find includes
-
-setg path+=inc/
-
-"
-" Commands
-"
-
-" Diff
-setg diffopt=vertical,hiddenoff,filler
-command! Gitdiff execute 'silent !git diff -R % > /tmp/%:t.patch' | execute 'redraw!' | execute 'diffp /tmp/%:t.patch'
-
-" Completion
-setg wildmenu
-setg wildchar=<TAB>
-setg wildmode=longest:full,list,full
-
-setg omnifunc=syntaxcomplete#Complete
-setg completeopt=menu,menuone,longest
-
-" Paste
-" nnoremap <F2> :setg invpaste paste?<CR>
-" imap <F2> <C-O>:setg invpaste paste?<CR>
-setg pastetoggle=<F2>
-
-" Fold
-setg foldmethod=manual
-setg foldnestmax=3
-setg foldcolumn=0
-"setg nofoldenable
-
-" Modelines
-setg modeline
-setg modelines=5
-
-"
-" Visual
-"
-
-" Windows
-setg splitbelow
-setg splitright
-"setg title
-
-" Go to previous tab on close
-augroup vimrc
-	let g:tablist = [1, 1]
-	au TabLeave * let g:tablist[0] = g:tablist[1]
-	au TabLeave * let g:tablist[1] = tabpagenr()
-	au TabClosed * exe "normal " . g:tablist[0] . "gt"
-augroup END
-
-augroup vimrc
-	function! IndentPastedText()
-		if !v:option_old && v:option_new
-			mark [
-		elseif v:option_old && !v:option_new
-			let pos = getpos('.')
-			normal ='[
-			call setpos('.', pos)
-		endif
-	endfunction
-	au OptionSet paste call IndentPastedText()
-augroup END
-
-" set t_te& t_ti&
 
 filetype plugin indent on
 syntax on

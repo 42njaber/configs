@@ -1,11 +1,12 @@
 
+silent eval system('mkdir -p ~/.vimstore/sessions/')
 let s:reload_me=1
 
-" set term&
+set t_te& t_ti&
 if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
-	set t_ti&
-	set t_te&
-	set term=tmux-256color
+	if &term != "tmux-256color"
+		set term=tmux-256color
+	endif
 	set <xUp>=[1;*A
 	set <xDown>=[1;*B
 	set <xRight>=[1;*C
@@ -14,8 +15,6 @@ if !has('gui') && (&term =~ "^screen" || &term =~ "^tmux")
 	set <PasteEnd>=[201~
 endif
 set sessionoptions=curdir,globals,buffers,tabpages,help,winpos,winsize
-
-silent eval system('mkdir -p ~/.vimstore/sessions/')
 
 function! LoadSession(session)
 	let g:session_name = a:session

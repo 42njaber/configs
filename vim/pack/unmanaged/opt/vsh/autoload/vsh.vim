@@ -35,32 +35,32 @@ function! s:foldLine(line,end=0)
 	return l:ret
 endfunction
 
-function! s:synstackDepth(lnum)
-	let end = getline(a:lnum)->len()
-	let stack = synstack(a:lnum,l:end + 1)
-	let groups = ["shExpr","shHereDoc","shParen","shDo","shIf","shSingleQuote","shDoubleQuote"]->map('hlID(v:val)')
+" function! s:synstackDepth(lnum)
+" 	let end = getline(a:lnum)->len()
+" 	let stack = synstack(a:lnum,l:end + 1)
+" 	let groups = ["shExpr","shHereDoc","shParen","shDo","shIf","shSingleQuote","shDoubleQuote"]->map('hlID(v:val)')
+" 
+" 	let counter = 0
+" 	for synID in stack
+" 		if index(groups,synID) >= 0
+" 			let counter += 1
+" 		endif
+" 	endfor
+" 	return counter
+" endfunction
 
-	let counter = 0
-	for synID in stack
-		if index(groups,synID) >= 0
-			let counter += 1
-		endif
-	endfor
-	return counter
-endfunction
-
-function! vsh#FoldLevel(lnum)
-	let l:prev_lvl = a:lnum == 0 ? 0 : s:synstackDepth(a:lnum - 1)
-	let l:next_lvl = s:synstackDepth(a:lnum)
-
-	if prev_lvl == next_lvl
-		return -1
-	elseif prev_lvl < next_lvl
-		return '>'..next_lvl
-	elseif prev_lvl > next_lvl
-		return '<'..prev_lvl
-	endif
-endfunc
+" function! vsh#FoldLevel(lnum)
+" 	let l:prev_lvl = a:lnum == 0 ? 0 : s:synstackDepth(a:lnum - 1)
+" 	let l:next_lvl = s:synstackDepth(a:lnum)
+" 
+" 	if prev_lvl == next_lvl
+" 		return -1
+" 	elseif prev_lvl < next_lvl
+" 		return '>'..next_lvl
+" 	elseif prev_lvl > next_lvl
+" 		return '<'..prev_lvl
+" 	endif
+" endfunc
 
 function! vsh#Load()
 	if !exists('g:fm_macros')
@@ -105,15 +105,11 @@ function! vsh#Run() range
 			let l:vars=readfile(l:tempfile)->join("\uABCD")->split("\n")
 			let l:vars=l:vars->map('v:val->substitute("\uABCD","\n","g")')
 			let l:vars=l:vars->map('[strpart(v:val,0,stridx(v:val,"=")),strpart(v:val,stridx(v:val,"=") + 1)]')
-			let l:vars=l:vars->filter('getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
+			let l:vars=l:vars->filter('v:val[0] != "PWD" && getenv(v:val[0]) != (v:val[1] == "" ? v:null : v:val[1])')
 			echoh Label
-			for v in vars 
+			for v in vars
 				call setenv(v[0],v[1])
 				echom "let "..v[0].."="..v[1]
-				if v[0] == "PWD" && b:vsh_lvl >= 2
-					exec "cd "..v[1]
-					echom "cd "..v[1]
-				endif
 			endfor
 			echoh None
 		endif
@@ -138,7 +134,7 @@ endfunction
 augroup vsh
 	au!
 	au FocusGained * call <SID>reload_env()
-	au TextChanged,InsertLeave *.vsh normal zx
+	au InsertLeave *.vsh normal zx
 augroup END
 
 call s:reload_env()

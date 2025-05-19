@@ -7,7 +7,7 @@ augroup vimrc
 				\ else |
 				\	0r ~/.vim/templates/cpp/default.cpp | exe 'normal G' |
 				\ endif
-	autocmd BufNewFile *.hpp
+	autocmd BufNewFile *.hpp,*.tpp
 				\ if(@% =~ ".*\.class\.hpp") |
 				\	0r ~/.vim/templates/cpp/class.hpp | exe 'normal 9G' |
 				\ else |

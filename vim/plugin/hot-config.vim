@@ -42,7 +42,16 @@ function! s:ReloadLocals()
 
 	au! * <buffer>
 
-	do BufRead
+	setf FALLBACK RESET
+	doau BufRead
+endfunction
+
+function! s:ReloadWins()
+	let win = winnr()
+	let tab = tabpagenr()
+	tabdo windo exec 'runtime! ftplugin/'..&ft..'.vim'
+	exec tab.."tabn"
+	exec win.."winc w"
 endfunction
 
 if ! exists('s:reload_post')
@@ -59,14 +68,15 @@ augroup reload
 
 	autocmd User ReloadConfig call s:ReloadPre() | call s:Reload() | call s:ReloadPost()
 	autocmd User ReloadLocals ++nested call s:ReloadLocals()
+	autocmd User ReloadWins ++nested call s:ReloadWins()
 augroup END
 
 command! -bang ShouldReload let b:reload_me=<bang>v:true
 
-map			<TAB>r			<NOP>
-map			<TAB>rr			<Cmd>do User ReloadConfig<CR>
-map			<TAB>ra			<Cmd>do User ReloadConfig \| doautoall User ReloadLocals<CR>
+map			<LEADER>r			<NOP>
+map			<LEADER>rr			<Cmd>do User ReloadConfig<CR>
+map			<LEADER>ra			<Cmd>do User ReloadConfig \| doautoall User ReloadLocals \| do User ReloadWins<CR>
 
-map			<TAB>rf			:exec "tabnew ~/.vim/after/ftplugin/"..&ft..".vim"<CR>
-map			<TAB>rs			:exec "tabnew ~/.vim/after/syntax/"..&ft..".vim"<CR>
-map			<TAB>ri			:exec "tabnew ~/.vim/after/indent/"..&ft..".vim"<CR>
+map			<LEADER>rf			:exec "tabnew ~/configs/vim/after/ftplugin/"..&ft..".vim"<CR>
+map			<LEADER>rs			:exec "tabnew ~/configs/vim/after/syntax/"..&ft..".vim"<CR>
+map			<LEADER>ri			:exec "tabnew ~/configs/vim/after/indent/"..&ft..".vim"<CR>

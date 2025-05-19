@@ -13,17 +13,15 @@ nnoremap <buffer>			<leader>D	:let b:vsh_dynamic=1 \| let b:vsh_cwd=1<CR>
 
 call vsh#Load()
 
-setl foldmethod=expr
-setl foldexpr=vsh#FoldLevel(v:lnum)
+setl foldmethod=marker
+setl foldmarker=#>,#<
 setl nocindent
 setl foldcolumn=3
 setl buftype=
 setl relativenumber
 
-setl statusline=%#StatusLineTerm#
-setl statusline+=\ %1*%{&readonly?'[Read-Only]':&modifiable?'':'[Unmodifiable]'}%#StatusLineTerm#
-setl statusline+=\ [VSH:%f]
-setl statusline+=\ %{getcwd()}\ $>
-setl statusline+=%5(%2*%-3.3{&modified?'\ +\ ':''}%#StatusLineTerm#%)
-setl statusline+=%=
-setl statusline+=\ \ L%l/%L(%p%%)
+function! s:VshStatus()
+	return ' $> %<' .. getline('.')
+endfunction
+
+let b:StatusExtra = function('s:VshStatus')
