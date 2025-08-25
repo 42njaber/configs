@@ -1,3 +1,3 @@
 
 setlocal keywordprg=:Plhelp
-setlocal et
+" setlocal et

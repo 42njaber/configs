@@ -2,15 +2,10 @@ if !exists('$TMUX') || has('gui_running')
   finish
 endif
 
-if exists('g:loaded_tmux_focus_events') && g:loaded_tmux_focus_events
-  finish
-endif
-let g:loaded_tmux_focus_events = 1
-
 let s:save_cpo = &cpo
 set cpo&vim
 
-function s:do_autocmd(event)
+function! s:do_autocmd(event)
   let cmd = getcmdline()
   let pos = getcmdpos()
   exec 'silent doautocmd ' . a:event . ' <nomodeline> %'
@@ -37,8 +32,12 @@ function! s:restore_focus_events()
 
   let disable_focus_reporting = "\<Esc>[?1004l"
 
-  let &t_ti .= escaped_enable_focus_reporting . save_screen
-  let &t_te = disable_focus_reporting . restore_screen . &t_te
+  if (&t_ti->stridx(enable_focus_reporting . save_screen) == -1)
+   	let &t_ti = &t_ti . escaped_enable_focus_reporting . save_screen
+  endif
+  if (&t_te->stridx(disable_focus_reporting . restore_screen) == -1)
+   	let &t_te = disable_focus_reporting . restore_screen . &t_te
+  endif
 
   " When Tmux 'focus-events' option is on, Tmux will send <Esc>[O when the
   " window loses focus and <Esc>[I when it gains focus.
@@ -66,12 +65,11 @@ function! s:restore_focus_events()
   cnoremap <silent> <F25> <C-\>e<SID>do_autocmd('FocusGained')<CR>
 endfunction
 
-call <SID>restore_focus_events()
-
 " When '&term' changes values for '<F24>', '<F25>', '&t_ti' and '&t_te' are
 " reset. Below autocmd restores values for those options.
 au TermChanged * eval <SID>restore_focus_events()
-au User ConfigPost eval <SID>restore_focus_events()
+
+call <SID>restore_focus_events()
 
 " restore vim 'autoread' functionality
 " au FocusGained * call tmux_focus_events#focus_gained()

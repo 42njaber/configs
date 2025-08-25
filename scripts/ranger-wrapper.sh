@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This wrapper script is invoked by xdg-desktop-portal-termfilechooser.
 #
 # Inputs:
@@ -25,15 +25,15 @@ save="$3"
 path="$4"
 out="$5"
 
-cmd="/usr/bin/ranger"
-termcmd="/usr/bin/alacritty --class 'Info' -t 'Ranger file picker' -e"
+cmd=$(which ranger)
+termcmd=("$(which alacritty)" --class Info -T 'Ranger file picker' )
 
 if ! [ -f "$out" ]; then
     touch "$out"
 fi
 
 if [ "$save" = "1" ]; then
-    set -- --choosefile="$out" --cmd="echo 'Select save path (see tutorial in preview pane; try pressing zv or zp if no preview)'" "$path"
+    set -- --choosefile="$out" --cmd="echo Select save path (see tutorial in preview pane; try pressing zv or zp if no preview)" "$path"
     printf '%s' 'xdg-desktop-portal-termfilechooser saving files tutorial
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -56,16 +56,16 @@ Notes:
    will be removed and the save operation aborted.
 ' > "$path"
 elif [ "$directory" = "1" ]; then
-    set -- --choosedir="$out" --show-only-dirs --cmd="'echo Select directory (quit in dir to select it)'"
+    set -- --choosedir="$out" --show-only-dirs --cmd="echo Select directory (quit in dir to select it)"
 elif [ "$multiple" = "1" ]; then
     echo >> "$out"
-    set -- --choosefiles="$out" --cmd="'echo Select file(s) (open file to select it; <Space> to select multiple)'"
+    set -- --choosefiles="$out" --cmd="echo Select file(s) (open file to select it; <Space> to select multiple)"
 else
-    set -- --choosefile="$out" --cmd="'echo Select file (open file to select it)'"
+    set -- --choosefile="$out" --cmd="echo Select file (open file to select it)"
 fi
 
-echo $termcmd $cmd $@
-sh -c "$termcmd $cmd $@" && echo >> "$out"
+echo "${termcmd[@]}" -e "${cmd[@]}" "${@}"
+"${termcmd[@]}" -e "${cmd[@]}" "${@}"
 if [ "$save" = "1" ] && [ ! -s "$out" ]; then
     rm "$path"
 fi

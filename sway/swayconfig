@@ -173,6 +173,7 @@ bindsym Print exec 'FILE=/tmp/screenshot.png; XDG_CURRENT_DESKTOP=Sway flameshot
 bindsym Pause exec bash ~/configs/switchtouch.sh
 
 bindsym $mod+control+g exec firefox -new-tab https://translate.google.com; [class="Firefox"] focus
+bindsym $mod+w exec nmcli device wifi rescan
 
 bindsym $mod+shift+z	exec "sleep 1; xset dpms force off"
 bindsym $mod+shift+s	exec $HOME/configs/scripts/sway-screenshare.sh

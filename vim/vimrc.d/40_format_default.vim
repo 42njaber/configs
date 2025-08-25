@@ -5,10 +5,11 @@ setg modeline
 setg modelines=5
 
 setg cindent
+setg autoindent
 
-setg shiftwidth=4
-setg softtabstop=4
-setg tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
 setg nosmarttab
 setg noexpandtab
 

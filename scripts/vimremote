@@ -1,54 +1,53 @@
 #!/bin/env bash
-# vim: ft=sh
 
 # -use return value from ${PIPESTATUS[0]}, because ! hosed $?
 ! getopt --test > /dev/null 
 if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
-    echo 'I’m sorry, `getopt --test` failed in this environment.' >&2
-    exit 1
+	echo 'I’m sorry, `getopt --test` failed in this environment.' >&2
+	exit 1
 fi
 
 # option --output/-o requires 1 argument
-OPTIONS=Sse:w
+OPTIONS=Sse:
 
 # -pass arguments only via   -- "$@"   to separate them correctly
 ! PARSED=$(getopt --options=$OPTIONS --name "$0" -- "$@")
 if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
-    exit 2
+	exit 2
 fi
 # read getopt’s output this way to handle the quoting right:
 eval set -- "$PARSED"
 
 # now enjoy the options in order and nicely split until we see --
 while true; do
-    case "$1" in
-        -s)
-            s=false
-            shift 1
-            ;;
-        -S)
-            s=true
-            shift 1
-            ;;
-        -w)
-            w=-wait
-            shift 1
-            ;;
-        -e)
-            s=${s:-false}
-            e=true
-            ex_cmd="`sed "s/'/\\\"/g" <<< "$2"`"
-            shift 2
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            echo "Programming error" >&2
-            exit 3
-            ;;
-    esac
+	case "$1" in
+		-s)
+			s=false
+			shift 1
+			;;
+		-S)
+			s=true
+			shift 1
+			;;
+#		-w)
+#			w=-wait
+#			shift 1
+#			;;
+		-e)
+			s=${s:-false}
+			e=true
+			ex_cmd="`sed "s/'/\\\"/g" <<< "$2"`"
+			shift 2
+			;;
+		--)
+			shift
+			break
+			;;
+		*)
+			echo "Programming error" >&2
+			exit 3
+			;;
+	esac
 done
 s=${s:-true}
 e=${e:-false}
@@ -61,38 +60,39 @@ VIMPANE="`tmux display -p "#{@vimpane}"`"
 REMOTE=$(vim --servername $SESSION_NAME --remote-expr "v:servername" 2>/dev/null)
 
 if test "$REMOTE"; then
-    if [[ $# -gt 0 ]]; then
-        FILES=("$@")
-        for file in "${FILES[@]}"; do
-            if [ "$file" == "-" ] || [ -p "$file" ]; then
-                mkdir -p /tmp/vimremote
-                PIPE=$(mktemp /tmp/vimremote/pipe-XXXXXXXXXXXX)
-                cat "$file" > "$PIPE"
-                vim --servername "$REMOTE" --remote-expr "execute('sp')" >/dev/null
-                vim --servername "$REMOTE" --remote$w "$PIPE"
-                vim --servername "$REMOTE" --remote-expr "execute('set nobuflisted | set buftype=nofile | 0file | bw#')" >/dev/null
-                rm "$PIPE"
-            else
-                vim --servername "$REMOTE" --remote$w "$file" </dev/null
-            fi
-        done
-    elif ! $e; then
-        echo "$0: One or more input files are required." >&2
-        exit 4
-    fi
+	if [[ $# -gt 0 ]]; then
+		FILES=("$@")
+		for file in "${FILES[@]}"; do
+			if [ "$file" == "-" ] || [ -p "$file" ]; then
+				echo "Remote piping diabled"
+				exit -1
+				# mkdir -p /tmp/vimremote
+				# PIPE=$(mktemp /tmp/vimremote/pipe-XXXXXXXXXXXX)
+				# cat "$file" > "$PIPE"
+				# vim --servername "$REMOTE" --remote-tab$w +"set nobuflisted | set buftype=nofile | 0file" "$PIPE"
+				# rm "$PIPE"
+			else
+				vim --servername "$REMOTE" --remote-send '<C-\><C-N>:e '"$file"'<CR>' </dev/null
+				#vim --servername "$REMOTE" --remote-send '<C-\><C-N>:e '"$file"'<CR>' </dev/null
+			fi
+		done
+	elif ! $e; then
+		echo "$0: One or more input files are required." >&2
+		exit 4
+	fi
 
-    if $s; then
-        tmux switch-client -t "$VIMPANE"
-    fi
-    if $e; then
-        vim --servername "$REMOTE" --remote-expr "execute(\"${ex_cmd//\"/\\\"}\")"
-    fi
+	if $s; then
+		tmux switch-client -t "$VIMPANE"
+	fi
+	if $e; then
+		vim --servername "$REMOTE" --remote-expr "execute(\"${ex_cmd//\"/\\\"}\")"
+	fi
 else
-    echo "Server not found, opening local session" >&2
-    if $e; then
-        echo "Cannot run Ex command without a server" >&2
-        exit 5
-    fi
+	echo "Server not found, opening local session" >&2
+	if $e; then
+		echo "Cannot run Ex command without a server" >&2
+		exit 5
+	fi
 
-    vim $@
+	vim $@
 fi
