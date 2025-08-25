@@ -36,7 +36,7 @@ if VIM_SESSION:
 
     @on_hook(api,'hook_init')
     def sync(fm):
-        envdir = "/tmp/vsh/fm/"
+        envdir = f"/tmp/vsh-{os.environ.get("USER", None)}/fm/"
         if not os.path.isdir(envdir):
             os.makedirs(envdir)
         envfile = envdir + VIM_SESSION + ".vim"

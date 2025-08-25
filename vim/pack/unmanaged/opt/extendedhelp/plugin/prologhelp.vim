@@ -1,7 +1,7 @@
 
 function! PrologExtendedHelp(search)
 	let l:bufname= "/tmp/prolog-help.man"
-	let l:command = ["swipl","-g","help('".a:search."') ; apropos('".a:search."')","-t","halt"]
+	let l:command = ["swipl","-f","none","-g","help('".a:search."') ; apropos('".a:search."')","-t","halt"]
 	call ExtendedHelp(l:bufname,l:command)
 endfunction
 

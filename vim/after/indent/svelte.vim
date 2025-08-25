@@ -32,7 +32,7 @@ unlet! b:did_indent
 let b:did_indent = 1
 
 setlocal indentexpr=GetSvelteIndent()
-setlocal indentkeys=o,O,<Return>,<>>,{,},0),0],!^F,;,=:else,=:then,=:catch,=/if,=/each,=/await,=/snippet
+setlocal indentkeys=o,O,<Return>,0{,0},0),0],!^F,=:else,=:then,=:catch,=/if,=/each,=/await,=/snippet
 
 function! GetSvelteIndent()
   let current_line_number = v:lnum
@@ -59,6 +59,16 @@ function! GetSvelteIndent()
     else
       return previous_line_indent
     endif
+  endif
+
+  let isJavascript = (index(synstack(current_line_number, 1), hlID('javaScript')) >= 0)
+  let isTypescript = (index(synstack(current_line_number, 1), hlID('typeScript')) >= 0)
+  let isScriptTag = (index(synstack(current_line_number, 1), hlID('htmlScriptTag')) >= 0)
+
+  if isTypescript && !isScriptTag
+    return max([shiftwidth(), GetTypescriptIndent()])
+  elseif isJavascript && !isScriptTag
+    return max([shiftwidth(), GetJavascriptIndent()])
   endif
 
   if previous_line =~ '^\s*<style'
@@ -173,18 +183,18 @@ function! GetSvelteIndent()
     let prev_tag_end = previous_line =~ '>$'
     let current_tag_end = current_line =~ '>$'
 
+    let tag_tab = searchpos('<[a-zA-Z0-9:]\+\s', 'bW')
     if !prev_tag_end && current_tag_end
-      let tag_tab = searchpos('<[a-zA-Z0-9:]\+\s', 'bW')
-      return tag_tab[1] - 1
+      return virtcol(tag_tab) - 1
+    elseif !prev_tag_end
+      echo previous_line_indent
+      return previous_line_indent + 1
     elseif prev_tag_end && !previous_closes
       return previous_line_indent + shiftwidth()
     elseif indents_match && !previous_closes && previous_line =~ '<\(\u\|\l\+:\l\+\)'
       return previous_line_indent + shiftwidth()
     elseif !indents_match && previous_closes
       return previous_line_indent
-    elseif !prev_tag_end
-      let tag_tab = searchpos('<[a-zA-Z0-9:]\+\s*', 'beW')
-      return tag_tab[1]
     endif
   endif
 

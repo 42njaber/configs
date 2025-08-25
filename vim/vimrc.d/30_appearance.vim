@@ -1,7 +1,7 @@
 
 set list
 set belloff=all
-set lcs=tab:--\|,leadmultispace:\|\ \ \ ,multispace:.\ \ \ ,eol:.,nbsp:#
+set lcs=tab:--\|,multispace:.\ \ \ ,eol:$,nbsp:#
 set conceallevel=2
 set diffopt=vertical,hiddenoff,filler
 
@@ -24,8 +24,6 @@ setg report=2
 setg more
 setg cursorline
 setg hlsearch
-
-setg tabline=%{%GetTabline()%}
 
 setg statusline=
 setg statusline+=%1*%{%FileTags()%}%*
@@ -54,28 +52,33 @@ function! Ruler()
 endfunction
 
 function! GetTabline()
-	let ret = []
+	const bufs = tabpagebuflist()
 
-	for i in range(tabpagenr('$'))
-		let s = '%' .. (i + 1) .. 'T'
-		let s ..= GetTabLabel(i + 1,i + 1 == tabpagenr() ? 'TabLineSel' : 'TabLine')
+	let ret = []
+	for num in range(tabpagenr('$'))
+		let num += 1
+		let cwd = getcwd(-1,num)->ShortestPath(getcwd(-1))->PathAbbrev(15)
+
+		let s = ('%' .. num .. 'T') .. (num == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
+		let s ..= ' [' .. tabpagebuflist(num)->len() .. '] '
+		let s ..= (cwd == ''?'(.) ':'(%.20('..cwd..')%) ')
+
 		let ret = ret->add(s)
 	endfor
 
-	return ret->join('%#TabLineFill#%T ') .. '%#TabLineFill#%T'
-endfunction
+	let ret = ret->add('%=')
 
-function GetTabLabel(n,hi)
-	const buflist = tabpagebuflist(a:n)->filter('v:val->getbufvar("&buftype") != "help"')
-	const winnr = tabpagewinnr(a:n)
-	let bufs = []
-	for i in range(buflist->len())
-		let bufs = bufs->add("["..(i + 1 == winnr ? '%#'..a:hi..'Em#' : '')
-					\.."%.30(" .. expand("#"..buflist[i]..":p")->ShortestPath(getcwd(-1,a:n))->pathshorten().."%)"
-					\..(i + 1 == winnr ? '%#'..a:hi..'#' : '').."]")
+	for num in range(bufs->len())
+		let num += 1
+		let s = '%#TabLineSel# ['
+		let s ..= (num == winnr() ? '%#TabLineSelEm#' : '')
+		let s ..= "%.50(" .. expand("#"..bufs[num - 1]..":p")->ShortestPath(getcwd(-1,tabpagenr()))->PathAbbrev(50).."%)"
+		let s ..= (num == winnr() ? '%#TabLineSel#' : '').."] "
+
+		let ret = ret->add(s)
 	endfor
-	let cwd = getcwd(-1,a:n)->ShortestPath(getcwd(-1))->pathshorten()
-	return '%#'..a:hi..'# '..(cwd==''?'':'('..cwd..') ')..(bufs == [] ? "[%#"..a:hi.."Em#Help%#"..a:hi.."#]" : bufs->join(' '))..' '
+
+	return ret->join('%#TabLineFill#%T ')
 endfunction
 
 function! ShortestPath(to,from)
@@ -97,3 +100,21 @@ function! ShortestPath(to,from)
 	endif
 	return prefix .. to[i:-1]->join('/')
 endfunction
+
+function! PathAbbrev(path,max=0)
+	if a:max > 0 && a:path->len() < a:max
+		return a:path
+	else
+		return a:path->pathshorten()
+	endif
+endfunction
+
+try 
+	call GetTabline()
+	setg tabline=%{%GetTabline()%}
+catch
+	echoh Error
+	echom v:exception
+	echoh None
+	setg tabline=
+endtry

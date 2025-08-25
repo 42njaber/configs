@@ -1,18 +1,17 @@
 
-setg mouse=
-setg ttymouse=
 setg virtualedit=onemore,block
 
 setg timeout&
 setg ttimeout
-setg ttimeoutlen=500
+setg ttimeoutlen=3000
 
 setg omnifunc=syntaxcomplete#Complete
 setg completeopt=menu,menuone,longest
 
-let mapleader=' '
+let g:mapleader=' '
+let g:maplocaltleader=''
 
-inoremap	 <C-C>	 <ESC>
+inoremap	 <C-C>	 <ESC>`^
 vnoremap	 <C-C>	 <ESC>
 nnoremap	 <C-C>	 <NOP>
 

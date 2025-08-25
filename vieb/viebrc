@@ -8,6 +8,7 @@ set searchwords+={"css_":"https://developer.mozilla.org/en-US/search?q=%s"}
 set searchwords+={"pl_":"https://us.swi-prolog.org/search?for=%s"}
 set searchwords+={"cpp_":"https://duckduckgo.com/?sites=cppreference.com&q=%s"}
 set containerstartuppage=s:usematching
+set menupage=never
 
 !mkdir -p ~/Downloads/Vieb/html
 set downloadpath=~/Downloads/Vieb/html

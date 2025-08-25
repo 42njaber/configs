@@ -6,6 +6,7 @@ from threading import Thread
 import asyncio
 import sys
 import os
+import re
 
 import ranger.api as api
 
@@ -49,7 +50,7 @@ if SESSION:
     def write(fm):
         tabfile = fm.datapath(SESSION + ".conf")
         source = "\n".join(
-                    ("tab_open " + str(n) + " " + str(t.thisdir))
+                    ("eval self.fm.tab_open(" + repr(n) + "," + repr(str(t.thisdir)) + ")")
                     for (n,t) in fm.tabs.items()
                 )
         source += "\ntab_move " + str(fm.current_tab)

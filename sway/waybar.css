@@ -4,7 +4,8 @@
     border-radius: 0;
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: Roboto, DejaVu, Arial, sans-serif;
-    font-family: Material Design Icons;
+    font-family: FontAwesome;
+    /* font-family: Material Design Icons; */
     font-size: 13px;
     min-height: 0;
 }
@@ -74,6 +75,7 @@ window#waybar.solo {
 #memory,
 #temperature,
 #backlight,
+#keyboard-state,
 #filesystem,
 #network,
 #pulseaudio,
@@ -83,7 +85,7 @@ window#waybar.solo {
 #language,
 #idle_inhibitor,
 #mpd {
-    padding: 0 10px;
+    padding: 0 8px;
     color: #ffffff;
     background-color: rgba(43, 48, 59, 0.9);
     border-bottom: 3px solid rgba(100, 114, 125, 1);
@@ -97,11 +99,8 @@ window#waybar.solo {
     background-color: #bd9c20;
 }
 
-@keyframes blink {
-    to {
-        color: #000000;
-    }
-}
+@keyframes blink
+{ to { color: #000000; } }
 
 #battery.critical:not(.charging) {
     background-color: #bd2c40;
@@ -142,4 +141,15 @@ window#waybar.solo {
 }
 
 #mpd.paused {
+}
+
+#keyboard {
+    margin: 0px;
+}
+#keyboard-state label {
+    color: grey;
+    margin: 0 3px 0 0;
+}
+#keyboard-state label.locked {
+    color: green;
 }

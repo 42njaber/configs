@@ -23,7 +23,7 @@ hi SpecialKey                              ctermfg=236
 hi SpecialKey                                guifg=#303030
 hi Statement                               ctermfg=69
 hi Statement              gui=NONE           guifg=#5f87ff
-hi NonText              cterm=bold         ctermfg=233
+hi NonText              cterm=bold         ctermfg=232
 hi NonText                gui=NONE           guifg=lightgrey
 hi Question                                ctermfg=green
 hi Question                                  guifg=green

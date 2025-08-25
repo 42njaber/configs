@@ -3,10 +3,10 @@
 " - Fold management in vsh
 " - Better ranger interation?
 
-let s:reload_me=1
-
 " unlet! skip_defaults_vim
 " source $VIMRUNTIME/defaults.vim
+
+vim9s
 
 setg langmenu=en_US.UTF-8
 language message C

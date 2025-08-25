@@ -7,6 +7,8 @@ call minpac#add('vim-jp/syntax-vim-ex')
 call minpac#add('vim-scripts/let-modeline.vim')
 call minpac#add('godlygeek/tabular')
 
+call minpac#add('lervag/vimtex')
+
 call minpac#add('othree/html5.vim')
 call minpac#add('tikhomirov/vim-glsl')
 call minpac#add('pangloss/vim-javascript')

@@ -10,4 +10,6 @@ function! ExtendedMan(section,manpage,search = "")
 	call ExtendedHelp(l:bufname,l:command,a:search)
 endfunction
 
-command -count=0 -nargs=+ Man call ExtendedMan(<count>, <f-args>)
+if ! has('nvim')
+	command -count=0 -nargs=+ Man call ExtendedMan(<count>, <f-args>)
+endif
