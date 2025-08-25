@@ -4,6 +4,7 @@ set -e
 
 sudo -S bash <<ROOT
 ln -sfv /run/systemd/resolve/resolv.conf /etc/resolv.conf
+ln -fvsT "$HOME/configs/vieb/session.sh" "/usr/bin/vieb-session"
 
 pacman -Sy --needed --noconfirm reflector
 
@@ -72,25 +73,26 @@ SH
 echo "Path: "
 echo $PATH | tr ':' '\n'
 
-mkdir -vp "$XDG_CONFIG_HOME"/{ranger/plugins,rifle,alacritty,sway,waybar,tmux}
+git -C "$HOME/configs" submodule update --init --recursive
+
+mkdir -vp "$XDG_CONFIG_HOME"/{ranger/plugins,rifle,alacritty,sway,waybar,tofi,tmux}
 mkdir -vp "$XDG_CONFIG_HOME"/xdg-desktop-portal{,-termfilechooser}
 ln -fsvT "$HOME/.vimstore"                 "$HOST/.vimstore"
 ln -fsvT "$HOME/.viebstore/sessions"       "$HOST/.viebstore/sessions"
 ln -fsvT "$HOME/.tmuxstore/sessions"       "$HOST/.tmuxstore/sessions"
 ln -fsvT "$HOME/wallpapers"                "$HOST/wallpapers"
 
-ln -fvsT "$HOME/configs/vimrc" "$HOME/.vimrc"
 ln -fvsT "$HOME/configs/vim" "$HOME/.vim"
 
-ln -fvsT "$HOME/configs/vibrc" "$HOME/.viebrc"
+ln -fvsT "$HOME/configs/vieb/viebrc" "$HOME/.viebrc"
 
-ln -fvsT "$HOME/configs/rangerrc.conf" "$HOME/.config/ranger/rc.conf"
+ln -fvsT "$HOME/configs/ranger/rangerrc.conf" "$HOME/.config/ranger/rc.conf"
 ln -fvsT "$HOME/configs/ranger/scope.sh" "$HOME/.config/ranger/scope.sh"
-ln -fvs  "$HOME/configs/ranger"/*.py "$HOME/.config/ranger/plugins/"
-ln -fvsT "$HOME/configs/rifle.conf" "$HOME/.config/ranger/rifle.conf"
-ln -fvsT "$HOME/configs/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+ln -fvsT "$HOME/configs/ranger/plugins/" "$HOME/.config/ranger/plugins/"
+ln -fvsT "$HOME/configs/ranger/rifle.conf" "$HOME/.config/ranger/rifle.conf"
+ln -fvsT "$HOME/configs/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
 
-ln -fvsT "$HOME/configs/swayconfig" "$HOME/.config/sway/config"
+ln -fvsT "$HOME/configs/sway/swayconfig" "$HOME/.config/sway/config"
 
 tee "$HOME/.sway.local" <<SWAYRC
 # vim: set ft=i3conf
@@ -100,12 +102,12 @@ output Virtual-1 mode 1920x1080
 output '*' bg ~/wallpapers/desktop.* fill
 SWAYRC
 
-ln -fvsT "$HOME/configs/waybar.json" "$HOME/.config/waybar/config"
-ln -fvsT "$HOME/configs/waybar.css" "$HOME/.config/waybar/style.css"
+ln -fvsT "$HOME/configs/sway/waybar.json" "$HOME/.config/waybar/config"
+ln -fvsT "$HOME/configs/sway/waybar.css" "$HOME/.config/waybar/style.css"
 
-ln -fvsT "$HOME/configs/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+ln -fvsT "$HOME/configs/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 
-rofi -dump-config > config.rasi
+ln -fvsT "$HOME/configs/tofi/tofi.cfg" "$HOME/.config/tofi/config"
 
 tee "$HOME/.bashrc" <<BASHRC
 stty susp undef
