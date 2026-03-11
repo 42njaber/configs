@@ -46,12 +46,25 @@ def SaveSession()
 	endif
 enddef
 
+command! QuitBuf b#\|bw#
+
+def QuitWin()
+	if winnr('$') > 1
+		close
+	else
+		echoe "use ':tabclose' to close last window"
+	endif
+enddef
+command! QuitWin call QuitWin()
+
 def SetupSession()
 	if !has("nvim") && exists("v:servername") && v:servername != ""
 		&viminfofile = "~/.vimstore/info/" .. v:servername
-		cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == "q" ? "close" : "q"
-		cnoreabbrev <expr> x getcmdtype() == ":" && getcmdline() == "x" ? "w \| close" : "x"
-		nnoremap <silent> ZZ <Cmd>b#\|bw#<CR>
+
+		nnoremap <silent> ZZ <Cmd>QuitBuf<CR>
+
+		cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == "q" ? "QuitWin" : "q"
+		cnoreabbrev <expr> x getcmdtype() == ":" && getcmdline() == "x" ? "w\|QuitWin" : "x"
 
 		if !exists("g:session_name") | call LoadSession(v:servername) | endif
 	endif

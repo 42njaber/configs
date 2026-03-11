@@ -116,10 +116,71 @@ function! vsh#TmuxRun() range
 				\ ])
 endfunction
 
+function! vsh#VimBufRunner(outbufnr, script)
+	if getbufvar(a:outbufnr, "vsh_output", 0) != 1
+		echoerr "Buf is not a valid pipe buffer!"
+		return
+	endif
+
+	exec a:outbufnr.."b"
+	e!
+
+	let oldjob = getbufvar(a:outbufnr, "vsh_job", "")
+	if oldjob != ""
+		let oldstatus = job_status( oldjob )
+		if oldstatus != "dead"
+			echoerr "Old job still running!"
+			return
+		endif
+	endif
+
+	call setbufvar(a:outbufnr, "&buftype", "nofile")
+	call setbufvar(a:outbufnr, "vsh_script", a:script)
+
+	for l:line in copy(a:script)->filter( { _, val -> val[0] == ':' })
+		exec l:line
+	endfor
+
+	let l:job = job_start([ 'bash', '-c',
+				\	copy(a:script)->filter( { _, val -> val[0] != ':' } )->join("\n")
+				\ ], {
+				\ 	"out_io": "buffer", "out_buf": a:outbufnr,
+				\ 	"err_io": "buffer", "err_buf": a:outbufnr
+				\ })
+
+	call setbufvar(a:outbufnr, "vsh_job", l:job)
+endfunction
+
+function! vsh#VimBufRun()
+	let [l:firstline,l:lastline]=[s:foldLine(a:firstline),s:foldLine(a:lastline,1)]
+
+	let l:name=getline(l:firstline)->substitute('^#<\?\s*','', "")
+	let l:script=getline(l:firstline,l:lastline)
+
+	let l:bufname="$> "..l:name
+
+	let l:outbufnr = bufnr(l:bufname)
+	if l:outbufnr < 0
+		let l:outbufnr = bufadd(l:bufname)
+	endif
+
+	if bufwinnr( l:outbufnr ) > 0
+		call bufwinnr( l:outbufnr )->win_getid()->win_gotoid()
+	else
+		exec "sb " l:outbufnr
+		call setbufvar(l:outbufnr, "vsh_output", 1)
+		e!
+	endif
+
+	call vsh#VimBufRunner(l:outbufnr, l:script)
+endfunction
+
 augroup vsh
 	au!
-	au FocusGained * call <SID>reload_env()
-	au InsertLeave *.vsh normal zx
+	au FocusGained 	*     	call <SID>reload_env()
+	au InsertLeave 	*.vsh 	normal zx
+
+	au BufRead     	*     	if exists("b:vsh_output") | runtime! ftplugin/pipe.vim | endif
 augroup END
 
 call s:reload_env()

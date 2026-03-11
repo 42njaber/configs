@@ -11,10 +11,6 @@ vim9s
 setg langmenu=en_US.UTF-8
 language message C
 
-augroup vimrc
-	au! vimrc
-augroup END
-
 runtime! vimrc.d/*.vim
 
 filetype plugin indent on

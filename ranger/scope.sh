@@ -52,8 +52,6 @@ summary() {
         cat "$1"
     else
         head -n ${PV_HEIGHT} "$1"
-        echo ===================
-        tail -n 10 "$1"
     fi
 }
 
@@ -67,15 +65,20 @@ vim_highlight() {
         set modeline
         set notermguicolors
         set t_Co=256
-        set runtimepath^=~/.vim runtimepath+=~/.vim/after
-        for dir in expand('~/.vim/bundle/*',0,1)
-            exec 'set runtimepath+='..dir
-        endfor
+
+        set runtimepath+=~/.vim
+        set runtimepath+=~/.vim/after
+        set packpath+=~/.vim/pack/minpack
+        set packpath+=~/.vim/pack/unmanaged
+        packl!
+        pa vsh
+
         file ${FILE_PATH}
         filetype detect
-        set foldlevel=2
-        syntax on
         colorscheme custom
+        syntax on
+
+        let g:html_no_progress=1
         let g:html_no_progress=1
         let g:html_pre_wrap=1
         let g:html_use_css=1

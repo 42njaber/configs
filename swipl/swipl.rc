@@ -1,10 +1,19 @@
 
 :- set_prolog_flag(generate_debug_info, true).
-:- set_prolog_flag(debug_on_interupt, false).
+:- set_prolog_flag(debug_on_interupt, true).
 :- set_prolog_flag(double_quotes, codes).
+:- set_prolog_flag(backtrace_goal_depth, 5).
+:- set_prolog_flag(write_attributes, write).
+:- set_prolog_flag(toplevel_print_anon, false).
+
+
 %:- set_prolog_flag(gui, false).
 %:- set_prolog_flag(xpce, false).
 
 :- trap(_).
 
 :- abolish( prolog:show_profile_hook/1 ).
+
+:- set_prolog_flag(generate_debug_info, false).
+user:breakpoint.
+:- spy(user:breakpoint/0).

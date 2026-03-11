@@ -79,3 +79,7 @@ if SESSION:
         def execute(self):
             write(self.fm)
 
+else:
+    class write_session(api.commands.Command):
+        def execute(self):
+            pass

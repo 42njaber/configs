@@ -30,9 +30,11 @@ def on_hook(obj,name,after = False):
 
 LOG = getLogger(__name__)
 
-VIM_SESSION = os.environ.get("VIM_SESSION", None).upper()
+VIM_SESSION = os.environ.get("VIM_SESSION", None)
 
 if VIM_SESSION:
+    VIM_SESSION = VIM_SESSION.upper()
+    print( f"Found vim session : {VIM_SESSION}" )
 
     @on_hook(api,'hook_init')
     def sync(fm):

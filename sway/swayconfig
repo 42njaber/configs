@@ -22,8 +22,8 @@ input "1267:12350:ELAN1200:00_04F3:303E_Mouse" {
 input type:touchpad {
 	events enabled
 	dwt "enabled"
-	pointer_accel 0.3
-	accel_profile "adaptive"
+	pointer_accel 0.2
+	accel_profile "flat"
 	scroll_method "two_finger"
 #	scroll_button "disable"
 	tap "disabled"
@@ -164,8 +164,8 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
 
-bindsym XF86MonBrightnessUp		exec --no-startup-id /opt/bin/backlight +5
-bindsym XF86MonBrightnessDown	exec --no-startup-id /opt/bin/backlight -5
+bindsym XF86MonBrightnessUp		exec --no-startup-id /opt/bin/backlight +2
+bindsym XF86MonBrightnessDown	exec --no-startup-id /opt/bin/backlight -2
 
 bindsym $mod+Print exec 'FILE=/tmp/screenshot.png; XDG_CURRENT_DESKTOP=Sway flameshot gui -s -r > "$FILE"; gimp -a "$FILE"; swaymsg "[class=\"Gimp\"] focus"'
 bindsym Print exec 'FILE=/tmp/screenshot.png; XDG_CURRENT_DESKTOP=Sway flameshot full -r > "$FILE"; gimp -a "$FILE"; swaymsg "[class=\"Gimp\"] focus"'

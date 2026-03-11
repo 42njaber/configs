@@ -4,6 +4,8 @@ if v:vim_did_enter
 endif
 
 " Open up to 10 arg files in tabs
-augroup vimrc
+augroup vimrc_99
+	au!
+
 	au VimEnter * sil tab sall 10
 augroup END

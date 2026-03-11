@@ -11,56 +11,58 @@ setg completeopt=menu,menuone,longest
 let g:mapleader=' '
 let g:maplocaltleader=''
 
-inoremap	 <C-C>	 <ESC>`^
-vnoremap	 <C-C>	 <ESC>
-nnoremap	 <C-C>	 <NOP>
+inoremap 	<C-C>            	<ESC>`^
+vnoremap 	<C-C>            	<ESC>
+nnoremap 	<C-C>            	<NOP>
 
-nnoremap	 ,	    /
-vnoremap	 ,	    /
-inoremap	 <F1>	 <NOP>
-nnoremap	 <F1>	 <NOP>
-nnoremap	 /	    :30messages<CR>
-nnoremap	 Q	    <NOP>
+nnoremap 	,                	/
+vnoremap 	,                	/
+inoremap 	<F1>             	<NOP>
+nnoremap 	<F1>             	<NOP>
+nnoremap 	/                	:30messages<CR>
+nnoremap 	Q                	<NOP>
 
-nnoremap	 +	  g+
-nnoremap	 -	  g-
-nmap	     gf	 :e <cfile><CR>
+nnoremap 	+                	g+
+nnoremap 	-                	g-
+nmap     	gf               	<Cmd>e <cfile><CR>
 
-nnoremap    <LEADER>            <NOP>
-nnoremap    <LEADER><LEADER>    <NOP>
+nnoremap 	<LEADER>z        	<Cmd>call ChooseBuffer()<CR>
 
-nnoremap    <LEADER>y           mmggVG:w !wl-copy<CR>'m
-vnoremap    <LEADER>y           ""y:call system('wl-copy', getreg('"'))<CR>
+nnoremap 	<LEADER>         	<NOP>
+nnoremap 	<LEADER><LEADER> 	<NOP>
 
-nnoremap    <LEADER>t           :silent setl list!<CR>
-nnoremap    <LEADER>g           :silent nohls<CR>
-nohls
+nnoremap 	<LEADER>y        	mmggVG:w !wl-copy<CR>'m
+vnoremap 	<LEADER>y        	""y:call system('wl-copy', getreg('"'))<CR>
 
-nnoremap    <LEADER>h           :tabprev<CR>
-nnoremap    <LEADER>l           :tabnext<CR>
-nnoremap    <LEADER>H           :tabm -1<CR>
-nnoremap    <LEADER>L           :tabm +1<CR>
+nnoremap 	<LEADER>t        	:silent setl list!<CR>
+nnoremap 	<LEADER>g        	:silent nohls<CR>
+nohls    	                 	
 
-nnoremap    (                   <C-[>
-nnoremap    )                   <C-]>
+nnoremap 	<LEADER>h        	:tabprev<CR>
+nnoremap 	<LEADER>l        	:tabnext<CR>
+nnoremap 	<LEADER>H        	:tabm -1<CR>
+nnoremap 	<LEADER>L        	:tabm +1<CR>
 
-noremap     H                    0
-noremap     L                    $
-noremap     j                    gj
-noremap     k                    gk
+nnoremap 	(                	<C-[>
+nnoremap 	)                	<C-]>
 
-nnoremap    <A-h>                <C-w>h
-nnoremap    <A-j>                <C-w>j
-nnoremap    <A-k>                <C-w>k
-nnoremap    <A-l>                <C-w>l
+noremap  	H                	0
+noremap  	L                	$
+noremap  	j                	gj
+noremap  	k                	gk
 
-nnoremap    <Esc>h               <C-w>h
-nnoremap    <Esc>j               <C-w>j
-nnoremap    <Esc>k               <C-w>k
-nnoremap    <Esc>l               <C-w>l
+nnoremap 	<A-h>            	<C-w>h
+nnoremap 	<A-j>            	<C-w>j
+nnoremap 	<A-k>            	<C-w>k
+nnoremap 	<A-l>            	<C-w>l
 
-nnoremap    <C-e>                3<C-e>
-nnoremap    <C-y>                3<C-y>
+nnoremap 	<Esc>h           	<C-w>h
+nnoremap 	<Esc>j           	<C-w>j
+nnoremap 	<Esc>k           	<C-w>k
+nnoremap 	<Esc>l           	<C-w>l
+
+nnoremap 	<C-e>            	3<C-e>
+nnoremap 	<C-y>            	3<C-y>
 
 " Swap position of 2 selections
 "  select first block, <LEADER>m, select second block, <LEADER>s
@@ -89,7 +91,9 @@ function! ShowSynStack()
 endfunc
 
 setg pastetoggle=<F2>
-augroup vimrc
+augroup vimrc_70
+	au!
+
 	function! IndentPastedText()
 		if !v:option_old && v:option_new
 			mark [

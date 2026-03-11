@@ -6,6 +6,7 @@ call minpac#add('k-takata/minpac', {'type': 'opt'})
 call minpac#add('vim-jp/syntax-vim-ex')
 call minpac#add('vim-scripts/let-modeline.vim')
 call minpac#add('godlygeek/tabular')
+call minpac#add('powerman/vim-plugin-AnsiEsc')
 
 call minpac#add('lervag/vimtex')
 

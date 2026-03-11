@@ -6,7 +6,7 @@ function CompleteFile(findstart,base)
 	else
 		let path = expand(a:base)
 		let files = glob(path.."*",v:false,v:true,v:true)
-		echom $files
+		let files = files->map({i,f -> isdirectory(f) ? f .. "/" : f})
 		return files->map({i,f -> f->substitute(path,a:base,"")})
 	endif
 endfunction

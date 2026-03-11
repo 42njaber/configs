@@ -5,14 +5,45 @@ setg splitright
 
 # Go to previous tab on close
 
-augroup vimrc
-	g:tablist = [1, 1]
-	au TabLeave * g:tablist[0] = g:tablist[1]
-	au TabLeave * g:tablist[1] = tabpagenr()
-	au TabClosed * exe "normal " .. g:tablist[0] .. "gt"
+if !exists("g:tablist")
+	g:tablist = [0]
+endif
+
+def ReorderTab(page: number)
+	if g:tablist->index(page) > 0
+		g:tablist->remove(g:tablist->index(page))
+	endif
+
+	g:tablist = [page] + g:tablist
+enddef
+
+def AddTab(page: number)
+	for i in range( g:tablist->len() )
+		g:tablist[i] += (g:tablist[i] >= page ? 1 : 0)
+	endfor
+
+	g:tablist += [page]
+enddef
+
+def RemoveTab(page: number)
+	assert_equal( page, g:tablist[0] )
+	g:tablist->remove(0)
+	for i in range( g:tablist->len() )
+		g:tablist[i] -= (g:tablist[i] > page ? 1 : 0)
+	endfor
+
+	exec "tabnext " g:tablist[0]
+enddef
+
+augroup vimrc_21
+	au!
+
+	au TabNew    	* call s:AddTab( tabpagenr() )
+	au TabClosed 	* call s:RemoveTab( tabpagenr() )
+	au TabLeave  	* call s:ReorderTab( tabpagenr() )
 augroup END
 
-def ChooseBuffer()
+def! g:ChooseBuffer()
 	var jumps = getjumplist()[0]
 	jumps = jumps->filter((i, v) => v.bufnr > 0 && v.bufnr != bufnr())
 	var buffers = [{id: bufnr(), name: bufname()}]
@@ -54,5 +85,3 @@ def ChooseBuffer()
 			}
 		})
 enddef
-
-nnoremap 	<LEADER>z 	<Cmd>call <SID>ChooseBuffer()<CR>

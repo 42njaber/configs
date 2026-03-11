@@ -1,13 +1,6 @@
 set background=dark
 highlight clear
 
-if version > 580
-	hi clear
-	if exists("syntax_on")
-		syntax reset
-	endif
-endif
-
 let colors_name = "custom"
 set guifont=Monospace\ 13
 

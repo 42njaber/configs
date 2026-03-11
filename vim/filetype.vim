@@ -1,10 +1,12 @@
 
 augroup filetypedetect
-	au BufNewFile,BufRead *.man                         setfiletype man
-	au BufNewFile,BufRead *.pl,*.plt,*.ow               setfiletype prolog
-	au BufNewFile,BufRead ranger/rc.conf,rangerrc.conf  setfiletype ranger
-	au BufNewFile,BufRead sawy/config,swayconfig        setfiletype swayconfig
-	au BufNewFile,BufRead *.tpp                         setfiletype cpp
+	au BufNewFile,BufRead *.man                        	setfiletype man
+	au BufNewFile,BufRead *.pl,*.plt,*.ow              	setfiletype prolog
+	au BufNewFile,BufRead ranger/rc.conf,rangerrc.conf 	setfiletype ranger
+	au BufNewFile,BufRead sawy/config,swayconfig       	setfiletype swayconfig
+	au BufNewFile,BufRead *.tpp                        	setfiletype cpp
+	au BufNewFile,BufRead *.output                     	setfiletype output
+	au BufNewFile,BufRead *.tpl                        	setfiletype temprolog
 augroup END
 
 	" au BufNewFile,BufRead *.sh set filetype=bash syntax=bash

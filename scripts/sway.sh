@@ -23,7 +23,7 @@ mv sway.err sway.err.old
 
 eval $(ssh-agent -s)
 
-set -e
+set -e -- --unsupported-gpu $@
 
 ( sway $@ ) 1>"$HOME/sway.log" 2> >( grep --line-buffered -xvf <( cat <<GLINES
 The XKEYBOARD keymap compiler (xkbcomp) reports:
